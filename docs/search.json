@@ -4,14 +4,14 @@
     "href": "index.html",
     "title": "Home",
     "section": "",
-    "text": "Welcome to my portfolio for MUSA 5080: Public Policy Analytics at the University of Pennsylvania.\nThis site documents my work in the Master of Urban Spatial Analytics program — weekly notes, course assignments, and a final project applying data analysis to urban policy questions.\n\n\n\nI’m a student in the MUSA program at Penn. My background is in [YOUR BACKGROUND], and I’m interested in [YOUR INTERESTS].\n\n\n\n\nWeekly Notes — what I’m learning each week\nAssignments — analyses completed for the course\nAbout — more background and how to reach me\n\n\n\n\n\n\nEmail: your-email@upenn.edu\nGitHub: @your-username"
+    "text": "Welcome to my portfolio for MUSA 5080: Public Policy Analytics at the University of Pennsylvania.\nThis site documents my work in the Master of Urban Spatial Analytics program — weekly notes, course assignments, and a final project applying data analysis to urban policy questions.\n\n\n\nI’m a student in the MUSA program at Penn. My background is in international development and business management with work experience in the spatial industry, and I’m interested in spatial data science with a focus on cities, public safety, land administration and infrastructure.\n\n\n\n\nWeekly Notes — what I’m learning each week\nAssignments — analyses completed for the course\nAbout — more background and how to reach me\n\n\n\n\n\n\nEmail: sampsone@upenn.edu\nGitHub: emmanuelsampson-prog"
   },
   {
     "objectID": "index.html#about-me",
     "href": "index.html#about-me",
     "title": "Home",
     "section": "",
-    "text": "I’m a student in the MUSA program at Penn. My background is in [YOUR BACKGROUND], and I’m interested in [YOUR INTERESTS]."
+    "text": "I’m a student in the MUSA program at Penn. My background is in international development and business management with work experience in the spatial industry, and I’m interested in spatial data science with a focus on cities, public safety, land administration and infrastructure."
   },
   {
     "objectID": "index.html#what-youll-find-here",
@@ -25,7 +25,7 @@
     "href": "index.html#get-in-touch",
     "title": "Home",
     "section": "",
-    "text": "Email: your-email@upenn.edu\nGitHub: @your-username"
+    "text": "Email: sampsone@upenn.edu\nGitHub: emmanuelsampson-prog"
   },
   {
     "objectID": "weekly-notes/week-01.html",
@@ -72,30 +72,30 @@
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About",
+    "title": "About Me",
     "section": "",
     "text": "Write a few paragraphs about yourself here: where you came from before MUSA, what drew you to urban spatial analytics, and what you’re hoping to do with it."
   },
   {
     "objectID": "about.html#background",
     "href": "about.html#background",
-    "title": "About",
+    "title": "About Me",
     "section": "",
     "text": "Write a few paragraphs about yourself here: where you came from before MUSA, what drew you to urban spatial analytics, and what you’re hoping to do with it."
   },
   {
     "objectID": "about.html#skills",
     "href": "about.html#skills",
-    "title": "About",
+    "title": "About Me",
     "section": "Skills",
     "text": "Skills\n\n\nLanguages & Tools: R, Quarto, Git\nSpatial: (add as you learn)\nData: US Census / ACS via tidycensus"
   },
   {
     "objectID": "about.html#contact",
     "href": "about.html#contact",
-    "title": "About",
+    "title": "About Me",
     "section": "Contact",
-    "text": "Contact\n\n\nEmail: your-email@upenn.edu\nGitHub: @your-username"
+    "text": "Contact"
   },
   {
     "objectID": "assignments/index.html",
@@ -117,5 +117,26 @@
     "title": "",
     "section": "",
     "text": "Code\n\n\n\n\nData files for MUSA 5080\nDownload assignment data from Canvas and save it here. Do not rename the files! Have a nice day :)"
+  },
+  {
+    "objectID": "about.html#about-me",
+    "href": "about.html#about-me",
+    "title": "About Me",
+    "section": "About Me",
+    "text": "About Me\nI am a geospatial professional and graduate student in Urban Spatial Analytics at the University of Pennsylvania. My work brings together spatial data science, GIS, surveying and mapping technology, and commercial strategy.\nI have experience in geospatial business development, strategic account management, and partnership development. My interests include GNSS, aerial mapping, optical monitoring, remote sensing, and the use of spatial data to support better urban and infrastructure decisions.\nThis portfolio documents my work in public-policy analytics and urban spatial analysis. It includes projects that use GIS, spatial statistics, data visualization, and reproducible analytical workflows to explore real-world questions."
+  },
+  {
+    "objectID": "about.html#areas-of-interest",
+    "href": "about.html#areas-of-interest",
+    "title": "About Me",
+    "section": "Areas of Interest",
+    "text": "Areas of Interest\n\nUrban spatial analytics and GIS\nSpatial data science and data visualization\nRemote sensing, aerial mapping, and GNSS\nSurveying and optical-monitoring technologies\nUrban infrastructure, resilience, and public policy\nGeospatial technology strategy and partnerships"
+  },
+  {
+    "objectID": "about.html#lets-connect",
+    "href": "about.html#lets-connect",
+    "title": "About Me",
+    "section": "Let’s Connect",
+    "text": "Let’s Connect\nI welcome conversations about urban spatial analytics, GIS, geospatial technology, mapping and monitoring solutions, and collaborative research or professional opportunities.\nYou can reach me through the following channels:\n\nEmail: sampsone@upenn.edu\nGitHub: github.com/emmanuelsampson-prog\nLocation: Philadelphia, Pennsylvania\n\nI am particularly interested in opportunities involving spatial data science, geospatial technology, urban analytics, infrastructure, and strategic partnerships."
   }
 ]

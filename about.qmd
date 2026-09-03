@@ -3,11 +3,22 @@ title: "About Me"
 ---
 
 ## Background
+## About Me
 
-<!-- CHANGE THIS -->
+I am a geospatial professional and graduate student in Urban Spatial Analytics at the University of Pennsylvania. My work brings together spatial data science, GIS, surveying and mapping technology, and commercial strategy.
 
-Write a few paragraphs about yourself here: where you came from before MUSA,
-what drew you to urban spatial analytics, and what you're hoping to do with it.
+I have experience in geospatial business development, strategic account management, and partnership development. My interests include GNSS, aerial mapping, optical monitoring, remote sensing, and the use of spatial data to support better urban and infrastructure decisions.
+
+This portfolio documents my work in public-policy analytics and urban spatial analysis. It includes projects that use GIS, spatial statistics, data visualization, and reproducible analytical workflows to explore real-world questions.
+
+## Areas of Interest
+
+- Urban spatial analytics and GIS
+- Spatial data science and data visualization
+- Remote sensing, aerial mapping, and GNSS
+- Surveying and optical-monitoring technologies
+- Urban infrastructure, resilience, and public policy
+- Geospatial technology strategy and partnerships
 
 ## Skills
 
@@ -20,6 +31,15 @@ what drew you to urban spatial analytics, and what you're hoping to do with it.
 ## Contact
 
 <!-- CHANGE THIS -->
+## Let's Connect
 
-- Email: your-email@upenn.edu
-- GitHub: [@your-username](https://github.com/your-username)
+I welcome conversations about urban spatial analytics, GIS, geospatial technology, mapping and monitoring solutions, and collaborative research or professional opportunities.
+
+You can reach me through the following channels:
+
+- **Email:** sampsone@upenn.edu
+- **GitHub:** [github.com/emmanuelsampson-prog](https://github.com/emmanuelsampson-prog)
+- **Location:** Philadelphia, Pennsylvania
+
+
+I am particularly interested in opportunities involving spatial data science, geospatial technology, urban analytics, infrastructure, and strategic partnerships.
