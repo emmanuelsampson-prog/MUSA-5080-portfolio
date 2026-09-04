@@ -4,10 +4,11 @@ project:
   execute-dir: project
 
 website:
-  title: "Emmanuel Sampson - MUSA 5080 Portfolio"        # <-- CHANGE THIS
-  description: "Public Policy Analytics portfolio"
+  title: "Emmanuel Sampson | Spatial Analytics Portfolio"
+  description: "Urban spatial analytics, GIS, and geospatial technology portfolio"
+
   navbar:
-    title: "Portfolio"
+    title: "Emmanuel Sampson"
     left:
       - href: index.qmd
         text: Home
@@ -17,9 +18,13 @@ website:
         text: "Weekly Notes"
       - href: assignments/index.qmd
         text: "Assignments"
+      - href: contact.qmd
+        text: "Get in Touch"
+
     right:
       - icon: github
-        href: https://github.com/emmanuelsampson-prog/MUSA-5080-portfolio      # <-- CHANGE THIS
+        href: https://github.com/emmanuelsampson-prog/MUSA-5080-portfolio
+        aria-label: GitHub repository
 
 format:
   html:
