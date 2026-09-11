@@ -26,9 +26,3 @@ international development and business management with work experience in the sp
 - **[Assignments](assignments/index.qmd)** — analyses completed for the course
 - **[About](about.qmd)** — more background and how to reach me
 
-## Get in Touch
-
-<!-- CHANGE THIS -->
-
-- Email: sampsone@upenn.edu
-- GitHub: [emmanuelsampson-prog](https://github.com/emmanuelsampson-prog)
