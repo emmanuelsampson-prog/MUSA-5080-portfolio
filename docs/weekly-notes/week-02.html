@@ -172,10 +172,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#what-we-did" id="toc-what-we-did" class="nav-link active" data-scroll-target="#what-we-did">What We Did</a></li>
-  <li><a href="#key-concepts" id="toc-key-concepts" class="nav-link" data-scroll-target="#key-concepts">Key Concepts</a></li>
-  <li><a href="#proving-r-works" id="toc-proving-r-works" class="nav-link" data-scroll-target="#proving-r-works">Proving R Works</a></li>
-  <li><a href="#reflection" id="toc-reflection" class="nav-link" data-scroll-target="#reflection">Reflection</a></li>
-  <li><a href="#questions-i-still-have" id="toc-questions-i-still-have" class="nav-link" data-scroll-target="#questions-i-still-have">Questions I Still Have</a></li>
+  <li><a href="#the-r-environment" id="toc-the-r-environment" class="nav-link" data-scroll-target="#the-r-environment">1. The R Environment</a></li>
+  <li><a href="#reading-r-code" id="toc-reading-r-code" class="nav-link" data-scroll-target="#reading-r-code">2. Reading R Code</a></li>
+  <li><a href="#r-packages" id="toc-r-packages" class="nav-link" data-scroll-target="#r-packages">3. R Packages</a></li>
+  <li><a href="#data-frames-and-tibbles" id="toc-data-frames-and-tibbles" class="nav-link" data-scroll-target="#data-frames-and-tibbles">4. Data Frames and Tibbles</a></li>
+  <li><a href="#common-dplyr-verbs" id="toc-common-dplyr-verbs" class="nav-link" data-scroll-target="#common-dplyr-verbs">5. Common dplyr Verbs</a></li>
+  <li><a href="#pipes-and-then" id="toc-pipes-and-then" class="nav-link" data-scroll-target="#pipes-and-then">6. Pipes: “And Then”</a></li>
+  <li><a href="#r-is-case-sensitive" id="toc-r-is-case-sensitive" class="nav-link" data-scroll-target="#r-is-case-sensitive">7. R Is Case Sensitive</a></li>
+  <li><a href="#census-data" id="toc-census-data" class="nav-link" data-scroll-target="#census-data">8. Census Data</a></li>
+  <li><a href="#acs-data-products" id="toc-acs-data-products" class="nav-link" data-scroll-target="#acs-data-products">9. ACS Data Products</a></li>
+  <li><a href="#estimates-and-margins-of-error" id="toc-estimates-and-margins-of-error" class="nav-link" data-scroll-target="#estimates-and-margins-of-error">10. Estimates and Margins of Error</a></li>
+  <li><a href="#census-variable-ids" id="toc-census-variable-ids" class="nav-link" data-scroll-target="#census-variable-ids">11. Census Variable IDs</a></li>
+  <li><a href="#geography-in-census-data" id="toc-geography-in-census-data" class="nav-link" data-scroll-target="#geography-in-census-data">12. Geography in Census Data</a></li>
+  <li><a href="#blocks-and-block-groups" id="toc-blocks-and-block-groups" class="nav-link" data-scroll-target="#blocks-and-block-groups">13. Blocks and Block Groups</a></li>
+  <li><a href="#geoids" id="toc-geoids" class="nav-link" data-scroll-target="#geoids">14. GEOIDs</a></li>
+  <li><a href="#getting-census-data-with-tidycensus" id="toc-getting-census-data-with-tidycensus" class="nav-link" data-scroll-target="#getting-census-data-with-tidycensus">15. Getting Census Data with tidycensus</a></li>
+  <li><a href="#long-vs.-wide-data" id="toc-long-vs.-wide-data" class="nav-link" data-scroll-target="#long-vs.-wide-data">16. Long vs.&nbsp;Wide Data</a></li>
+  <li><a href="#key-concepts-to-remember" id="toc-key-concepts-to-remember" class="nav-link" data-scroll-target="#key-concepts-to-remember">17. Key Concepts to Remember</a></li>
   </ul>
 </nav>
     </div>
@@ -214,39 +227,317 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="what-we-did" class="level2">
 <h2 class="anchored" data-anchor-id="what-we-did">What We Did</h2>
-<p>First we had a quiz. It was a little scary but I am not scared anymore</p>
+<p>First we had a quiz. It was a little scary but I am not scared anymore.</p>
 </section>
-<section id="key-concepts" class="level2">
-<h2 class="anchored" data-anchor-id="key-concepts">Key Concepts</h2>
-<p>Three places a file can live:</p>
-<ol type="1">
-<li><strong>My computer</strong> — where I edit</li>
-<li><strong>GitHub.com</strong> — where it’s stored</li>
-<li><strong>My live site</strong> — what the world sees</li>
-</ol>
-<p>The loop: <strong>Edit → Save → Render → Commit → Push → wait → refresh</strong></p>
-</section>
-<section id="proving-r-works" class="level2">
-<h2 class="anchored" data-anchor-id="proving-r-works">Proving R Works</h2>
-<p>The chunk below runs when this page renders. If you can see a result underneath it on your published site, R and Quarto are talking to each other correctly.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()<span class="sc">$</span>R.version<span class="sc">$</span>version.string</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "R version 4.6.1 (2026-06-24 ucrt)"</code></pre>
-</div>
-</div>
-</section>
-<section id="reflection" class="level2">
-<h2 class="anchored" data-anchor-id="reflection">Reflection</h2>
-<!-- CHANGE THIS: 3-4 sentences -->
-<p>What I want out of this course:</p>
-<p>One thing I’m nervous about:</p>
-</section>
-<section id="questions-i-still-have" class="level2">
-<h2 class="anchored" data-anchor-id="questions-i-still-have">Questions I Still Have</h2>
+<section id="the-r-environment" class="level2">
+<h2 class="anchored" data-anchor-id="the-r-environment">1. The R Environment</h2>
 <ul>
-<li></li>
-<li></li>
+<li><strong>Console</strong>: run code interactively (e.g.&nbsp;<code>2 + 2</code>), but nothing is saved.</li>
+<li><strong>R Script (.R)</strong>: saves code so you can rerun/edit later.</li>
+<li><strong>Quarto (.qmd)</strong>: combines text, headings, R code, tables, and figures into one reproducible document — code lives inside chunks:</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+</section>
+<section id="reading-r-code" class="level2">
+<h2 class="anchored" data-anchor-id="reading-r-code">2. Reading R Code</h2>
+<p>Think of code in terms of <strong>objects</strong> (store results), <strong>verbs/functions</strong> (perform actions), <strong>arguments</strong> (instructions), and <strong>data</strong> (what’s being analyzed).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">filter</span>(counties, population <span class="sc">&gt;</span> <span class="dv">50000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Component</th>
+<th>Example</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Object</td>
+<td><code>result</code></td>
+<td>Stores the result</td>
+</tr>
+<tr class="even">
+<td>Assignment</td>
+<td><code>&lt;-</code></td>
+<td>Assigns result to object</td>
+</tr>
+<tr class="odd">
+<td>Function</td>
+<td><code>filter()</code></td>
+<td>Action performed</td>
+</tr>
+<tr class="even">
+<td>Data</td>
+<td><code>counties</code></td>
+<td>Data being processed</td>
+</tr>
+<tr class="odd">
+<td>Argument</td>
+<td><code>population &gt; 50000</code></td>
+<td>Condition applied</td>
+</tr>
+</tbody>
+</table>
+<p><code>&lt;-</code> is the <strong>assignment operator</strong>: <code>x &lt;- 10</code> creates object <code>x</code> holding 10.</p>
+</section>
+<section id="r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="r-packages">3. R Packages</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)   <span class="co"># install once</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)               <span class="co"># load each session</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidycensus)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>install.packages()</code> = get it on your computer; <code>library()</code> = load it for use.</p>
+</section>
+<section id="data-frames-and-tibbles" class="level2">
+<h2 class="anchored" data-anchor-id="data-frames-and-tibbles">4. Data Frames and Tibbles</h2>
+<p>A <strong>data frame</strong> is data in rows (observations) and columns (variables); a <strong>tibble</strong> is a cleaner-printing tidyverse version.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Income</th>
+<th>MOE</th>
+<th>MOE_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Adams</td>
+<td>78,975</td>
+<td>3,334</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td>Berks</td>
+<td>74,617</td>
+<td>1,191</td>
+<td>12</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="common-dplyr-verbs" class="level2">
+<h2 class="anchored" data-anchor-id="common-dplyr-verbs">5. Common dplyr Verbs</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>filter()</code></td>
+<td>Pick rows by condition</td>
+</tr>
+<tr class="even">
+<td><code>select()</code></td>
+<td>Pick columns</td>
+</tr>
+<tr class="odd">
+<td><code>mutate()</code></td>
+<td>Create/modify columns</td>
+</tr>
+<tr class="even">
+<td><code>arrange()</code></td>
+<td>Reorder rows (<code>desc()</code> for descending)</td>
+</tr>
+<tr class="odd">
+<td><code>group_by()</code></td>
+<td>Group for per-group analysis</td>
+</tr>
+<tr class="even">
+<td><code>summarize()</code></td>
+<td>Reduce to summary stats</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(counties, population <span class="sc">&gt;</span> <span class="dv">50000</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(counties, NAME, population)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>counties <span class="ot">&lt;-</span> <span class="fu">mutate</span>(counties, <span class="at">income2 =</span> income <span class="sc">*</span> <span class="dv">2</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(counties, <span class="fu">desc</span>(income))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>counties <span class="sc">|&gt;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">min_income =</span> <span class="fu">min</span>(income, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="pipes-and-then" class="level2">
+<h2 class="anchored" data-anchor-id="pipes-and-then">6. Pipes: “And Then”</h2>
+<p><code>|&gt;</code> (modern) and <code>%&gt;%</code> (older tidyverse) chain operations together:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>counties <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(moe_pct <span class="sc">&gt;</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(moe_pct)) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(NAME, moe_pct)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Reads as: start with counties → filter → arrange → select. Equivalent to writing separate <code>step1</code>, <code>step2</code>, <code>step3</code> objects, but more compact.</p>
+</section>
+<section id="r-is-case-sensitive" class="level2">
+<h2 class="anchored" data-anchor-id="r-is-case-sensitive">7. R Is Case Sensitive</h2>
+<p><code>counties</code> ≠ <code>Counties</code>; <code>moe_pct</code> ≠ <code>MOE_pct</code>. Always match exact spelling/capitalization.</p>
+</section>
+<section id="census-data" class="level2">
+<h2 class="anchored" data-anchor-id="census-data">8. Census Data</h2>
+<ul>
+<li><strong>Decennial Census</strong>: every 10 years, full population count.</li>
+<li><strong>ACS (American Community Survey)</strong>: sample-based (since 2005), gives detailed demographic/economic/housing data plus a <strong>margin of error (MOE)</strong> since it’s an estimate, not a full count.</li>
+</ul>
+</section>
+<section id="acs-data-products" class="level2">
+<h2 class="anchored" data-anchor-id="acs-data-products">9. ACS Data Products</h2>
+<ul>
+<li><strong>1-Year estimates</strong>: larger areas/populations only.</li>
+<li><strong>5-Year estimates</strong>: smaller areas (tracts, block groups, counties, places); e.g.&nbsp;a 2023 5-year estimate covers the 5-year period ending 2023.</li>
+</ul>
+</section>
+<section id="estimates-and-margins-of-error" class="level2">
+<h2 class="anchored" data-anchor-id="estimates-and-margins-of-error">10. Estimates and Margins of Error</h2>
+<p>Every ACS value pairs an <strong>estimate</strong> with an <strong>MOE</strong> indicating uncertainty:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>County</th>
+<th>Income</th>
+<th>MOE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Adams</td>
+<td>$78,975</td>
+<td>$3,334</td>
+</tr>
+<tr class="even">
+<td>Bucks</td>
+<td>$104,200</td>
+<td>$1,502</td>
+</tr>
+</tbody>
+</table>
+<p>Always report/interpret estimates alongside their MOE.</p>
+</section>
+<section id="census-variable-ids" class="level2">
+<h2 class="anchored" data-anchor-id="census-variable-ids">11. Census Variable IDs</h2>
+<p><code>B19013_001E</code> → <strong>B</strong>(base table) <strong>19013</strong>(table number) <strong>001</strong>(line number) <strong>E</strong>(estimate). The MOE version ends in <strong>M</strong> (<code>B19013_001M</code>).</p>
+</section>
+<section id="geography-in-census-data" class="level2">
+<h2 class="anchored" data-anchor-id="geography-in-census-data">12. Geography in Census Data</h2>
+<p>Hierarchy: <strong>State → County → Census Tract → Block Group → Block</strong>. Not all datasets cover every level. Tract boundaries can shift over time — use <strong>NHGIS</strong> or <strong>LTDB/LTDR</strong> for longitudinal comparisons.</p>
+</section>
+<section id="blocks-and-block-groups" class="level2">
+<h2 class="anchored" data-anchor-id="blocks-and-block-groups">13. Blocks and Block Groups</h2>
+<p><strong>Blocks</strong> are the smallest unit (Decennial only, little ACS data). <strong>Block groups</strong> (collections of blocks) allow detailed analysis but often carry large MOEs due to small sample sizes.</p>
+</section>
+<section id="geoids" class="level2">
+<h2 class="anchored" data-anchor-id="geoids">14. GEOIDs</h2>
+<p>Unique geographic identifier, e.g.&nbsp;<code>42101000100</code> = <code>42</code>(PA) + <code>101</code>(county) + <code>000100</code>(tract). Used to join Census data to boundary files.</p>
+</section>
+<section id="getting-census-data-with-tidycensus" class="level2">
+<h2 class="anchored" data-anchor-id="getting-census-data-with-tidycensus">15. Getting Census Data with tidycensus</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidycensus)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">get_acs</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">geography =</span> <span class="st">"county"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"B19013_001"</span>, <span class="st">"B01003_001"</span>),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">state =</span> <span class="st">"PA"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">year =</span> <span class="dv">2023</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey =</span> <span class="st">"acs5"</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>geography</code></td>
+<td>Geographic level</td>
+</tr>
+<tr class="even">
+<td><code>variables</code></td>
+<td>Census variable codes</td>
+</tr>
+<tr class="odd">
+<td><code>state</code></td>
+<td>State filter</td>
+</tr>
+<tr class="even">
+<td><code>year</code></td>
+<td>Data year</td>
+</tr>
+<tr class="odd">
+<td><code>survey</code></td>
+<td>ACS product (e.g.&nbsp;<code>acs5</code>)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="long-vs.-wide-data" class="level2">
+<h2 class="anchored" data-anchor-id="long-vs.-wide-data">16. Long vs.&nbsp;Wide Data</h2>
+<p><strong>Long</strong>: one row per observation-variable pair (good for multi-variable tidyverse workflows).</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>GEOID</th>
+<th>NAME</th>
+<th>VARIABLE</th>
+<th>ESTIMATE</th>
+<th>MOE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>42001</td>
+<td>Adams</td>
+<td>B19013_001</td>
+<td>78,975</td>
+<td>3,334</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Wide</strong>: each variable is its own column (easier to scan per variable).</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>GEOID</th>
+<th>NAME</th>
+<th>B19013_001</th>
+<th>MOE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>42001</td>
+<td>Adams</td>
+<td>78,975</td>
+<td>3,334</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="key-concepts-to-remember" class="level2">
+<h2 class="anchored" data-anchor-id="key-concepts-to-remember">17. Key Concepts to Remember</h2>
+<ul>
+<li>Console = testing; R script = saved code; Quarto chunk = code inside <code>.qmd</code>.</li>
+<li>Objects store data; functions act on objects; arguments guide functions.</li>
+<li><code>filter()</code> rows, <code>select()</code> columns, <code>mutate()</code> new/modified columns, <code>arrange()</code> order, <code>group_by()</code>/<code>summarize()</code> grouped stats.</li>
+<li>Pipes (<code>|&gt;</code>/<code>%&gt;%</code>) chain steps; R is case sensitive.</li>
+<li>ACS = estimates with MOE, not exact counts; GEOIDs identify geography; geography can change over time.</li>
+<li><code>tidycensus</code> fetches Census/ACS data; results can be long or wide format.</li>
 </ul>
 
 
@@ -706,48 +997,188 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Week 2: dplyr and census"</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "First impressions, and getting the workflow running."</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-09-04</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## What We Did</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>First we had a quiz. It was a little scary but I am not scared anymore</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Concepts</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>Three places a file can live:</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**My computer** — where I edit</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**GitHub.com** — where it's stored</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**My live site** — what the world sees</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>The loop: **Edit → Save → Render → Commit → Push → wait → refresh**</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## Proving R Works</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>The chunk below runs when this page renders. If you can see a result underneath</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>it on your published site, R and Quarto are talking to each other correctly.</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()<span class="sc">$</span>R.version<span class="sc">$</span>version.string</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reflection</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- CHANGE THIS: 3-4 sentences --&gt;</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>What I want out of this course:</span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>One thing I'm nervous about:</span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="fu">## Questions I Still Have</span></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>-</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>-</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Week 2: dplyr and census"</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "First impressions, and getting the workflow running."</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-09-04</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## What We Did</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>First we had a quiz. It was a little scary but I am not scared anymore.</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. The R Environment</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Console**: run code interactively (e.g. <span class="in">`2 + 2`</span>), but nothing is saved.</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**R Script (.R)**: saves code so you can rerun/edit later.</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Quarto (.qmd)**: combines text, headings, R code, tables, and figures into one reproducible document — code lives inside chunks:</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Reading R Code</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>Think of code in terms of **objects** (store results), **verbs/functions** (perform actions), **arguments** (instructions), and **data** (what's being analyzed).</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">filter</span>(counties, population <span class="sc">&gt;</span> <span class="dv">50000</span>)</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Component <span class="pp">|</span> Example <span class="pp">|</span> Meaning <span class="pp">|</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Object <span class="pp">|</span> <span class="in">`result`</span> <span class="pp">|</span> Stores the result <span class="pp">|</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Assignment <span class="pp">|</span> <span class="in">`&lt;-`</span> <span class="pp">|</span> Assigns result to object <span class="pp">|</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Function <span class="pp">|</span> <span class="in">`filter()`</span> <span class="pp">|</span> Action performed <span class="pp">|</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Data <span class="pp">|</span> <span class="in">`counties`</span> <span class="pp">|</span> Data being processed <span class="pp">|</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Argument <span class="pp">|</span> <span class="in">`population &gt; 50000`</span> <span class="pp">|</span> Condition applied <span class="pp">|</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="in">`&lt;-`</span> is the **assignment operator**: <span class="in">`x &lt;- 10`</span> creates object <span class="in">`x`</span> holding 10.</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. R Packages</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)   <span class="co"># install once</span></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)               <span class="co"># load each session</span></span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidycensus)</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="in">`install.packages()`</span> = get it on your computer; <span class="in">`library()`</span> = load it for use.</span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Data Frames and Tibbles</span></span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>A **data frame** is data in rows (observations) and columns (variables); a **tibble** is a cleaner-printing tidyverse version.</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Name <span class="pp">|</span> Income <span class="pp">|</span> MOE <span class="pp">|</span> MOE_pct <span class="pp">|</span></span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Adams <span class="pp">|</span> 78,975 <span class="pp">|</span> 3,334 <span class="pp">|</span> 9 <span class="pp">|</span></span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Berks <span class="pp">|</span> 74,617 <span class="pp">|</span> 1,191 <span class="pp">|</span> 12 <span class="pp">|</span></span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Common dplyr Verbs</span></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Function <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`filter()`</span> <span class="pp">|</span> Pick rows by condition <span class="pp">|</span></span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`select()`</span> <span class="pp">|</span> Pick columns <span class="pp">|</span></span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`mutate()`</span> <span class="pp">|</span> Create/modify columns <span class="pp">|</span></span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`arrange()`</span> <span class="pp">|</span> Reorder rows (<span class="in">`desc()`</span> for descending) <span class="pp">|</span></span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`group_by()`</span> <span class="pp">|</span> Group for per-group analysis <span class="pp">|</span></span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`summarize()`</span> <span class="pp">|</span> Reduce to summary stats <span class="pp">|</span></span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(counties, population <span class="sc">&gt;</span> <span class="dv">50000</span>)</span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(counties, NAME, population)</span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>counties <span class="ot">&lt;-</span> <span class="fu">mutate</span>(counties, <span class="at">income2 =</span> income <span class="sc">*</span> <span class="dv">2</span>)</span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(counties, <span class="fu">desc</span>(income))</span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>counties <span class="sc">|&gt;</span></span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span></span>
+<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">min_income =</span> <span class="fu">min</span>(income, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. Pipes: "And Then"</span></span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a><span class="in">`|&gt;`</span> (modern) and <span class="in">`%&gt;%`</span> (older tidyverse) chain operations together:</span>
+<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a>counties <span class="sc">|&gt;</span></span>
+<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(moe_pct <span class="sc">&gt;</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(moe_pct)) <span class="sc">|&gt;</span></span>
+<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(NAME, moe_pct)</span>
+<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a>Reads as: start with counties → filter → arrange → select. Equivalent to writing separate <span class="in">`step1`</span>, <span class="in">`step2`</span>, <span class="in">`step3`</span> objects, but more compact.</span>
+<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7. R Is Case Sensitive</span></span>
+<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a><span class="in">`counties`</span> ≠ <span class="in">`Counties`</span>; <span class="in">`moe_pct`</span> ≠ <span class="in">`MOE_pct`</span>. Always match exact spelling/capitalization.</span>
+<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8. Census Data</span></span>
+<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Decennial Census**: every 10 years, full population count.</span>
+<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**ACS (American Community Survey)**: sample-based (since 2005), gives detailed demographic/economic/housing data plus a **margin of error (MOE)** since it's an estimate, not a full count.</span>
+<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a><span class="fu">## 9. ACS Data Products</span></span>
+<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**1-Year estimates**: larger areas/populations only.</span>
+<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**5-Year estimates**: smaller areas (tracts, block groups, counties, places); e.g. a 2023 5-year estimate covers the 5-year period ending 2023.</span>
+<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a><span class="fu">## 10. Estimates and Margins of Error</span></span>
+<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a>Every ACS value pairs an **estimate** with an **MOE** indicating uncertainty:</span>
+<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> County <span class="pp">|</span> Income <span class="pp">|</span> MOE <span class="pp">|</span></span>
+<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Adams <span class="pp">|</span> $78,975 <span class="pp">|</span> $3,334 <span class="pp">|</span></span>
+<span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Bucks <span class="pp">|</span> $104,200 <span class="pp">|</span> $1,502 <span class="pp">|</span></span>
+<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a>Always report/interpret estimates alongside their MOE.</span>
+<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a><span class="fu">## 11. Census Variable IDs</span></span>
+<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a><span class="in">`B19013_001E`</span> → **B**(base table) **19013**(table number) **001**(line number) **E**(estimate). The MOE version ends in **M** (<span class="in">`B19013_001M`</span>).</span>
+<span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a><span class="fu">## 12. Geography in Census Data</span></span>
+<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a>Hierarchy: **State → County → Census Tract → Block Group → Block**. Not all datasets cover every level. Tract boundaries can shift over time — use **NHGIS** or **LTDB/LTDR** for longitudinal comparisons.</span>
+<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a><span class="fu">## 13. Blocks and Block Groups</span></span>
+<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a>**Blocks** are the smallest unit (Decennial only, little ACS data). **Block groups** (collections of blocks) allow detailed analysis but often carry large MOEs due to small sample sizes.</span>
+<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a><span class="fu">## 14. GEOIDs</span></span>
+<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a>Unique geographic identifier, e.g. <span class="in">`42101000100`</span> = <span class="in">`42`</span>(PA) + <span class="in">`101`</span>(county) + <span class="in">`000100`</span>(tract). Used to join Census data to boundary files.</span>
+<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a><span class="fu">## 15. Getting Census Data with tidycensus</span></span>
+<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidycensus)</span>
+<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">get_acs</span>(</span>
+<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a>  <span class="at">geography =</span> <span class="st">"county"</span>,</span>
+<span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a>  <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"B19013_001"</span>, <span class="st">"B01003_001"</span>),</span>
+<span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a>  <span class="at">state =</span> <span class="st">"PA"</span>,</span>
+<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a>  <span class="at">year =</span> <span class="dv">2023</span>,</span>
+<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey =</span> <span class="st">"acs5"</span></span>
+<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Argument <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`geography`</span> <span class="pp">|</span> Geographic level <span class="pp">|</span></span>
+<span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`variables`</span> <span class="pp">|</span> Census variable codes <span class="pp">|</span></span>
+<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`state`</span> <span class="pp">|</span> State filter <span class="pp">|</span></span>
+<span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`year`</span> <span class="pp">|</span> Data year <span class="pp">|</span></span>
+<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`survey`</span> <span class="pp">|</span> ACS product (e.g. <span class="in">`acs5`</span>) <span class="pp">|</span></span>
+<span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## 16. Long vs. Wide Data</span></span>
+<span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a>**Long**: one row per observation-variable pair (good for multi-variable tidyverse workflows).</span>
+<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> GEOID <span class="pp">|</span> NAME <span class="pp">|</span> VARIABLE <span class="pp">|</span> ESTIMATE <span class="pp">|</span> MOE <span class="pp">|</span></span>
+<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|---|</span></span>
+<span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 42001 <span class="pp">|</span> Adams <span class="pp">|</span> B19013_001 <span class="pp">|</span> 78,975 <span class="pp">|</span> 3,334 <span class="pp">|</span></span>
+<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a>**Wide**: each variable is its own column (easier to scan per variable).</span>
+<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> GEOID <span class="pp">|</span> NAME <span class="pp">|</span> B19013_001 <span class="pp">|</span> MOE <span class="pp">|</span></span>
+<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
+<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 42001 <span class="pp">|</span> Adams <span class="pp">|</span> 78,975 <span class="pp">|</span> 3,334 <span class="pp">|</span></span>
+<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a><span class="fu">## 17. Key Concepts to Remember</span></span>
+<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Console = testing; R script = saved code; Quarto chunk = code inside <span class="in">`.qmd`</span>.</span>
+<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Objects store data; functions act on objects; arguments guide functions.</span>
+<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`filter()`</span> rows, <span class="in">`select()`</span> columns, <span class="in">`mutate()`</span> new/modified columns, <span class="in">`arrange()`</span> order, <span class="in">`group_by()`</span>/<span class="in">`summarize()`</span> grouped stats.</span>
+<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pipes (<span class="in">`|&gt;`</span>/<span class="in">`%&gt;%`</span>) chain steps; R is case sensitive.</span>
+<span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>ACS = estimates with MOE, not exact counts; GEOIDs identify geography; geography can change over time.</span>
+<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`tidycensus`</span> fetches Census/ACS data; results can be long or wide format.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

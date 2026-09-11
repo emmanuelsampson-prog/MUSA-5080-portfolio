@@ -4,14 +4,14 @@
     "href": "weekly-notes/week-02.html",
     "title": "Week 2: dplyr and census",
     "section": "",
-    "text": "First we had a quiz. It was a little scary but I am not scared anymore"
+    "text": "First we had a quiz. It was a little scary but I am not scared anymore."
   },
   {
     "objectID": "weekly-notes/week-02.html#what-we-did",
     "href": "weekly-notes/week-02.html#what-we-did",
     "title": "Week 2: dplyr and census",
     "section": "",
-    "text": "First we had a quiz. It was a little scary but I am not scared anymore"
+    "text": "First we had a quiz. It was a little scary but I am not scared anymore."
   },
   {
     "objectID": "weekly-notes/week-02.html#key-concepts",
@@ -88,7 +88,7 @@
     "href": "assignments/index.html",
     "title": "Assignments",
     "section": "",
-    "text": "Completed assignments for MUSA 5080. New assignments appear here automatically once you add the .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Completed assignments for MUSA 5080. New assignments appear here automatically once you add the .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nAssignment 2: Who Do We Know the Least About?\n\n\n\n\n\n\n\n\nSep 10, 2026\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
@@ -123,14 +123,14 @@
     "href": "weekly-notes/week-01.html",
     "title": "Week 1: Getting Set Up",
     "section": "",
-    "text": "Set up the portfolio workflow: made a repository from a template, cloned it with GitHub Desktop, edited files in RStudio, rendered with Quarto, and published to GitHub Pages."
+    "text": "title: “Introduction to Quarto and Websites” author: “Emmanuel Sampson” date: today format: html ————"
   },
   {
     "objectID": "weekly-notes/week-01.html#what-we-did",
     "href": "weekly-notes/week-01.html#what-we-did",
     "title": "Week 1: Getting Set Up",
     "section": "",
-    "text": "Set up the portfolio workflow: made a repository from a template, cloned it with GitHub Desktop, edited files in RStudio, rendered with Quarto, and published to GitHub Pages."
+    "text": "title: “Introduction to Quarto and Websites” author: “Emmanuel Sampson” date: today format: html ————"
   },
   {
     "objectID": "weekly-notes/week-01.html#key-concepts",
@@ -144,7 +144,7 @@
     "href": "weekly-notes/week-01.html#proving-r-works",
     "title": "Week 1: Getting Set Up",
     "section": "Proving R Works",
-    "text": "Proving R Works\nThe chunk below runs when this page renders. If you can see a result underneath it on your published site, R and Quarto are talking to each other correctly.\n\nsessionInfo()$R.version$version.string\n\n[1] \"R version 4.6.0 (2026-04-24)\""
+    "text": "Proving R Works\nThe chunk below runs when this page renders. If you can see a result underneath it on your published site, R and Quarto are talking to each other correctly.\n\nsessionInfo()$R.version$version.string\n\n[1] \"R version 4.6.1 (2026-06-24 ucrt)\""
   },
   {
     "objectID": "weekly-notes/week-01.html#reflection",
@@ -158,6 +158,237 @@
     "href": "weekly-notes/week-01.html#questions-i-still-have",
     "title": "Week 1: Getting Set Up",
     "section": "Questions I Still Have",
-    "text": "Questions I Still Have"
+    "text": "Questions I Still Have\nHow can I make my Quarto website look more professional and visually appealing? What are the best practices for organizing data, code, images, and other files in a Quarto project? How can I efficiently troubleshoot errors when rendering a .qmd file? How can I use Git and GitHub effectively to track changes and manage different versions of my work? What are some ways to make data visualizations more effective for communicating findings to a non-technical audience?"
+  },
+  {
+    "objectID": "assignments/assignment2.html",
+    "href": "assignments/assignment2.html",
+    "title": "Assignment 2: Who Do We Know the Least About?",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(tidycensus)"
+  },
+  {
+    "objectID": "assignments/assignment2.html#setup",
+    "href": "assignments/assignment2.html#setup",
+    "title": "Assignment 2: Who Do We Know the Least About?",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(tidycensus)"
+  },
+  {
+    "objectID": "assignments/assignment2.html#the-question",
+    "href": "assignments/assignment2.html#the-question",
+    "title": "Assignment 2: Who Do We Know the Least About?",
+    "section": "The question",
+    "text": "The question\nEvery number the American Community Survey publishes is an estimate drawn from a sample, not a count. That means every number comes with a margin of error — a statement about how wrong it might be.\nMost people ignore it. In this assignment, you won’t."
+  },
+  {
+    "objectID": "assignments/assignment2.html#choosing-what-to-measure",
+    "href": "assignments/assignment2.html#choosing-what-to-measure",
+    "title": "Assignment 2: Who Do We Know the Least About?",
+    "section": "Choosing what to measure",
+    "text": "Choosing what to measure\nvars &lt;- load_variables(2023, \"acs5\")\nView(vars)\nThen use the search box. :::\n\nmy_state &lt;- \"CO\"        # two-letter abbreviation, in quotes\nmy_variable &lt;- \"B25077_001\"     # the variable code, in quotes"
+  },
+  {
+    "objectID": "assignments/assignment2.html#pulling-the-data",
+    "href": "assignments/assignment2.html#pulling-the-data",
+    "title": "Assignment 2: Who Do We Know the Least About?",
+    "section": "Pulling the data",
+    "text": "Pulling the data\n\ncounty_data &lt;- get_acs(\n  geography = \"county\",\n  variables = my_variable,\n  state = my_state,\n  year = 2023,\n  survey = \"acs5\"\n)\n\nLet’s look at what came back.\n\ndim(county_data)\n\n[1] 64  5\n\nhead(county_data)\n\n# A tibble: 6 × 5\n  GEOID NAME                       variable   estimate   moe\n  &lt;chr&gt; &lt;chr&gt;                      &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt;\n1 08001 Adams County, Colorado     B25077_001   458400  3021\n2 08003 Alamosa County, Colorado   B25077_001   218800 21223\n3 08005 Arapahoe County, Colorado  B25077_001   526000  5958\n4 08007 Archuleta County, Colorado B25077_001   451400 16410\n5 08009 Baca County, Colorado      B25077_001   122000 22458\n6 08011 Bent County, Colorado      B25077_001   137900 26527\n\n\nThere are 64 counties in Colorado and that number matches the rows returned by dim(country_data) which is 5.\n\ncounty_data &lt;- county_data %&gt;%\n  mutate(moe_pct = moe/estimate * 100)\n\nNow sort to see which counties are measured least reliably.\n\ncounty_data %&gt;%\n  arrange(desc(moe_pct)) %&gt;%\n  select(NAME, estimate, moe, moe_pct) %&gt;%\n  head(10)\n\n# A tibble: 10 × 4\n   NAME                        estimate    moe moe_pct\n   &lt;chr&gt;                          &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;\n 1 Jackson County, Colorado      250000 104968    42.0\n 2 San Miguel County, Colorado   613100 165694    27.0\n 3 San Juan County, Colorado     406900  93791    23.1\n 4 Kiowa County, Colorado        148600  30604    20.6\n 5 Bent County, Colorado         137900  26527    19.2\n 6 Baca County, Colorado         122000  22458    18.4\n 7 Lake County, Colorado         401300  67434    16.8\n 8 Cheyenne County, Colorado     187100  31159    16.7\n 9 Saguache County, Colorado     200000  30566    15.3\n10 Huerfano County, Colorado     256700  37763    14.7\n\n\nJackson County, Colorado has the largest margin of error relative to its estimate.Jackson County’s ACS median home-value estimate has a margin of error equal to about 42% of the estimate, making it the least precise estimate in the displayed set."
+  },
+  {
+    "objectID": "assignments/assignment2.html#sorting-counties-into-reliability-categories",
+    "href": "assignments/assignment2.html#sorting-counties-into-reliability-categories",
+    "title": "Assignment 2: Who Do We Know the Least About?",
+    "section": "Sorting counties into reliability categories",
+    "text": "Sorting counties into reliability categories\n\ncounty_data &lt;- county_data %&gt;%\n  mutate(reliability = case_when(\n    moe_pct &lt; 5  ~ \"High confidence\",\n    moe_pct &lt; 10 ~ \"Moderate\",\n    TRUE         ~ \"Low confidence\"\n  ))\n\ncount(county_data, reliability)\n\n# A tibble: 3 × 2\n  reliability         n\n  &lt;chr&gt;           &lt;int&gt;\n1 High confidence    23\n2 Low confidence     21\n3 Moderate           20\n\n\nI evaluated the reliability of ACS estimates for median owner-occupied home values across Colorado counties by calculating each estimate’s margin of error as a percentage of its reported value: (MOE/estimate)×100.Counties with a relative MOE below 5% were classified as high confidence, those between 5% and 10% as moderate confidence, and those above 10% as low confidence. These thresholds are interpretive rather than official Census reliability standards, but they create a useful distribution for this county-level analysis: 23 counties have high-confidence estimates, 20 have moderately reliable estimates, and 21 have low-confidence estimates.\n\ncounty_wide &lt;- get_acs(\n  geography = \"county\",\n  variables = c(myvar = my_variable,\n                pop   = \"B01003_001\"),\n  state = my_state,\n  year = 2023,\n  survey = \"acs5\",\n  output = \"wide\"\n)\n\nhead(county_wide)\n\n# A tibble: 6 × 6\n  GEOID NAME                       myvarE myvarM   popE  popM\n  &lt;chr&gt; &lt;chr&gt;                       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 08001 Adams County, Colorado     458400   3021 524408    NA\n2 08003 Alamosa County, Colorado   218800  21223  16515    NA\n3 08005 Arapahoe County, Colorado  526000   5958 655709    NA\n4 08007 Archuleta County, Colorado 451400  16410  13730    NA\n5 08009 Baca County, Colorado      122000  22458   3460    NA\n6 08011 Bent County, Colorado      137900  26527   5524    NA\n\n\n\ncounty_wide &lt;- county_wide %&gt;%\n  mutate(moe_pct = myvarM / myvarE * 100) %&gt;%\n  mutate(reliability = case_when(\n    moe_pct &lt; 5  ~ \"High confidence\",\n    moe_pct &lt; 15 ~ \"Moderate\",\n    TRUE         ~ \"Low confidence\"\n  ))\n\nNow compare the average population of counties in each reliability category.\n\ncounty_wide %&gt;%\n  group_by(reliability) %&gt;%\n  summarize(\n    n_counties = n(),\n    avg_population = mean(popE)\n  )\n\n# A tibble: 3 × 3\n  reliability     n_counties avg_population\n  &lt;chr&gt;                &lt;int&gt;          &lt;dbl&gt;\n1 High confidence         23        234182.\n2 Low confidence           9          4015.\n3 Moderate                32         12139.\n\n\nHigh-confidence counties have an average population of approximately 234,182 people, compared with about 4,015 people in low-confidence counties. Moderate-reliability counties have an average population of approximately 12,139 people. This pattern suggests that, in this dataset, more populous counties generally have more precise ACS median home-value estimates, while less populous counties tend to have larger relative margins of error and lower-confidence estimates."
+  },
+  {
+    "objectID": "assignments/assignment2.html#is-the-margin-of-error-bigger-in-small-places",
+    "href": "assignments/assignment2.html#is-the-margin-of-error-bigger-in-small-places",
+    "title": "Assignment 2: Who Do We Know the Least About?",
+    "section": "Is the margin of error bigger in small places?",
+    "text": "Is the margin of error bigger in small places?\nTo answer this we need population and our variable side by side, in the same row. That means a wide pull.\n\ncounty_wide &lt;- get_acs(\n  geography = \"county\",\n  variables = c(myvar = my_variable,\n                pop   = \"B01003_001\"),\n  state = my_state,\n  year = 2023,\n  survey = \"acs5\",\n  output = \"wide\"\n)\n\nhead(county_wide)\n\n# A tibble: 6 × 6\n  GEOID NAME                       myvarE myvarM   popE  popM\n  &lt;chr&gt; &lt;chr&gt;                       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 08001 Adams County, Colorado     458400   3021 524408    NA\n2 08003 Alamosa County, Colorado   218800  21223  16515    NA\n3 08005 Arapahoe County, Colorado  526000   5958 655709    NA\n4 08007 Archuleta County, Colorado 451400  16410  13730    NA\n5 08009 Baca County, Colorado      122000  22458   3460    NA\n6 08011 Bent County, Colorado      137900  26527   5524    NA\n\n\n\ncounty_wide &lt;- county_wide %&gt;%\n  mutate(moe_pct = myvarM / myvarE * 100) %&gt;%\n  mutate(reliability = case_when(\n    moe_pct &lt; 5  ~ \"High confidence\",\n    moe_pct &lt; 15 ~ \"Moderate\",\n    TRUE         ~ \"Low confidence\"\n  ))\n\nNow compare the average population of counties in each reliability category.\n\ncounty_wide %&gt;%\n  group_by(reliability) %&gt;%\n  summarize(\n    n_counties = n(),\n    avg_population = mean(popE)\n  )\n\n# A tibble: 3 × 3\n  reliability     n_counties avg_population\n  &lt;chr&gt;                &lt;int&gt;          &lt;dbl&gt;\n1 High confidence         23        234182.\n2 Low confidence           9          4015.\n3 Moderate                32         12139.\n\n\n[What is the average population of high-confidence counties versus low-confidence counties? Is there a pattern?]\nHigh-confidence counties have an average population of approximately 234,182 people, compared with about 4,015 people in low-confidence counties. Moderate-reliability counties have an average population of approximately 12,139 people. This pattern suggests that, in this dataset, more populous counties generally have more precise ACS median home-value estimates, while less populous counties tend to have larger relative margins of error and lower-confidence estimates."
+  },
+  {
+    "objectID": "assignments/assignment2.html#what-this-means-for-policy",
+    "href": "assignments/assignment2.html#what-this-means-for-policy",
+    "title": "Assignment 2: Who Do We Know the Least About?",
+    "section": "What this means for policy",
+    "text": "What this means for policy\nColorado communities with the least reliable ACS estimates of median owner-occupied home values are primarily small, rural counties. Jackson County has the greatest uncertainty: its estimated median home value is $250,000, with a margin of error of ±$104,968, or 42.0% of the estimate. Other counties with relatively high uncertainty include San Miguel County (27.0%), San Juan County (23.1%), Kiowa County (20.6%), Bent County (19.2%), and Baca County (18.4%). Using the selected thresholds, nine counties fall into the low-confidence category, compared with 23 high-confidence and 32 moderate-reliability counties.\nThis pattern reflects how the American Community Survey (ACS) works. Unlike a complete census count, the ACS is a continuous sample survey. Its estimates are based on responses from a subset of households rather than every household. Smaller counties contain fewer households and therefore tend to produce smaller survey samples. Smaller samples create more sampling variability, which appears as a larger margin of error relative to the reported estimate. ACS sampling error is generally lower when the sample size is larger, while small-area estimates often require pooled multi-year data to achieve usable precision.\nA state agency that allocates housing assistance, property-tax relief, or infrastructure funding based on median home values—but treats every county estimate as equally precise—could make poorly targeted decisions. Rural, low-population counties would be most vulnerable. For example, Jackson County could be classified as comparatively high-value or low-value based on an estimate with a confidence interval spanning roughly $145,032 to $354,968. Funding formulas that ignore this uncertainty could underfund communities with genuine housing need or direct funds away from them based on unstable measurements. Agencies should therefore incorporate MOEs, confidence intervals, or reliability flags when comparing counties and making resource-allocation decision.\nReflections\nWhen assessing estimates of median owner-occupied home values, it is important to consider margins of error and confidence intervals, as these measures provide greater context for informed policy-making. Relying solely on arbitrary or point estimates may lead to misleading conclusions and ineffective policy decisions. Counties seeking to implement policies that produce meaningful change should therefore account for the uncertainty surrounding these estimates when evaluating housing conditions and allocating resources."
+  },
+  {
+    "objectID": "assignments/assignment2.html#optional-challenges---for-those-craving-more",
+    "href": "assignments/assignment2.html#optional-challenges---for-those-craving-more",
+    "title": "Assignment 2: Who Do We Know the Least About?",
+    "section": "Optional challenges - For those craving more",
+    "text": "Optional challenges - For those craving more\n\n\n\n\n\n\nNoteDelete this box\n\n\n\nNone of these are graded. There are no extra points. A complete, well-written assignment earns a 2 either way.\nThey’re here for anyone who finished the above and found it straightforward. Pick one (or more) that interests you.\n\nPropagate the margin of error. If you compute a derived value — a percentage, a ratio, a sum — its uncertainty depends on the uncertainty of its inputs, and you can’t just carry the original MOE along. The Census Bureau publishes formulas for this, and tidycensus implements them: moe_sum(), moe_prop(), moe_ratio(). Compute something derived, and get its margin of error right.\nParameterize the report. Add params: to the YAML so the state is an input rather than hard-coded, and the same file regenerates for any state. Render it from the terminal with quarto render assignment2.qmd -P state:NY.\nWrite a function and iterate. Wrap the data pull in a function, then use purrr::map_dfr() to run it across several states at once. Does the small-places-are-noisier pattern hold everywhere, or are some states different?\nChange the geographic scale. Run the same variable at geography = \"tract\" inside one county. Compare the margins of error to what you saw at county level. What does that imply about the resolution at which you can actually trust ACS data?\n\nIf you try one, add a short section describing what you did and what you found."
+  },
+  {
+    "objectID": "assignments/assignment2.html#before-you-submit",
+    "href": "assignments/assignment2.html#before-you-submit",
+    "title": "Assignment 2: Who Do We Know the Least About?",
+    "section": "Before you submit",
+    "text": "Before you submit\n\n\n\n\n\n\nNoteDelete this box — checklist\n\n\n\n\nYour name is in the YAML header\nEvery instruction callout is deleted\nEvery [bracketed prompt] is replaced with your own writing\nNo ___ blanks remain anywhere\nThe file is at assignments/assignment2.qmd\nSession → Restart R, then render the whole project. It works.\nCommitted and pushed\nYou opened your live site and looked at the published page"
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#the-r-environment",
+    "href": "weekly-notes/week-02.html#the-r-environment",
+    "title": "Week 2: dplyr and census",
+    "section": "1. The R Environment",
+    "text": "1. The R Environment\n\nConsole: run code interactively (e.g. 2 + 2), but nothing is saved.\nR Script (.R): saves code so you can rerun/edit later.\nQuarto (.qmd): combines text, headings, R code, tables, and figures into one reproducible document — code lives inside chunks:\n\n\n2 + 2\n\n[1] 4"
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#reading-r-code",
+    "href": "weekly-notes/week-02.html#reading-r-code",
+    "title": "Week 2: dplyr and census",
+    "section": "2. Reading R Code",
+    "text": "2. Reading R Code\nThink of code in terms of objects (store results), verbs/functions (perform actions), arguments (instructions), and data (what’s being analyzed).\n\nresult &lt;- filter(counties, population &gt; 50000)\n\n\n\n\nComponent\nExample\nMeaning\n\n\n\n\nObject\nresult\nStores the result\n\n\nAssignment\n&lt;-\nAssigns result to object\n\n\nFunction\nfilter()\nAction performed\n\n\nData\ncounties\nData being processed\n\n\nArgument\npopulation &gt; 50000\nCondition applied\n\n\n\n&lt;- is the assignment operator: x &lt;- 10 creates object x holding 10."
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#r-packages",
+    "href": "weekly-notes/week-02.html#r-packages",
+    "title": "Week 2: dplyr and census",
+    "section": "3. R Packages",
+    "text": "3. R Packages\n\ninstall.packages(\"dplyr\")   # install once\nlibrary(dplyr)               # load each session\nlibrary(tidycensus)\n\ninstall.packages() = get it on your computer; library() = load it for use."
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#data-frames-and-tibbles",
+    "href": "weekly-notes/week-02.html#data-frames-and-tibbles",
+    "title": "Week 2: dplyr and census",
+    "section": "4. Data Frames and Tibbles",
+    "text": "4. Data Frames and Tibbles\nA data frame is data in rows (observations) and columns (variables); a tibble is a cleaner-printing tidyverse version.\n\n\n\nName\nIncome\nMOE\nMOE_pct\n\n\n\n\nAdams\n78,975\n3,334\n9\n\n\nBerks\n74,617\n1,191\n12"
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#common-dplyr-verbs",
+    "href": "weekly-notes/week-02.html#common-dplyr-verbs",
+    "title": "Week 2: dplyr and census",
+    "section": "5. Common dplyr Verbs",
+    "text": "5. Common dplyr Verbs\n\n\n\nFunction\nPurpose\n\n\n\n\nfilter()\nPick rows by condition\n\n\nselect()\nPick columns\n\n\nmutate()\nCreate/modify columns\n\n\narrange()\nReorder rows (desc() for descending)\n\n\ngroup_by()\nGroup for per-group analysis\n\n\nsummarize()\nReduce to summary stats\n\n\n\n\nfilter(counties, population &gt; 50000)\nselect(counties, NAME, population)\ncounties &lt;- mutate(counties, income2 = income * 2)\narrange(counties, desc(income))\n\ncounties |&gt;\n  group_by(state) |&gt;\n  summarize(min_income = min(income, na.rm = TRUE))"
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#pipes-and-then",
+    "href": "weekly-notes/week-02.html#pipes-and-then",
+    "title": "Week 2: dplyr and census",
+    "section": "6. Pipes: “And Then”",
+    "text": "6. Pipes: “And Then”\n|&gt; (modern) and %&gt;% (older tidyverse) chain operations together:\n\ncounties |&gt;\n  filter(moe_pct &gt; 10) |&gt;\n  arrange(desc(moe_pct)) |&gt;\n  select(NAME, moe_pct)\n\nReads as: start with counties → filter → arrange → select. Equivalent to writing separate step1, step2, step3 objects, but more compact."
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#r-is-case-sensitive",
+    "href": "weekly-notes/week-02.html#r-is-case-sensitive",
+    "title": "Week 2: dplyr and census",
+    "section": "7. R Is Case Sensitive",
+    "text": "7. R Is Case Sensitive\ncounties ≠ Counties; moe_pct ≠ MOE_pct. Always match exact spelling/capitalization."
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#census-data",
+    "href": "weekly-notes/week-02.html#census-data",
+    "title": "Week 2: dplyr and census",
+    "section": "8. Census Data",
+    "text": "8. Census Data\n\nDecennial Census: every 10 years, full population count.\nACS (American Community Survey): sample-based (since 2005), gives detailed demographic/economic/housing data plus a margin of error (MOE) since it’s an estimate, not a full count."
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#acs-data-products",
+    "href": "weekly-notes/week-02.html#acs-data-products",
+    "title": "Week 2: dplyr and census",
+    "section": "9. ACS Data Products",
+    "text": "9. ACS Data Products\n\n1-Year estimates: larger areas/populations only.\n5-Year estimates: smaller areas (tracts, block groups, counties, places); e.g. a 2023 5-year estimate covers the 5-year period ending 2023."
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#estimates-and-margins-of-error",
+    "href": "weekly-notes/week-02.html#estimates-and-margins-of-error",
+    "title": "Week 2: dplyr and census",
+    "section": "10. Estimates and Margins of Error",
+    "text": "10. Estimates and Margins of Error\nEvery ACS value pairs an estimate with an MOE indicating uncertainty:\n\n\n\nCounty\nIncome\nMOE\n\n\n\n\nAdams\n$78,975\n$3,334\n\n\nBucks\n$104,200\n$1,502\n\n\n\nAlways report/interpret estimates alongside their MOE."
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#census-variable-ids",
+    "href": "weekly-notes/week-02.html#census-variable-ids",
+    "title": "Week 2: dplyr and census",
+    "section": "11. Census Variable IDs",
+    "text": "11. Census Variable IDs\nB19013_001E → B(base table) 19013(table number) 001(line number) E(estimate). The MOE version ends in M (B19013_001M)."
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#geography-in-census-data",
+    "href": "weekly-notes/week-02.html#geography-in-census-data",
+    "title": "Week 2: dplyr and census",
+    "section": "12. Geography in Census Data",
+    "text": "12. Geography in Census Data\nHierarchy: State → County → Census Tract → Block Group → Block. Not all datasets cover every level. Tract boundaries can shift over time — use NHGIS or LTDB/LTDR for longitudinal comparisons."
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#blocks-and-block-groups",
+    "href": "weekly-notes/week-02.html#blocks-and-block-groups",
+    "title": "Week 2: dplyr and census",
+    "section": "13. Blocks and Block Groups",
+    "text": "13. Blocks and Block Groups\nBlocks are the smallest unit (Decennial only, little ACS data). Block groups (collections of blocks) allow detailed analysis but often carry large MOEs due to small sample sizes."
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#geoids",
+    "href": "weekly-notes/week-02.html#geoids",
+    "title": "Week 2: dplyr and census",
+    "section": "14. GEOIDs",
+    "text": "14. GEOIDs\nUnique geographic identifier, e.g. 42101000100 = 42(PA) + 101(county) + 000100(tract). Used to join Census data to boundary files."
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#getting-census-data-with-tidycensus",
+    "href": "weekly-notes/week-02.html#getting-census-data-with-tidycensus",
+    "title": "Week 2: dplyr and census",
+    "section": "15. Getting Census Data with tidycensus",
+    "text": "15. Getting Census Data with tidycensus\n\nlibrary(tidycensus)\n\ndata &lt;- get_acs(\n  geography = \"county\",\n  variables = c(\"B19013_001\", \"B01003_001\"),\n  state = \"PA\",\n  year = 2023,\n  survey = \"acs5\"\n)\n\n\n\n\nArgument\nPurpose\n\n\n\n\ngeography\nGeographic level\n\n\nvariables\nCensus variable codes\n\n\nstate\nState filter\n\n\nyear\nData year\n\n\nsurvey\nACS product (e.g. acs5)"
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#long-vs.-wide-data",
+    "href": "weekly-notes/week-02.html#long-vs.-wide-data",
+    "title": "Week 2: dplyr and census",
+    "section": "16. Long vs. Wide Data",
+    "text": "16. Long vs. Wide Data\nLong: one row per observation-variable pair (good for multi-variable tidyverse workflows).\n\n\n\nGEOID\nNAME\nVARIABLE\nESTIMATE\nMOE\n\n\n\n\n42001\nAdams\nB19013_001\n78,975\n3,334\n\n\n\nWide: each variable is its own column (easier to scan per variable).\n\n\n\nGEOID\nNAME\nB19013_001\nMOE\n\n\n\n\n42001\nAdams\n78,975\n3,334"
+  },
+  {
+    "objectID": "weekly-notes/week-02.html#key-concepts-to-remember",
+    "href": "weekly-notes/week-02.html#key-concepts-to-remember",
+    "title": "Week 2: dplyr and census",
+    "section": "17. Key Concepts to Remember",
+    "text": "17. Key Concepts to Remember\n\nConsole = testing; R script = saved code; Quarto chunk = code inside .qmd.\nObjects store data; functions act on objects; arguments guide functions.\nfilter() rows, select() columns, mutate() new/modified columns, arrange() order, group_by()/summarize() grouped stats.\nPipes (|&gt;/%&gt;%) chain steps; R is case sensitive.\nACS = estimates with MOE, not exact counts; GEOIDs identify geography; geography can change over time.\ntidycensus fetches Census/ACS data; results can be long or wide format."
+  },
+  {
+    "objectID": "weekly-notes/week-01.html#yaml",
+    "href": "weekly-notes/week-01.html#yaml",
+    "title": "Week 1: Getting Set Up",
+    "section": "1. YAML",
+    "text": "1. YAML\nYAML is the configuration block at the top of a .qmd file. It begins and ends with three dashes:\n---\ntitle: \"My Portfolio\"\nauthor: \"Emmanuel Sampson\"\ndate: today\nformat: html\n---\nYAML can specify:\n\nThe title and author\nThe date\nOutput format, such as HTML\nTable of contents settings\nWhether code is shown or hidden\nOther document-level options\n\n\nImportant YAML Rules\n\nIndentation matters.\nUse spaces, not tabs.\nA colon must have a space after it:\n\ntitle: \"My Page\"\n\nYAML begins at the first line of the document.\nThe opening and closing --- lines must both be present.\n\nA common error is incorrect indentation.\nFor example, this is wrong:\nwebsite:\nnavbar:\n  title: \"Portfolio\"\nBecause navbar should be nested under website.\nThe correct version is:\nwebsite:\n  navbar:\n    title: \"Portfolio\""
+  },
+  {
+    "objectID": "weekly-notes/week-01.html#useful-markdown-patterns",
+    "href": "weekly-notes/week-01.html#useful-markdown-patterns",
+    "title": "Week 1: Getting Set Up",
+    "section": "Useful Markdown Patterns",
+    "text": "Useful Markdown Patterns\n\n\n\n\n\n\n\n\nWhat you want\nMarkdown you write\nWhat it does\n\n\n\n\nMain heading\n# Title\nCreates the largest heading\n\n\nSection heading\n## Section\nCreates a major section\n\n\nSubsection\n### Subsection\nCreates a subsection\n\n\nBold text\n**important**\nMakes text bold\n\n\nItalic text\n*emphasis*\nMakes text italic\n\n\nLink\n[text](https://example.com)\nCreates a clickable link\n\n\nBullet list\n- item\nCreates a bulleted list\n\n\nNumbered list\n1. item\nCreates a numbered list\n\n\nInline code\n`mean(x)`\nDisplays code in text"
+  },
+  {
+    "objectID": "weekly-notes/week-01.html#markdown-example",
+    "href": "weekly-notes/week-01.html#markdown-example",
+    "title": "Week 1: Getting Set Up",
+    "section": "Markdown Example",
+    "text": "Markdown Example\n## What We Learned Today\n\nWe learned how **Quarto** turns text and R code into a webpage.\n\nFor more information, visit the [Quarto website](https://quarto.org)."
+  },
+  {
+    "objectID": "weekly-notes/week-01.html#code-chunk-options",
+    "href": "weekly-notes/week-01.html#code-chunk-options",
+    "title": "Week 1: Getting Set Up",
+    "section": "Code Chunk Options",
+    "text": "Code Chunk Options\nYou can add options to control what viewers see:\n2 + 2\nCommon options include:\n\necho: true or echo=true: Shows the code in the webpage.\necho: false or echo=false: Runs the code but hides it.\nwarning: false: Hides warning messages.\nmessage: false: Hides package startup messages.\ninclude: false: Runs the code but shows neither the code nor the output."
+  },
+  {
+    "objectID": "weekly-notes/week-01.html#pages-written-for-people",
+    "href": "weekly-notes/week-01.html#pages-written-for-people",
+    "title": "Week 1: Getting Set Up",
+    "section": "Pages Written for People",
+    "text": "Pages Written for People\n\n\n\n\n\n\n\nFile or folder\nPurpose\n\n\n\n\nindex.qmd\nThe home page of your site\n\n\nabout.qmd\nYour About page\n\n\ncontact.qmd\nA Get in Touch/contact page, if you create one\n\n\nweekly-notes/index.qmd\nThe main page for weekly notes\n\n\nweekly-notes/\nFolder holding weekly-note pages or materials\n\n\nassignments/index.qmd\nThe main page listing assignments\n\n\nassignments/\nFolder for assignment pages, data, code, and figures\n\n\nimages/ or img/\nImages used in the website\n\n\ndata/\nData files used in analysis, when appropriate"
+  },
+  {
+    "objectID": "weekly-notes/week-01.html#reflections",
+    "href": "weekly-notes/week-01.html#reflections",
+    "title": "Week 1: Getting Set Up",
+    "section": "Reflections",
+    "text": "Reflections\nWhat I want out of this course: I want to develop a stronger understanding of how Quarto, R, Git, GitHub, and GitHub Pages work together to create and publish data-driven websites. I also want to become more confident in using R for data analysis, visualization, and communicating results in a clear and professional way. By the end of the course, I hope to have a portfolio that demonstrates both my technical skills and my ability to communicate analytical findings. Most importantly, I want to develop skills that I can apply to future academic and professional projects.\nOne thing I’m nervous about:One thing I am nervous about is troubleshooting technical problems when my code, Quarto documents, or GitHub workflow does not work as expected. I am still becoming familiar with the different tools involved, so errors can sometimes be difficult to understand"
   }
 ]

@@ -6,7 +6,273 @@ date: 2026-08-28
 
 ## What We Did
 
-<!-- CHANGE THIS: replace with your own notes -->
+
+# What Is a Website?
+
+A website is a collection of files and folders that a web browser can read and display. The main files are usually **HTML** files.
+
+* **HTML** stands for HyperText Markup Language.
+* A browser—such as Chrome, Safari, Edge, or Firefox—reads HTML and displays it as a web page.
+* A website normally has one or more HTML pages, plus supporting files such as images, CSS stylesheets, JavaScript, fonts, and data files.
+
+For this course, you generally do **not** write large amounts of HTML by hand. You write Quarto documents, and Quarto creates the HTML for you.
+
+# The Quarto Workflow
+
+The basic Quarto workflow looks like this:
+
+```text
+You write .qmd files
+        ↓
+Quarto reads and renders them
+        ↓
+Quarto runs R code where needed
+        ↓
+Quarto creates .html files
+        ↓
+GitHub Pages publishes the HTML online
+```
+
+A `.qmd` file is a **Quarto Markdown** document. It is designed to hold narrative writing, headings, links, images, equations, and executable code in one file.
+
+Quarto is useful because it can produce web pages and other outputs—such as reports, presentations, PDFs, and Word documents—from a single source document.
+
+# What Does "Render" Mean?
+
+To **render** means to build the finished output from your source file.
+
+When you render a Quarto document, Quarto generally:
+
+1. Reads the `.qmd` file from top to bottom.
+2. Interprets the YAML settings at the top.
+3. Reads the Markdown text, headings, links, and images.
+4. Finds executable code cells/chunks.
+5. Sends R code to R, runs it, and receives the results.
+6. Combines the prose, code output, tables, figures, and formatting.
+7. Produces an HTML page for the website.
+
+For example, this code in a `.qmd` document:
+
+```{r}
+2 + 2
+```
+
+will be evaluated during rendering, and the resulting webpage can display:
+
+```text
+[1] 4
+```
+
+Depending on the document or project settings, you can show or hide the code, warnings, messages, and results.
+
+# Render Versus Preview
+
+These are related but different actions:
+
+| Action                      | What it does                                          | Who can see it?                                  |
+| :-------------------------- | :---------------------------------------------------- | :----------------------------------------------- |
+| **Save**                    | Saves your `.qmd` source file on your computer        | Only you                                         |
+| **Render**                  | Converts `.qmd` into `.html`                          | Initially only you                               |
+| **Preview**                 | Opens the rendered page locally, often at `localhost` | Only you                                         |
+| **Commit**                  | Creates a labeled Git snapshot on your computer       | You and anyone with access to the local computer |
+| **Push**                    | Uploads commits to GitHub                             | People with repository access                    |
+| **GitHub Pages deployment** | Publishes the rendered HTML as a public website       | Anyone with the URL                              |
+
+A URL such as `http://localhost:6930/about.html` is a local preview.
+
+**"Localhost" means your own computer**, so an instructor cannot open that address.
+
+Your public website is instead a GitHub Pages URL such as:
+
+`https://username.github.io/repository-name/`
+
+# Anatomy of a `.qmd` File
+
+A Quarto document has three common parts:
+
+1. YAML metadata at the top
+2. Markdown content
+3. Executable code cells/chunks
+
+## 1. YAML
+
+YAML is the configuration block at the top of a `.qmd` file. It begins and ends with three dashes:
+
+```yaml
+---
+title: "My Portfolio"
+author: "Emmanuel Sampson"
+date: today
+format: html
+---
+```
+
+YAML can specify:
+
+* The title and author
+* The date
+* Output format, such as HTML
+* Table of contents settings
+* Whether code is shown or hidden
+* Other document-level options
+
+### Important YAML Rules
+
+* Indentation matters.
+* Use spaces, not tabs.
+* A colon must have a space after it:
+
+```yaml
+title: "My Page"
+```
+
+* YAML begins at the first line of the document.
+* The opening and closing `---` lines must both be present.
+
+A common error is incorrect indentation.
+
+For example, this is **wrong**:
+
+```yaml
+website:
+navbar:
+  title: "Portfolio"
+```
+
+Because `navbar` should be nested under `website`.
+
+The correct version is:
+
+```yaml
+website:
+  navbar:
+    title: "Portfolio"
+```
+
+# 2. Markdown
+
+Markdown is the simple writing syntax used after YAML. It creates headings, paragraphs, lists, links, images, emphasis, and more.
+
+For example:
+
+```markdown
+# Main Page Title
+
+## Major Section
+
+### Smaller Section
+
+This is an ordinary paragraph.
+
+- First bullet
+- Second bullet
+
+1. First numbered item
+2. Second numbered item
+```
+
+## Useful Markdown Patterns
+
+| What you want   | Markdown you write            | What it does                |
+| :-------------- | :---------------------------- | :-------------------------- |
+| Main heading    | `# Title`                     | Creates the largest heading |
+| Section heading | `## Section`                  | Creates a major section     |
+| Subsection      | `### Subsection`              | Creates a subsection        |
+| Bold text       | `**important**`               | Makes text bold             |
+| Italic text     | `*emphasis*`                  | Makes text italic           |
+| Link            | `[text](https://example.com)` | Creates a clickable link    |
+| Bullet list     | `- item`                      | Creates a bulleted list     |
+| Numbered list   | `1. item`                     | Creates a numbered list     |
+| Inline code     | `` `mean(x)` ``               | Displays code in text       |
+
+## Markdown Example
+
+```markdown
+## What We Learned Today
+
+We learned how **Quarto** turns text and R code into a webpage.
+
+For more information, visit the [Quarto website](https://quarto.org).
+```
+
+# 3. Code Chunks/C ells
+
+A code chunk is a fenced block that tells Quarto to run code.
+
+In a Quarto document using R, a basic code cell looks like this:
+
+```{r}
+2 + 2
+```
+
+You can give a cell a meaningful label:
+
+```{r load-tidycensus}
+library(tidycensus)
+```
+
+Good chunk names help you find and debug code.
+
+Use names that describe the purpose, such as:
+
+* `load-packages`
+* `download-census-data`
+* `clean-data`
+* `make-map`
+* `plot-income-distribution`
+
+**Avoid spaces in chunk labels.** Use hyphens instead.
+
+## Code Chunk Options
+
+You can add options to control what viewers see:
+
+```r
+2 + 2
+```
+
+Common options include:
+
+* `echo: true` or `echo=true`: Shows the code in the webpage.
+* `echo: false` or `echo=false`: Runs the code but hides it.
+* `warning: false`: Hides warning messages.
+* `message: false`: Hides package startup messages.
+* `include: false`: Runs the code but shows neither the code nor the output.
+
+# Files and Folders in a Quarto Website
+
+A Quarto website contains files for people to read and files used by software to build and manage the project.
+
+## Pages Written for People
+
+| File or folder           | Purpose                                              |
+| :----------------------- | :--------------------------------------------------- |
+| `index.qmd`              | The home page of your site                           |
+| `about.qmd`              | Your About page                                      |
+| `contact.qmd`            | A Get in Touch/contact page, if you create one       |
+| `weekly-notes/index.qmd` | The main page for weekly notes                       |
+| `weekly-notes/`          | Folder holding weekly-note pages or materials        |
+| `assignments/index.qmd`  | The main page listing assignments                    |
+| `assignments/`           | Folder for assignment pages, data, code, and figures |
+| `images/` or `img/`      | Images used in the website                           |
+| `data/`                  | Data files used in analysis, when appropriate        |
+
+# Key Takeaways
+
+The main concepts to remember are:
+
+1. **HTML** is the language browsers use to display web pages.
+2. **Quarto** allows you to create web pages without writing large amounts of HTML manually.
+3. A **`.qmd` file** combines writing, formatting, and executable code.
+4. **YAML** controls document-level settings.
+5. **Markdown** controls the structure and formatting of your written content.
+6. **Code chunks** allow Quarto to execute R code during rendering.
+7. **Render** builds the finished HTML output.
+8. **Preview** lets you view the website locally on your own computer.
+9. **Commit** saves a snapshot of your work in Git.
+10. **Push** sends your commits to GitHub.
+11. **GitHub Pages** publishes your website online.
+
 
 Set up the portfolio workflow: made a repository from a template, cloned it with
 GitHub Desktop, edited files in RStudio, rendered with Quarto, and published to
@@ -31,15 +297,16 @@ it on your published site, R and Quarto are talking to each other correctly.
 sessionInfo()$R.version$version.string
 ```
 
-## Reflection
+## Reflections
 
-<!-- CHANGE THIS: 3-4 sentences -->
+What I want out of this course: I want to develop a stronger understanding of how Quarto, R, Git, GitHub, and GitHub Pages work together to create and publish data-driven websites. I also want to become more confident in using R for data analysis, visualization, and communicating results in a clear and professional way. By the end of the course, I hope to have a portfolio that demonstrates both my technical skills and my ability to communicate analytical findings. Most importantly, I want to develop skills that I can apply to future academic and professional projects.
 
-What I want out of this course:
-
-One thing I'm nervous about:
+One thing I'm nervous about:One thing I am nervous about is troubleshooting technical problems when my code, Quarto documents, or GitHub workflow does not work as expected. I am still becoming familiar with the different tools involved, so errors can sometimes be difficult to understand
 
 ## Questions I Still Have
 
--
--
+How can I make my Quarto website look more professional and visually appealing?
+What are the best practices for organizing data, code, images, and other files in a Quarto project?
+How can I efficiently troubleshoot errors when rendering a .qmd file?
+How can I use Git and GitHub effectively to track changes and manage different versions of my work?
+What are some ways to make data visualizations more effective for communicating findings to a non-technical audience?

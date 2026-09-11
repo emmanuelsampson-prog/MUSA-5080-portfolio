@@ -1,0 +1,167 @@
+---
+title: "Assignment 2: Who Do We Know the Least About?"
+subtitle: "Measuring uncertainty in American Community Survey data"
+author: "Emmanuel Sampson"
+date: today
+format:
+  html:
+    toc: true
+    code-fold: false
+execute:
+  warning: false
+  message: false
+---
+
+
+## Setup
+
+```{r}
+library(tidyverse)
+library(tidycensus)
+```
+
+
+
+---
+
+## The question
+
+Every number the American Community Survey publishes is an estimate drawn from a
+sample, not a count. That means every number comes with a margin of error — a
+statement about how wrong it might be.
+
+Most people ignore it. In this assignment, you won't.
+
+---
+
+## Choosing what to measure
+
+
+```r
+vars <- load_variables(2023, "acs5")
+View(vars)
+```
+
+Then use the search box.
+:::
+
+```{r}
+my_state <- "CO"        # two-letter abbreviation, in quotes
+my_variable <- "B25077_001"     # the variable code, in quotes
+```
+
+## Pulling the data
+
+```{r}
+county_data <- get_acs(
+  geography = "county",
+  variables = my_variable,
+  state = my_state,
+  year = 2023,
+  survey = "acs5"
+)
+```
+
+Let's look at what came back.
+
+```{r}
+dim(county_data)
+head(county_data)
+```
+
+
+There are 64 counties in Colorado and that number matches the rows returned by dim(country_data) which is 5.
+
+
+
+```{r}
+county_data <- county_data %>%
+  mutate(moe_pct = moe/estimate * 100)
+```
+
+
+
+Now sort to see which counties are measured least reliably.
+
+```{r}
+county_data %>%
+  arrange(desc(moe_pct)) %>%
+  select(NAME, estimate, moe, moe_pct) %>%
+  head(10)
+```
+
+Jackson County, Colorado has the largest margin of error relative to its estimate.Jackson County’s ACS median home-value estimate has a margin of error equal to about 42% of the estimate, making it the least precise estimate in the displayed set.
+
+## Sorting counties into reliability categories
+
+```{r}
+county_data <- county_data %>%
+  mutate(reliability = case_when(
+    moe_pct < 5  ~ "High confidence",
+    moe_pct < 10 ~ "Moderate",
+    TRUE         ~ "Low confidence"
+  ))
+
+count(county_data, reliability)
+```
+
+I evaluated the reliability of ACS estimates for median owner-occupied home values across Colorado counties by calculating each estimate’s margin of error as a percentage of its reported value: (MOE/estimate)×100.Counties with a relative MOE below 5% were classified as high confidence, those between 5% and 10% as moderate confidence, and those above 10% as low confidence. These thresholds are interpretive rather than official Census reliability standards, but they create a useful distribution for this county-level analysis: 23 counties have high-confidence estimates, 20 have moderately reliable estimates, and 21 have low-confidence estimates.
+
+
+
+```{r}
+county_wide <- get_acs(
+  geography = "county",
+  variables = c(myvar = my_variable,
+                pop   = "B01003_001"),
+  state = my_state,
+  year = 2023,
+  survey = "acs5",
+  output = "wide"
+)
+
+head(county_wide)
+```
+
+
+```{r}
+county_wide <- county_wide %>%
+  mutate(moe_pct = myvarM / myvarE * 100) %>%
+  mutate(reliability = case_when(
+    moe_pct < 5  ~ "High confidence",
+    moe_pct < 15 ~ "Moderate",
+    TRUE         ~ "Low confidence"
+  ))
+```
+
+Now compare the average population of counties in each reliability category.
+
+```{r}
+county_wide %>%
+  group_by(reliability) %>%
+  summarize(
+    n_counties = n(),
+    avg_population = mean(popE)
+  )
+```
+
+
+High-confidence counties have an average population of approximately 234,182 people, compared with about 4,015 people in low-confidence counties. Moderate-reliability counties have an average population of approximately 12,139 people. This pattern suggests that, in this dataset, more populous counties generally have more precise ACS median home-value estimates, while less populous counties tend to have larger relative margins of error and lower-confidence estimates.
+
+## What this means for policy
+
+Colorado communities with the least reliable ACS estimates of median owner-occupied home values are primarily small, rural counties. Jackson County has the greatest uncertainty: its estimated median home value is $250,000, with a margin of error of ±$104,968, or 42.0% of the estimate. Other counties with relatively high uncertainty include San Miguel County (27.0%), San Juan County (23.1%), Kiowa County (20.6%), Bent County (19.2%), and Baca County (18.4%). Using the selected thresholds, nine counties fall into the low-confidence category, compared with 23 high-confidence and 32 moderate-reliability counties.
+                                                                              
+This pattern reflects how the American Community Survey (ACS) works. Unlike a complete census count, the ACS is a continuous sample survey. Its estimates are based on responses from a subset of households rather than every household. Smaller counties contain fewer households and therefore tend to produce smaller survey samples. Smaller samples create more sampling variability, which appears as a larger margin of error relative to the reported estimate. ACS sampling error is generally lower when the sample size is larger, while small-area estimates often require pooled multi-year data to achieve usable precision.
+
+
+A state agency that allocates housing assistance, property-tax relief, or infrastructure funding based on median home values—but treats every county estimate as equally precise—could make poorly targeted decisions. Rural, low-population counties would be most vulnerable. For example, Jackson County could be classified as comparatively high-value or low-value based on an estimate with a confidence interval spanning roughly $145,032 to $354,968. Funding formulas that ignore this uncertainty could underfund communities with genuine housing need or direct funds away from them based on unstable measurements. Agencies should therefore incorporate MOEs, confidence intervals, or reliability flags when comparing counties and making resource-allocation decision.
+
+
+**Reflections**
+
+When assessing estimates of median owner-occupied home values, it is important to consider margins of error and confidence intervals, as these measures provide greater context for informed policy-making. Relying solely on arbitrary or point estimates may lead to misleading conclusions and ineffective policy decisions. Counties seeking to implement policies that produce meaningful change should therefore account for the uncertainty surrounding these estimates when evaluating housing conditions and allocating resources.
+
+
+
+

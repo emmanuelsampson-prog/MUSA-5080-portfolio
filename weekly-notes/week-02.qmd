@@ -5,38 +5,178 @@ date: 2026-09-04
 ---
 
 ## What We Did
-First we had a quiz. It was a little scary but I am not scared anymore
+First we had a quiz. It was a little scary but I am not scared anymore.
 
 
+## 1. The R Environment
 
-## Key Concepts
-
-Three places a file can live:
-
-1. **My computer** — where I edit
-2. **GitHub.com** — where it's stored
-3. **My live site** — what the world sees
-
-The loop: **Edit → Save → Render → Commit → Push → wait → refresh**
-
-## Proving R Works
-
-The chunk below runs when this page renders. If you can see a result underneath
-it on your published site, R and Quarto are talking to each other correctly.
+- **Console**: run code interactively (e.g. `2 + 2`), but nothing is saved.
+- **R Script (.R)**: saves code so you can rerun/edit later.
+- **Quarto (.qmd)**: combines text, headings, R code, tables, and figures into one reproducible document — code lives inside chunks:
 
 ```{r}
-sessionInfo()$R.version$version.string
+2 + 2
 ```
 
-## Reflection
+## 2. Reading R Code
 
-<!-- CHANGE THIS: 3-4 sentences -->
+Think of code in terms of **objects** (store results), **verbs/functions** (perform actions), **arguments** (instructions), and **data** (what's being analyzed).
 
-What I want out of this course:
+```{r}
+#| eval: false
+result <- filter(counties, population > 50000)
+```
 
-One thing I'm nervous about:
+| Component | Example | Meaning |
+|---|---|---|
+| Object | `result` | Stores the result |
+| Assignment | `<-` | Assigns result to object |
+| Function | `filter()` | Action performed |
+| Data | `counties` | Data being processed |
+| Argument | `population > 50000` | Condition applied |
 
-## Questions I Still Have
+`<-` is the **assignment operator**: `x <- 10` creates object `x` holding 10.
 
--
--
+## 3. R Packages
+
+```{r}
+#| eval: false
+install.packages("dplyr")   # install once
+library(dplyr)               # load each session
+library(tidycensus)
+```
+
+`install.packages()` = get it on your computer; `library()` = load it for use.
+
+## 4. Data Frames and Tibbles
+
+A **data frame** is data in rows (observations) and columns (variables); a **tibble** is a cleaner-printing tidyverse version.
+
+| Name | Income | MOE | MOE_pct |
+|---|---|---|---|
+| Adams | 78,975 | 3,334 | 9 |
+| Berks | 74,617 | 1,191 | 12 |
+
+## 5. Common dplyr Verbs
+
+| Function | Purpose |
+|---|---|
+| `filter()` | Pick rows by condition |
+| `select()` | Pick columns |
+| `mutate()` | Create/modify columns |
+| `arrange()` | Reorder rows (`desc()` for descending) |
+| `group_by()` | Group for per-group analysis |
+| `summarize()` | Reduce to summary stats |
+
+```{r}
+#| eval: false
+filter(counties, population > 50000)
+select(counties, NAME, population)
+counties <- mutate(counties, income2 = income * 2)
+arrange(counties, desc(income))
+
+counties |>
+  group_by(state) |>
+  summarize(min_income = min(income, na.rm = TRUE))
+```
+
+## 6. Pipes: "And Then"
+
+`|>` (modern) and `%>%` (older tidyverse) chain operations together:
+
+```{r}
+#| eval: false
+counties |>
+  filter(moe_pct > 10) |>
+  arrange(desc(moe_pct)) |>
+  select(NAME, moe_pct)
+```
+
+Reads as: start with counties → filter → arrange → select. Equivalent to writing separate `step1`, `step2`, `step3` objects, but more compact.
+
+## 7. R Is Case Sensitive
+
+`counties` ≠ `Counties`; `moe_pct` ≠ `MOE_pct`. Always match exact spelling/capitalization.
+
+## 8. Census Data
+
+- **Decennial Census**: every 10 years, full population count.
+- **ACS (American Community Survey)**: sample-based (since 2005), gives detailed demographic/economic/housing data plus a **margin of error (MOE)** since it's an estimate, not a full count.
+
+## 9. ACS Data Products
+
+- **1-Year estimates**: larger areas/populations only.
+- **5-Year estimates**: smaller areas (tracts, block groups, counties, places); e.g. a 2023 5-year estimate covers the 5-year period ending 2023.
+
+## 10. Estimates and Margins of Error
+
+Every ACS value pairs an **estimate** with an **MOE** indicating uncertainty:
+
+| County | Income | MOE |
+|---|---|---|
+| Adams | $78,975 | $3,334 |
+| Bucks | $104,200 | $1,502 |
+
+Always report/interpret estimates alongside their MOE.
+
+## 11. Census Variable IDs
+
+`B19013_001E` → **B**(base table) **19013**(table number) **001**(line number) **E**(estimate). The MOE version ends in **M** (`B19013_001M`).
+
+## 12. Geography in Census Data
+
+Hierarchy: **State → County → Census Tract → Block Group → Block**. Not all datasets cover every level. Tract boundaries can shift over time — use **NHGIS** or **LTDB/LTDR** for longitudinal comparisons.
+
+## 13. Blocks and Block Groups
+
+**Blocks** are the smallest unit (Decennial only, little ACS data). **Block groups** (collections of blocks) allow detailed analysis but often carry large MOEs due to small sample sizes.
+
+## 14. GEOIDs
+
+Unique geographic identifier, e.g. `42101000100` = `42`(PA) + `101`(county) + `000100`(tract). Used to join Census data to boundary files.
+
+## 15. Getting Census Data with tidycensus
+
+```{r}
+#| eval: false
+library(tidycensus)
+
+data <- get_acs(
+  geography = "county",
+  variables = c("B19013_001", "B01003_001"),
+  state = "PA",
+  year = 2023,
+  survey = "acs5"
+)
+```
+
+| Argument | Purpose |
+|---|---|
+| `geography` | Geographic level |
+| `variables` | Census variable codes |
+| `state` | State filter |
+| `year` | Data year |
+| `survey` | ACS product (e.g. `acs5`) |
+
+## 16. Long vs. Wide Data
+
+**Long**: one row per observation-variable pair (good for multi-variable tidyverse workflows).
+
+| GEOID | NAME | VARIABLE | ESTIMATE | MOE |
+|---|---|---|---|---|
+| 42001 | Adams | B19013_001 | 78,975 | 3,334 |
+
+**Wide**: each variable is its own column (easier to scan per variable).
+
+| GEOID | NAME | B19013_001 | MOE |
+|---|---|---|---|
+| 42001 | Adams | 78,975 | 3,334 |
+
+## 17. Key Concepts to Remember
+
+- Console = testing; R script = saved code; Quarto chunk = code inside `.qmd`.
+- Objects store data; functions act on objects; arguments guide functions.
+- `filter()` rows, `select()` columns, `mutate()` new/modified columns, `arrange()` order, `group_by()`/`summarize()` grouped stats.
+- Pipes (`|>`/`%>%`) chain steps; R is case sensitive.
+- ACS = estimates with MOE, not exact counts; GEOIDs identify geography; geography can change over time.
+- `tidycensus` fetches Census/ACS data; results can be long or wide format.

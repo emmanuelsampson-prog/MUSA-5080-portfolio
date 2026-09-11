@@ -9,7 +9,7 @@
 <meta name="dcterms.date" content="2026-08-28">
 <meta name="description" content="First impressions, and getting the workflow running.">
 
-<title>Week 1: Getting Set Up – Emmanuel Sampson - MUSA 5080 Portfolio</title>
+<title>Week 1: Getting Set Up – Emmanuel Sampson | Spatial Analytics Portfolio</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -119,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">Portfolio</span>
+    <span class="navbar-title">Emmanuel Sampson</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -144,10 +144,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="../assignments/index.html"> 
 <span class="menu-text">Assignments</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.qmd"> 
+<span class="menu-text">Get in Touch</span></a>
+  </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/emmanuelsampson-prog/MUSA-5080-portfolio"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/emmanuelsampson-prog/MUSA-5080-portfolio"> <i class="bi bi-github" role="img" aria-label="GitHub repository">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -168,10 +172,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#what-we-did" id="toc-what-we-did" class="nav-link active" data-scroll-target="#what-we-did">What We Did</a></li>
+  <li><a href="#what-is-a-website" id="toc-what-is-a-website" class="nav-link" data-scroll-target="#what-is-a-website">What Is a Website?</a></li>
+  <li><a href="#the-quarto-workflow" id="toc-the-quarto-workflow" class="nav-link" data-scroll-target="#the-quarto-workflow">The Quarto Workflow</a></li>
+  <li><a href="#what-does-render-mean" id="toc-what-does-render-mean" class="nav-link" data-scroll-target="#what-does-render-mean">What Does “Render” Mean?</a></li>
+  <li><a href="#render-versus-preview" id="toc-render-versus-preview" class="nav-link" data-scroll-target="#render-versus-preview">Render Versus Preview</a></li>
+  <li><a href="#anatomy-of-a-.qmd-file" id="toc-anatomy-of-a-.qmd-file" class="nav-link" data-scroll-target="#anatomy-of-a-.qmd-file">Anatomy of a <code>.qmd</code> File</a>
+  <ul class="collapse">
+  <li><a href="#yaml" id="toc-yaml" class="nav-link" data-scroll-target="#yaml">1. YAML</a>
+  <ul class="collapse">
+  <li><a href="#important-yaml-rules" id="toc-important-yaml-rules" class="nav-link" data-scroll-target="#important-yaml-rules">Important YAML Rules</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#markdown" id="toc-markdown" class="nav-link" data-scroll-target="#markdown">2. Markdown</a>
+  <ul class="collapse">
+  <li><a href="#useful-markdown-patterns" id="toc-useful-markdown-patterns" class="nav-link" data-scroll-target="#useful-markdown-patterns">Useful Markdown Patterns</a></li>
+  <li><a href="#markdown-example" id="toc-markdown-example" class="nav-link" data-scroll-target="#markdown-example">Markdown Example</a></li>
+  </ul></li>
+  <li><a href="#code-chunksc-ells" id="toc-code-chunksc-ells" class="nav-link" data-scroll-target="#code-chunksc-ells">3. Code Chunks/C ells</a>
+  <ul class="collapse">
+  <li><a href="#code-chunk-options" id="toc-code-chunk-options" class="nav-link" data-scroll-target="#code-chunk-options">Code Chunk Options</a></li>
+  </ul></li>
+  <li><a href="#files-and-folders-in-a-quarto-website" id="toc-files-and-folders-in-a-quarto-website" class="nav-link" data-scroll-target="#files-and-folders-in-a-quarto-website">Files and Folders in a Quarto Website</a>
+  <ul class="collapse">
+  <li><a href="#pages-written-for-people" id="toc-pages-written-for-people" class="nav-link" data-scroll-target="#pages-written-for-people">Pages Written for People</a></li>
+  </ul></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key Takeaways</a>
+  <ul class="collapse">
   <li><a href="#key-concepts" id="toc-key-concepts" class="nav-link" data-scroll-target="#key-concepts">Key Concepts</a></li>
   <li><a href="#proving-r-works" id="toc-proving-r-works" class="nav-link" data-scroll-target="#proving-r-works">Proving R Works</a></li>
-  <li><a href="#reflection" id="toc-reflection" class="nav-link" data-scroll-target="#reflection">Reflection</a></li>
+  <li><a href="#reflections" id="toc-reflections" class="nav-link" data-scroll-target="#reflections">Reflections</a></li>
   <li><a href="#questions-i-still-have" id="toc-questions-i-still-have" class="nav-link" data-scroll-target="#questions-i-still-have">Questions I Still Have</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -210,9 +241,363 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="what-we-did" class="level2">
 <h2 class="anchored" data-anchor-id="what-we-did">What We Did</h2>
-<!-- CHANGE THIS: replace with your own notes -->
-<p>Set up the portfolio workflow: made a repository from a template, cloned it with GitHub Desktop, edited files in RStudio, rendered with Quarto, and published to GitHub Pages.</p>
 </section>
+<section id="what-is-a-website" class="level1">
+<h1>What Is a Website?</h1>
+<p>A website is a collection of files and folders that a web browser can read and display. The main files are usually <strong>HTML</strong> files.</p>
+<ul>
+<li><strong>HTML</strong> stands for HyperText Markup Language.</li>
+<li>A browser—such as Chrome, Safari, Edge, or Firefox—reads HTML and displays it as a web page.</li>
+<li>A website normally has one or more HTML pages, plus supporting files such as images, CSS stylesheets, JavaScript, fonts, and data files.</li>
+</ul>
+<p>For this course, you generally do <strong>not</strong> write large amounts of HTML by hand. You write Quarto documents, and Quarto creates the HTML for you.</p>
+</section>
+<section id="the-quarto-workflow" class="level1">
+<h1>The Quarto Workflow</h1>
+<p>The basic Quarto workflow looks like this:</p>
+<pre class="text"><code>You write .qmd files
+        ↓
+Quarto reads and renders them
+        ↓
+Quarto runs R code where needed
+        ↓
+Quarto creates .html files
+        ↓
+GitHub Pages publishes the HTML online</code></pre>
+<p>A <code>.qmd</code> file is a <strong>Quarto Markdown</strong> document. It is designed to hold narrative writing, headings, links, images, equations, and executable code in one file.</p>
+<p>Quarto is useful because it can produce web pages and other outputs—such as reports, presentations, PDFs, and Word documents—from a single source document.</p>
+</section>
+<section id="what-does-render-mean" class="level1">
+<h1>What Does “Render” Mean?</h1>
+<p>To <strong>render</strong> means to build the finished output from your source file.</p>
+<p>When you render a Quarto document, Quarto generally:</p>
+<ol type="1">
+<li>Reads the <code>.qmd</code> file from top to bottom.</li>
+<li>Interprets the YAML settings at the top.</li>
+<li>Reads the Markdown text, headings, links, and images.</li>
+<li>Finds executable code cells/chunks.</li>
+<li>Sends R code to R, runs it, and receives the results.</li>
+<li>Combines the prose, code output, tables, figures, and formatting.</li>
+<li>Produces an HTML page for the website.</li>
+</ol>
+<p>For example, this code in a <code>.qmd</code> document:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p>will be evaluated during rendering, and the resulting webpage can display:</p>
+<pre class="text"><code>[1] 4</code></pre>
+<p>Depending on the document or project settings, you can show or hide the code, warnings, messages, and results.</p>
+</section>
+<section id="render-versus-preview" class="level1">
+<h1>Render Versus Preview</h1>
+<p>These are related but different actions:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 41%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Action</th>
+<th style="text-align: left;">What it does</th>
+<th style="text-align: left;">Who can see it?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Save</strong></td>
+<td style="text-align: left;">Saves your <code>.qmd</code> source file on your computer</td>
+<td style="text-align: left;">Only you</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Render</strong></td>
+<td style="text-align: left;">Converts <code>.qmd</code> into <code>.html</code></td>
+<td style="text-align: left;">Initially only you</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Preview</strong></td>
+<td style="text-align: left;">Opens the rendered page locally, often at <code>localhost</code></td>
+<td style="text-align: left;">Only you</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Commit</strong></td>
+<td style="text-align: left;">Creates a labeled Git snapshot on your computer</td>
+<td style="text-align: left;">You and anyone with access to the local computer</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Push</strong></td>
+<td style="text-align: left;">Uploads commits to GitHub</td>
+<td style="text-align: left;">People with repository access</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>GitHub Pages deployment</strong></td>
+<td style="text-align: left;">Publishes the rendered HTML as a public website</td>
+<td style="text-align: left;">Anyone with the URL</td>
+</tr>
+</tbody>
+</table>
+<p>A URL such as <code>http://localhost:6930/about.html</code> is a local preview.</p>
+<p><strong>“Localhost” means your own computer</strong>, so an instructor cannot open that address.</p>
+<p>Your public website is instead a GitHub Pages URL such as:</p>
+<p><code>https://username.github.io/repository-name/</code></p>
+</section>
+<section id="anatomy-of-a-.qmd-file" class="level1">
+<h1>Anatomy of a <code>.qmd</code> File</h1>
+<p>A Quarto document has three common parts:</p>
+<ol type="1">
+<li>YAML metadata at the top</li>
+<li>Markdown content</li>
+<li>Executable code cells/chunks</li>
+</ol>
+<section id="yaml" class="level2">
+<h2 class="anchored" data-anchor-id="yaml">1. YAML</h2>
+<p>YAML is the configuration block at the top of a <code>.qmd</code> file. It begins and ends with three dashes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"My Portfolio"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">"Emmanuel Sampson"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> today</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> html</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>YAML can specify:</p>
+<ul>
+<li>The title and author</li>
+<li>The date</li>
+<li>Output format, such as HTML</li>
+<li>Table of contents settings</li>
+<li>Whether code is shown or hidden</li>
+<li>Other document-level options</li>
+</ul>
+<section id="important-yaml-rules" class="level3">
+<h3 class="anchored" data-anchor-id="important-yaml-rules">Important YAML Rules</h3>
+<ul>
+<li>Indentation matters.</li>
+<li>Use spaces, not tabs.</li>
+<li>A colon must have a space after it:</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"My Page"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>YAML begins at the first line of the document.</li>
+<li>The opening and closing <code>---</code> lines must both be present.</li>
+</ul>
+<p>A common error is incorrect indentation.</p>
+<p>For example, this is <strong>wrong</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">website</span><span class="kw">:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">navbar</span><span class="kw">:</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Portfolio"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Because <code>navbar</code> should be nested under <code>website</code>.</p>
+<p>The correct version is:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">website</span><span class="kw">:</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">navbar</span><span class="kw">:</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Portfolio"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+</section>
+<section id="markdown" class="level1">
+<h1>2. Markdown</h1>
+<p>Markdown is the simple writing syntax used after YAML. It creates headings, paragraphs, lists, links, images, emphasis, and more.</p>
+<p>For example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Main Page Title</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Major Section</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">### Smaller Section</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>This is an ordinary paragraph.</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>First bullet</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Second bullet</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>First numbered item</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Second numbered item</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="useful-markdown-patterns" class="level2">
+<h2 class="anchored" data-anchor-id="useful-markdown-patterns">Useful Markdown Patterns</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 40%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">What you want</th>
+<th style="text-align: left;">Markdown you write</th>
+<th style="text-align: left;">What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Main heading</td>
+<td style="text-align: left;"><code># Title</code></td>
+<td style="text-align: left;">Creates the largest heading</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Section heading</td>
+<td style="text-align: left;"><code>## Section</code></td>
+<td style="text-align: left;">Creates a major section</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Subsection</td>
+<td style="text-align: left;"><code>### Subsection</code></td>
+<td style="text-align: left;">Creates a subsection</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bold text</td>
+<td style="text-align: left;"><code>**important**</code></td>
+<td style="text-align: left;">Makes text bold</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Italic text</td>
+<td style="text-align: left;"><code>*emphasis*</code></td>
+<td style="text-align: left;">Makes text italic</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Link</td>
+<td style="text-align: left;"><code>[text](https://example.com)</code></td>
+<td style="text-align: left;">Creates a clickable link</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bullet list</td>
+<td style="text-align: left;"><code>- item</code></td>
+<td style="text-align: left;">Creates a bulleted list</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Numbered list</td>
+<td style="text-align: left;"><code>1. item</code></td>
+<td style="text-align: left;">Creates a numbered list</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Inline code</td>
+<td style="text-align: left;"><code>`mean(x)`</code></td>
+<td style="text-align: left;">Displays code in text</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="markdown-example" class="level2">
+<h2 class="anchored" data-anchor-id="markdown-example">Markdown Example</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## What We Learned Today</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>We learned how **Quarto** turns text and R code into a webpage.</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>For more information, visit the <span class="co">[</span><span class="ot">Quarto website</span><span class="co">](https://quarto.org)</span>.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="code-chunksc-ells" class="level1">
+<h1>3. Code Chunks/C ells</h1>
+<p>A code chunk is a fenced block that tells Quarto to run code.</p>
+<p>In a Quarto document using R, a basic code cell looks like this:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p>You can give a cell a meaningful label:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidycensus)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Good chunk names help you find and debug code.</p>
+<p>Use names that describe the purpose, such as:</p>
+<ul>
+<li><code>load-packages</code></li>
+<li><code>download-census-data</code></li>
+<li><code>clean-data</code></li>
+<li><code>make-map</code></li>
+<li><code>plot-income-distribution</code></li>
+</ul>
+<p><strong>Avoid spaces in chunk labels.</strong> Use hyphens instead.</p>
+<section id="code-chunk-options" class="level2">
+<h2 class="anchored" data-anchor-id="code-chunk-options">Code Chunk Options</h2>
+<p>You can add options to control what viewers see:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Common options include:</p>
+<ul>
+<li><code>echo: true</code> or <code>echo=true</code>: Shows the code in the webpage.</li>
+<li><code>echo: false</code> or <code>echo=false</code>: Runs the code but hides it.</li>
+<li><code>warning: false</code>: Hides warning messages.</li>
+<li><code>message: false</code>: Hides package startup messages.</li>
+<li><code>include: false</code>: Runs the code but shows neither the code nor the output.</li>
+</ul>
+</section>
+</section>
+<section id="files-and-folders-in-a-quarto-website" class="level1">
+<h1>Files and Folders in a Quarto Website</h1>
+<p>A Quarto website contains files for people to read and files used by software to build and manage the project.</p>
+<section id="pages-written-for-people" class="level2">
+<h2 class="anchored" data-anchor-id="pages-written-for-people">Pages Written for People</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">File or folder</th>
+<th style="text-align: left;">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>index.qmd</code></td>
+<td style="text-align: left;">The home page of your site</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>about.qmd</code></td>
+<td style="text-align: left;">Your About page</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>contact.qmd</code></td>
+<td style="text-align: left;">A Get in Touch/contact page, if you create one</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>weekly-notes/index.qmd</code></td>
+<td style="text-align: left;">The main page for weekly notes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>weekly-notes/</code></td>
+<td style="text-align: left;">Folder holding weekly-note pages or materials</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>assignments/index.qmd</code></td>
+<td style="text-align: left;">The main page listing assignments</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>assignments/</code></td>
+<td style="text-align: left;">Folder for assignment pages, data, code, and figures</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>images/</code> or <code>img/</code></td>
+<td style="text-align: left;">Images used in the website</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>data/</code></td>
+<td style="text-align: left;">Data files used in analysis, when appropriate</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="key-takeaways" class="level1">
+<h1>Key Takeaways</h1>
+<p>The main concepts to remember are:</p>
+<ol type="1">
+<li><strong>HTML</strong> is the language browsers use to display web pages.</li>
+<li><strong>Quarto</strong> allows you to create web pages without writing large amounts of HTML manually.</li>
+<li>A <strong><code>.qmd</code> file</strong> combines writing, formatting, and executable code.</li>
+<li><strong>YAML</strong> controls document-level settings.</li>
+<li><strong>Markdown</strong> controls the structure and formatting of your written content.</li>
+<li><strong>Code chunks</strong> allow Quarto to execute R code during rendering.</li>
+<li><strong>Render</strong> builds the finished HTML output.</li>
+<li><strong>Preview</strong> lets you view the website locally on your own computer.</li>
+<li><strong>Commit</strong> saves a snapshot of your work in Git.</li>
+<li><strong>Push</strong> sends your commits to GitHub.</li>
+<li><strong>GitHub Pages</strong> publishes your website online.</li>
+</ol>
+<p>Set up the portfolio workflow: made a repository from a template, cloned it with GitHub Desktop, edited files in RStudio, rendered with Quarto, and published to GitHub Pages.</p>
 <section id="key-concepts" class="level2">
 <h2 class="anchored" data-anchor-id="key-concepts">Key Concepts</h2>
 <p>Three places a file can live:</p>
@@ -227,28 +612,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="proving-r-works">Proving R Works</h2>
 <p>The chunk below runs when this page renders. If you can see a result underneath it on your published site, R and Quarto are talking to each other correctly.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()<span class="sc">$</span>R.version<span class="sc">$</span>version.string</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()<span class="sc">$</span>R.version<span class="sc">$</span>version.string</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "R version 4.6.0 (2026-04-24)"</code></pre>
+<pre><code>[1] "R version 4.6.1 (2026-06-24 ucrt)"</code></pre>
 </div>
 </div>
 </section>
-<section id="reflection" class="level2">
-<h2 class="anchored" data-anchor-id="reflection">Reflection</h2>
-<!-- CHANGE THIS: 3-4 sentences -->
-<p>What I want out of this course:</p>
-<p>One thing I’m nervous about:</p>
+<section id="reflections" class="level2">
+<h2 class="anchored" data-anchor-id="reflections">Reflections</h2>
+<p>What I want out of this course: I want to develop a stronger understanding of how Quarto, R, Git, GitHub, and GitHub Pages work together to create and publish data-driven websites. I also want to become more confident in using R for data analysis, visualization, and communicating results in a clear and professional way. By the end of the course, I hope to have a portfolio that demonstrates both my technical skills and my ability to communicate analytical findings. Most importantly, I want to develop skills that I can apply to future academic and professional projects.</p>
+<p>One thing I’m nervous about:One thing I am nervous about is troubleshooting technical problems when my code, Quarto documents, or GitHub workflow does not work as expected. I am still becoming familiar with the different tools involved, so errors can sometimes be difficult to understand</p>
 </section>
 <section id="questions-i-still-have" class="level2">
 <h2 class="anchored" data-anchor-id="questions-i-still-have">Questions I Still Have</h2>
-<ul>
-<li></li>
-<li></li>
-</ul>
+<p>How can I make my Quarto website look more professional and visually appealing? What are the best practices for organizing data, code, images, and other files in a Quarto project? How can I efficiently troubleshoot errors when rendering a .qmd file? How can I use Git and GitHub effectively to track changes and manage different versions of my work? What are some ways to make data visualizations more effective for communicating findings to a non-technical audience?</p>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -703,51 +1085,318 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Week 1: Getting Set Up"</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "First impressions, and getting the workflow running."</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-08-28</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## What We Did</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- CHANGE THIS: replace with your own notes --&gt;</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>Set up the portfolio workflow: made a repository from a template, cloned it with</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>GitHub Desktop, edited files in RStudio, rendered with Quarto, and published to</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>GitHub Pages.</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Concepts</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>Three places a file can live:</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**My computer** — where I edit</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**GitHub.com** — where it's stored</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**My live site** — what the world sees</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>The loop: **Edit → Save → Render → Commit → Push → wait → refresh**</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="fu">## Proving R Works</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>The chunk below runs when this page renders. If you can see a result underneath</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>it on your published site, R and Quarto are talking to each other correctly.</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()<span class="sc">$</span>R.version<span class="sc">$</span>version.string</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reflection</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- CHANGE THIS: 3-4 sentences --&gt;</span></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>What I want out of this course:</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>One thing I'm nervous about:</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## Questions I Still Have</span></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>-</span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>-</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Week 1: Getting Set Up"</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "First impressions, and getting the workflow running."</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-08-28</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## What We Did</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu"># What Is a Website?</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>A website is a collection of files and folders that a web browser can read and display. The main files are usually **HTML** files.</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**HTML** stands for HyperText Markup Language.</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>A browser—such as Chrome, Safari, Edge, or Firefox—reads HTML and displays it as a web page.</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>A website normally has one or more HTML pages, plus supporting files such as images, CSS stylesheets, JavaScript, fonts, and data files.</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>For this course, you generally do **not** write large amounts of HTML by hand. You write Quarto documents, and Quarto creates the HTML for you.</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="fu"># The Quarto Workflow</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>The basic Quarto workflow looks like this:</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="in">You write .qmd files</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="in">        ↓</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="in">Quarto reads and renders them</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="in">        ↓</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="in">Quarto runs R code where needed</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a><span class="in">        ↓</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="in">Quarto creates .html files</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="in">        ↓</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="in">GitHub Pages publishes the HTML online</span></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>A <span class="in">`.qmd`</span> file is a **Quarto Markdown** document. It is designed to hold narrative writing, headings, links, images, equations, and executable code in one file.</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>Quarto is useful because it can produce web pages and other outputs—such as reports, presentations, PDFs, and Word documents—from a single source document.</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a><span class="fu"># What Does "Render" Mean?</span></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>To **render** means to build the finished output from your source file.</span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>When you render a Quarto document, Quarto generally:</span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Reads the <span class="in">`.qmd`</span> file from top to bottom.</span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Interprets the YAML settings at the top.</span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Reads the Markdown text, headings, links, and images.</span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Finds executable code cells/chunks.</span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Sends R code to R, runs it, and receives the results.</span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Combines the prose, code output, tables, figures, and formatting.</span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>Produces an HTML page for the website.</span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a>For example, this code in a <span class="in">`.qmd`</span> document:</span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a>will be evaluated during rendering, and the resulting webpage can display:</span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
+<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a><span class="in">[1] 4</span></span>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a>Depending on the document or project settings, you can show or hide the code, warnings, messages, and results.</span>
+<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a><span class="fu"># Render Versus Preview</span></span>
+<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a>These are related but different actions:</span>
+<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Action                      <span class="pp">|</span> What it does                                          <span class="pp">|</span> Who can see it?                                  <span class="pp">|</span></span>
+<span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a><span class="pp">| :--------------------------</span> <span class="pp">| :----------------------------------------------------</span> <span class="pp">| :-----------------------------------------------</span> <span class="pp">|</span></span>
+<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Save**                    <span class="pp">|</span> Saves your <span class="in">`.qmd`</span> source file on your computer        <span class="pp">|</span> Only you                                         <span class="pp">|</span></span>
+<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Render**                  <span class="pp">|</span> Converts <span class="in">`.qmd`</span> into <span class="in">`.html`</span>                          <span class="pp">|</span> Initially only you                               <span class="pp">|</span></span>
+<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Preview**                 <span class="pp">|</span> Opens the rendered page locally, often at <span class="in">`localhost`</span> <span class="pp">|</span> Only you                                         <span class="pp">|</span></span>
+<span id="cb17-79"><a href="#cb17-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Commit**                  <span class="pp">|</span> Creates a labeled Git snapshot on your computer       <span class="pp">|</span> You and anyone with access to the local computer <span class="pp">|</span></span>
+<span id="cb17-80"><a href="#cb17-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Push**                    <span class="pp">|</span> Uploads commits to GitHub                             <span class="pp">|</span> People with repository access                    <span class="pp">|</span></span>
+<span id="cb17-81"><a href="#cb17-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **GitHub Pages deployment** <span class="pp">|</span> Publishes the rendered HTML as a public website       <span class="pp">|</span> Anyone with the URL                              <span class="pp">|</span></span>
+<span id="cb17-82"><a href="#cb17-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-83"><a href="#cb17-83" aria-hidden="true" tabindex="-1"></a>A URL such as <span class="in">`http://localhost:6930/about.html`</span> is a local preview.</span>
+<span id="cb17-84"><a href="#cb17-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-85"><a href="#cb17-85" aria-hidden="true" tabindex="-1"></a>**"Localhost" means your own computer**, so an instructor cannot open that address.</span>
+<span id="cb17-86"><a href="#cb17-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-87"><a href="#cb17-87" aria-hidden="true" tabindex="-1"></a>Your public website is instead a GitHub Pages URL such as:</span>
+<span id="cb17-88"><a href="#cb17-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-89"><a href="#cb17-89" aria-hidden="true" tabindex="-1"></a><span class="in">`https://username.github.io/repository-name/`</span></span>
+<span id="cb17-90"><a href="#cb17-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a><span class="fu"># Anatomy of a `.qmd` File</span></span>
+<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a>A Quarto document has three common parts:</span>
+<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>YAML metadata at the top</span>
+<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Markdown content</span>
+<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Executable code cells/chunks</span>
+<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. YAML</span></span>
+<span id="cb17-100"><a href="#cb17-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-101"><a href="#cb17-101" aria-hidden="true" tabindex="-1"></a>YAML is the configuration block at the top of a <span class="in">`.qmd`</span> file. It begins and ends with three dashes:</span>
+<span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-103"><a href="#cb17-103" aria-hidden="true" tabindex="-1"></a><span class="in">```yaml</span></span>
+<span id="cb17-104"><a href="#cb17-104" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb17-105"><a href="#cb17-105" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"My Portfolio"</span></span>
+<span id="cb17-106"><a href="#cb17-106" aria-hidden="true" tabindex="-1"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">"Emmanuel Sampson"</span></span>
+<span id="cb17-107"><a href="#cb17-107" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> today</span></span>
+<span id="cb17-108"><a href="#cb17-108" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> html</span></span>
+<span id="cb17-109"><a href="#cb17-109" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb17-110"><a href="#cb17-110" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-111"><a href="#cb17-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-112"><a href="#cb17-112" aria-hidden="true" tabindex="-1"></a>YAML can specify:</span>
+<span id="cb17-113"><a href="#cb17-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-114"><a href="#cb17-114" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>The title and author</span>
+<span id="cb17-115"><a href="#cb17-115" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>The date</span>
+<span id="cb17-116"><a href="#cb17-116" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Output format, such as HTML</span>
+<span id="cb17-117"><a href="#cb17-117" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Table of contents settings</span>
+<span id="cb17-118"><a href="#cb17-118" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Whether code is shown or hidden</span>
+<span id="cb17-119"><a href="#cb17-119" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Other document-level options</span>
+<span id="cb17-120"><a href="#cb17-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-121"><a href="#cb17-121" aria-hidden="true" tabindex="-1"></a><span class="fu">### Important YAML Rules</span></span>
+<span id="cb17-122"><a href="#cb17-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-123"><a href="#cb17-123" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Indentation matters.</span>
+<span id="cb17-124"><a href="#cb17-124" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Use spaces, not tabs.</span>
+<span id="cb17-125"><a href="#cb17-125" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>A colon must have a space after it:</span>
+<span id="cb17-126"><a href="#cb17-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-127"><a href="#cb17-127" aria-hidden="true" tabindex="-1"></a><span class="in">```yaml</span></span>
+<span id="cb17-128"><a href="#cb17-128" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"My Page"</span></span>
+<span id="cb17-129"><a href="#cb17-129" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-130"><a href="#cb17-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-131"><a href="#cb17-131" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>YAML begins at the first line of the document.</span>
+<span id="cb17-132"><a href="#cb17-132" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>The opening and closing <span class="in">`---`</span> lines must both be present.</span>
+<span id="cb17-133"><a href="#cb17-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-134"><a href="#cb17-134" aria-hidden="true" tabindex="-1"></a>A common error is incorrect indentation.</span>
+<span id="cb17-135"><a href="#cb17-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-136"><a href="#cb17-136" aria-hidden="true" tabindex="-1"></a>For example, this is **wrong**:</span>
+<span id="cb17-137"><a href="#cb17-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-138"><a href="#cb17-138" aria-hidden="true" tabindex="-1"></a><span class="in">```yaml</span></span>
+<span id="cb17-139"><a href="#cb17-139" aria-hidden="true" tabindex="-1"></a><span class="fu">website</span><span class="kw">:</span></span>
+<span id="cb17-140"><a href="#cb17-140" aria-hidden="true" tabindex="-1"></a><span class="fu">navbar</span><span class="kw">:</span></span>
+<span id="cb17-141"><a href="#cb17-141" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Portfolio"</span></span>
+<span id="cb17-142"><a href="#cb17-142" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-143"><a href="#cb17-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-144"><a href="#cb17-144" aria-hidden="true" tabindex="-1"></a>Because <span class="in">`navbar`</span> should be nested under <span class="in">`website`</span>.</span>
+<span id="cb17-145"><a href="#cb17-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-146"><a href="#cb17-146" aria-hidden="true" tabindex="-1"></a>The correct version is:</span>
+<span id="cb17-147"><a href="#cb17-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-148"><a href="#cb17-148" aria-hidden="true" tabindex="-1"></a><span class="in">```yaml</span></span>
+<span id="cb17-149"><a href="#cb17-149" aria-hidden="true" tabindex="-1"></a><span class="fu">website</span><span class="kw">:</span></span>
+<span id="cb17-150"><a href="#cb17-150" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">navbar</span><span class="kw">:</span></span>
+<span id="cb17-151"><a href="#cb17-151" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Portfolio"</span></span>
+<span id="cb17-152"><a href="#cb17-152" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-153"><a href="#cb17-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-154"><a href="#cb17-154" aria-hidden="true" tabindex="-1"></a><span class="fu"># 2. Markdown</span></span>
+<span id="cb17-155"><a href="#cb17-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-156"><a href="#cb17-156" aria-hidden="true" tabindex="-1"></a>Markdown is the simple writing syntax used after YAML. It creates headings, paragraphs, lists, links, images, emphasis, and more.</span>
+<span id="cb17-157"><a href="#cb17-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-158"><a href="#cb17-158" aria-hidden="true" tabindex="-1"></a>For example:</span>
+<span id="cb17-159"><a href="#cb17-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-160"><a href="#cb17-160" aria-hidden="true" tabindex="-1"></a><span class="in">```markdown</span></span>
+<span id="cb17-161"><a href="#cb17-161" aria-hidden="true" tabindex="-1"></a><span class="fu"># Main Page Title</span></span>
+<span id="cb17-162"><a href="#cb17-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-163"><a href="#cb17-163" aria-hidden="true" tabindex="-1"></a><span class="fu">## Major Section</span></span>
+<span id="cb17-164"><a href="#cb17-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-165"><a href="#cb17-165" aria-hidden="true" tabindex="-1"></a><span class="fu">### Smaller Section</span></span>
+<span id="cb17-166"><a href="#cb17-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-167"><a href="#cb17-167" aria-hidden="true" tabindex="-1"></a>This is an ordinary paragraph.</span>
+<span id="cb17-168"><a href="#cb17-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-169"><a href="#cb17-169" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>First bullet</span>
+<span id="cb17-170"><a href="#cb17-170" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Second bullet</span>
+<span id="cb17-171"><a href="#cb17-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-172"><a href="#cb17-172" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>First numbered item</span>
+<span id="cb17-173"><a href="#cb17-173" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Second numbered item</span>
+<span id="cb17-174"><a href="#cb17-174" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-175"><a href="#cb17-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-176"><a href="#cb17-176" aria-hidden="true" tabindex="-1"></a><span class="in">## Useful Markdown Patterns</span></span>
+<span id="cb17-177"><a href="#cb17-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-178"><a href="#cb17-178" aria-hidden="true" tabindex="-1"></a><span class="in">| What you want   | Markdown you write            | What it does                |</span></span>
+<span id="cb17-179"><a href="#cb17-179" aria-hidden="true" tabindex="-1"></a><span class="in">| :-------------- | :---------------------------- | :-------------------------- |</span></span>
+<span id="cb17-180"><a href="#cb17-180" aria-hidden="true" tabindex="-1"></a><span class="in">| Main heading    | `# Title`                     | Creates the largest heading |</span></span>
+<span id="cb17-181"><a href="#cb17-181" aria-hidden="true" tabindex="-1"></a><span class="in">| Section heading | `## Section`                  | Creates a major section     |</span></span>
+<span id="cb17-182"><a href="#cb17-182" aria-hidden="true" tabindex="-1"></a><span class="in">| Subsection      | `### Subsection`              | Creates a subsection        |</span></span>
+<span id="cb17-183"><a href="#cb17-183" aria-hidden="true" tabindex="-1"></a><span class="in">| Bold text       | `**important**`               | Makes text bold             |</span></span>
+<span id="cb17-184"><a href="#cb17-184" aria-hidden="true" tabindex="-1"></a><span class="in">| Italic text     | `*emphasis*`                  | Makes text italic           |</span></span>
+<span id="cb17-185"><a href="#cb17-185" aria-hidden="true" tabindex="-1"></a><span class="in">| Link            | `[text](https://example.com)` | Creates a clickable link    |</span></span>
+<span id="cb17-186"><a href="#cb17-186" aria-hidden="true" tabindex="-1"></a><span class="in">| Bullet list     | `- item`                      | Creates a bulleted list     |</span></span>
+<span id="cb17-187"><a href="#cb17-187" aria-hidden="true" tabindex="-1"></a><span class="in">| Numbered list   | `1. item`                     | Creates a numbered list     |</span></span>
+<span id="cb17-188"><a href="#cb17-188" aria-hidden="true" tabindex="-1"></a><span class="in">| Inline code     | `` `mean(x)` ``               | Displays code in text       |</span></span>
+<span id="cb17-189"><a href="#cb17-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-190"><a href="#cb17-190" aria-hidden="true" tabindex="-1"></a><span class="in">## Markdown Example</span></span>
+<span id="cb17-191"><a href="#cb17-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-192"><a href="#cb17-192" aria-hidden="true" tabindex="-1"></a><span class="in">```markdown</span></span>
+<span id="cb17-193"><a href="#cb17-193" aria-hidden="true" tabindex="-1"></a><span class="in">## What We Learned Today</span></span>
+<span id="cb17-194"><a href="#cb17-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-195"><a href="#cb17-195" aria-hidden="true" tabindex="-1"></a><span class="in">We learned how **Quarto** turns text and R code into a webpage.</span></span>
+<span id="cb17-196"><a href="#cb17-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-197"><a href="#cb17-197" aria-hidden="true" tabindex="-1"></a><span class="in">For more information, visit the [Quarto website](https://quarto.org).</span></span>
+<span id="cb17-198"><a href="#cb17-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-199"><a href="#cb17-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-200"><a href="#cb17-200" aria-hidden="true" tabindex="-1"></a><span class="fu"># 3. Code Chunks/C ells</span></span>
+<span id="cb17-201"><a href="#cb17-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-202"><a href="#cb17-202" aria-hidden="true" tabindex="-1"></a>A code chunk is a fenced block that tells Quarto to run code.</span>
+<span id="cb17-203"><a href="#cb17-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-204"><a href="#cb17-204" aria-hidden="true" tabindex="-1"></a>In a Quarto document using R, a basic code cell looks like this:</span>
+<span id="cb17-205"><a href="#cb17-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-208"><a href="#cb17-208" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb17-209"><a href="#cb17-209" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span>
+<span id="cb17-210"><a href="#cb17-210" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-211"><a href="#cb17-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-212"><a href="#cb17-212" aria-hidden="true" tabindex="-1"></a>You can give a cell a meaningful label:</span>
+<span id="cb17-213"><a href="#cb17-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-214"><a href="#cb17-214" aria-hidden="true" tabindex="-1"></a><span class="in">```{r load-tidycensus}</span></span>
+<span id="cb17-215"><a href="#cb17-215" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidycensus)</span>
+<span id="cb17-216"><a href="#cb17-216" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-217"><a href="#cb17-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-218"><a href="#cb17-218" aria-hidden="true" tabindex="-1"></a>Good chunk names help you find and debug code.</span>
+<span id="cb17-219"><a href="#cb17-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-220"><a href="#cb17-220" aria-hidden="true" tabindex="-1"></a>Use names that describe the purpose, such as:</span>
+<span id="cb17-221"><a href="#cb17-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-222"><a href="#cb17-222" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`load-packages`</span></span>
+<span id="cb17-223"><a href="#cb17-223" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`download-census-data`</span></span>
+<span id="cb17-224"><a href="#cb17-224" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`clean-data`</span></span>
+<span id="cb17-225"><a href="#cb17-225" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`make-map`</span></span>
+<span id="cb17-226"><a href="#cb17-226" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`plot-income-distribution`</span></span>
+<span id="cb17-227"><a href="#cb17-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-228"><a href="#cb17-228" aria-hidden="true" tabindex="-1"></a>**Avoid spaces in chunk labels.** Use hyphens instead.</span>
+<span id="cb17-229"><a href="#cb17-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-230"><a href="#cb17-230" aria-hidden="true" tabindex="-1"></a><span class="fu">## Code Chunk Options</span></span>
+<span id="cb17-231"><a href="#cb17-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-232"><a href="#cb17-232" aria-hidden="true" tabindex="-1"></a>You can add options to control what viewers see:</span>
+<span id="cb17-233"><a href="#cb17-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-234"><a href="#cb17-234" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb17-235"><a href="#cb17-235" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span>
+<span id="cb17-236"><a href="#cb17-236" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-237"><a href="#cb17-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-238"><a href="#cb17-238" aria-hidden="true" tabindex="-1"></a>Common options include:</span>
+<span id="cb17-239"><a href="#cb17-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-240"><a href="#cb17-240" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`echo: true`</span> or <span class="in">`echo=true`</span>: Shows the code in the webpage.</span>
+<span id="cb17-241"><a href="#cb17-241" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`echo: false`</span> or <span class="in">`echo=false`</span>: Runs the code but hides it.</span>
+<span id="cb17-242"><a href="#cb17-242" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`warning: false`</span>: Hides warning messages.</span>
+<span id="cb17-243"><a href="#cb17-243" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`message: false`</span>: Hides package startup messages.</span>
+<span id="cb17-244"><a href="#cb17-244" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`include: false`</span>: Runs the code but shows neither the code nor the output.</span>
+<span id="cb17-245"><a href="#cb17-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-246"><a href="#cb17-246" aria-hidden="true" tabindex="-1"></a><span class="fu"># Files and Folders in a Quarto Website</span></span>
+<span id="cb17-247"><a href="#cb17-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-248"><a href="#cb17-248" aria-hidden="true" tabindex="-1"></a>A Quarto website contains files for people to read and files used by software to build and manage the project.</span>
+<span id="cb17-249"><a href="#cb17-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-250"><a href="#cb17-250" aria-hidden="true" tabindex="-1"></a><span class="fu">## Pages Written for People</span></span>
+<span id="cb17-251"><a href="#cb17-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-252"><a href="#cb17-252" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File or folder           <span class="pp">|</span> Purpose                                              <span class="pp">|</span></span>
+<span id="cb17-253"><a href="#cb17-253" aria-hidden="true" tabindex="-1"></a><span class="pp">| :-----------------------</span> <span class="pp">| :---------------------------------------------------</span> <span class="pp">|</span></span>
+<span id="cb17-254"><a href="#cb17-254" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`index.qmd`</span>              <span class="pp">|</span> The home page of your site                           <span class="pp">|</span></span>
+<span id="cb17-255"><a href="#cb17-255" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`about.qmd`</span>              <span class="pp">|</span> Your About page                                      <span class="pp">|</span></span>
+<span id="cb17-256"><a href="#cb17-256" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`contact.qmd`</span>            <span class="pp">|</span> A Get in Touch/contact page, if you create one       <span class="pp">|</span></span>
+<span id="cb17-257"><a href="#cb17-257" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`weekly-notes/index.qmd`</span> <span class="pp">|</span> The main page for weekly notes                       <span class="pp">|</span></span>
+<span id="cb17-258"><a href="#cb17-258" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`weekly-notes/`</span>          <span class="pp">|</span> Folder holding weekly-note pages or materials        <span class="pp">|</span></span>
+<span id="cb17-259"><a href="#cb17-259" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`assignments/index.qmd`</span>  <span class="pp">|</span> The main page listing assignments                    <span class="pp">|</span></span>
+<span id="cb17-260"><a href="#cb17-260" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`assignments/`</span>           <span class="pp">|</span> Folder for assignment pages, data, code, and figures <span class="pp">|</span></span>
+<span id="cb17-261"><a href="#cb17-261" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`images/`</span> or <span class="in">`img/`</span>      <span class="pp">|</span> Images used in the website                           <span class="pp">|</span></span>
+<span id="cb17-262"><a href="#cb17-262" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`data/`</span>                  <span class="pp">|</span> Data files used in analysis, when appropriate        <span class="pp">|</span></span>
+<span id="cb17-263"><a href="#cb17-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-264"><a href="#cb17-264" aria-hidden="true" tabindex="-1"></a><span class="fu"># Key Takeaways</span></span>
+<span id="cb17-265"><a href="#cb17-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-266"><a href="#cb17-266" aria-hidden="true" tabindex="-1"></a>The main concepts to remember are:</span>
+<span id="cb17-267"><a href="#cb17-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-268"><a href="#cb17-268" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**HTML** is the language browsers use to display web pages.</span>
+<span id="cb17-269"><a href="#cb17-269" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Quarto** allows you to create web pages without writing large amounts of HTML manually.</span>
+<span id="cb17-270"><a href="#cb17-270" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>A **`.qmd` file** combines writing, formatting, and executable code.</span>
+<span id="cb17-271"><a href="#cb17-271" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**YAML** controls document-level settings.</span>
+<span id="cb17-272"><a href="#cb17-272" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Markdown** controls the structure and formatting of your written content.</span>
+<span id="cb17-273"><a href="#cb17-273" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Code chunks** allow Quarto to execute R code during rendering.</span>
+<span id="cb17-274"><a href="#cb17-274" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>**Render** builds the finished HTML output.</span>
+<span id="cb17-275"><a href="#cb17-275" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span>**Preview** lets you view the website locally on your own computer.</span>
+<span id="cb17-276"><a href="#cb17-276" aria-hidden="true" tabindex="-1"></a><span class="ss">9. </span>**Commit** saves a snapshot of your work in Git.</span>
+<span id="cb17-277"><a href="#cb17-277" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>**Push** sends your commits to GitHub.</span>
+<span id="cb17-278"><a href="#cb17-278" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>**GitHub Pages** publishes your website online.</span>
+<span id="cb17-279"><a href="#cb17-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-280"><a href="#cb17-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-281"><a href="#cb17-281" aria-hidden="true" tabindex="-1"></a>Set up the portfolio workflow: made a repository from a template, cloned it with</span>
+<span id="cb17-282"><a href="#cb17-282" aria-hidden="true" tabindex="-1"></a>GitHub Desktop, edited files in RStudio, rendered with Quarto, and published to</span>
+<span id="cb17-283"><a href="#cb17-283" aria-hidden="true" tabindex="-1"></a>GitHub Pages.</span>
+<span id="cb17-284"><a href="#cb17-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-285"><a href="#cb17-285" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Concepts</span></span>
+<span id="cb17-286"><a href="#cb17-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-287"><a href="#cb17-287" aria-hidden="true" tabindex="-1"></a>Three places a file can live:</span>
+<span id="cb17-288"><a href="#cb17-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-289"><a href="#cb17-289" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**My computer** — where I edit</span>
+<span id="cb17-290"><a href="#cb17-290" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**GitHub.com** — where it's stored</span>
+<span id="cb17-291"><a href="#cb17-291" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**My live site** — what the world sees</span>
+<span id="cb17-292"><a href="#cb17-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-293"><a href="#cb17-293" aria-hidden="true" tabindex="-1"></a>The loop: **Edit → Save → Render → Commit → Push → wait → refresh**</span>
+<span id="cb17-294"><a href="#cb17-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-295"><a href="#cb17-295" aria-hidden="true" tabindex="-1"></a><span class="fu">## Proving R Works</span></span>
+<span id="cb17-296"><a href="#cb17-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-297"><a href="#cb17-297" aria-hidden="true" tabindex="-1"></a>The chunk below runs when this page renders. If you can see a result underneath</span>
+<span id="cb17-298"><a href="#cb17-298" aria-hidden="true" tabindex="-1"></a>it on your published site, R and Quarto are talking to each other correctly.</span>
+<span id="cb17-299"><a href="#cb17-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-302"><a href="#cb17-302" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb17-303"><a href="#cb17-303" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()<span class="sc">$</span>R.version<span class="sc">$</span>version.string</span>
+<span id="cb17-304"><a href="#cb17-304" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-305"><a href="#cb17-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-306"><a href="#cb17-306" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reflections</span></span>
+<span id="cb17-307"><a href="#cb17-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-308"><a href="#cb17-308" aria-hidden="true" tabindex="-1"></a>What I want out of this course: I want to develop a stronger understanding of how Quarto, R, Git, GitHub, and GitHub Pages work together to create and publish data-driven websites. I also want to become more confident in using R for data analysis, visualization, and communicating results in a clear and professional way. By the end of the course, I hope to have a portfolio that demonstrates both my technical skills and my ability to communicate analytical findings. Most importantly, I want to develop skills that I can apply to future academic and professional projects.</span>
+<span id="cb17-309"><a href="#cb17-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-310"><a href="#cb17-310" aria-hidden="true" tabindex="-1"></a>One thing I'm nervous about:One thing I am nervous about is troubleshooting technical problems when my code, Quarto documents, or GitHub workflow does not work as expected. I am still becoming familiar with the different tools involved, so errors can sometimes be difficult to understand</span>
+<span id="cb17-311"><a href="#cb17-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-312"><a href="#cb17-312" aria-hidden="true" tabindex="-1"></a><span class="fu">## Questions I Still Have</span></span>
+<span id="cb17-313"><a href="#cb17-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-314"><a href="#cb17-314" aria-hidden="true" tabindex="-1"></a>How can I make my Quarto website look more professional and visually appealing?</span>
+<span id="cb17-315"><a href="#cb17-315" aria-hidden="true" tabindex="-1"></a>What are the best practices for organizing data, code, images, and other files in a Quarto project?</span>
+<span id="cb17-316"><a href="#cb17-316" aria-hidden="true" tabindex="-1"></a>How can I efficiently troubleshoot errors when rendering a .qmd file?</span>
+<span id="cb17-317"><a href="#cb17-317" aria-hidden="true" tabindex="-1"></a>How can I use Git and GitHub effectively to track changes and manage different versions of my work?</span>
+<span id="cb17-318"><a href="#cb17-318" aria-hidden="true" tabindex="-1"></a>What are some ways to make data visualizations more effective for communicating findings to a non-technical audience?</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
