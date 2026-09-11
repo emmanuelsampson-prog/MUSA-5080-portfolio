@@ -28,9 +28,7 @@ This portfolio documents my work in public-policy analytics and urban spatial an
 - **Spatial:** (add as you learn)
 - **Data:** US Census / ACS via `tidycensus`
 
-## Contact
 
-<!-- CHANGE THIS -->
 ## Let's Connect
 
 I welcome conversations about urban spatial analytics, GIS, geospatial technology, mapping and monitoring solutions, and collaborative research or professional opportunities.

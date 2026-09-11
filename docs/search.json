@@ -81,7 +81,7 @@
     "href": "about.html#contact",
     "title": "About Me",
     "section": "Contact",
-    "text": "Contact\n\n\nEmail: your-email@upenn.edu\nGitHub: @your-username"
+    "text": "Contact"
   },
   {
     "objectID": "assignments/index.html",
@@ -390,5 +390,26 @@
     "title": "Week 1: Getting Set Up",
     "section": "Reflections",
     "text": "Reflections\nWhat I want out of this course: I want to develop a stronger understanding of how Quarto, R, Git, GitHub, and GitHub Pages work together to create and publish data-driven websites. I also want to become more confident in using R for data analysis, visualization, and communicating results in a clear and professional way. By the end of the course, I hope to have a portfolio that demonstrates both my technical skills and my ability to communicate analytical findings. Most importantly, I want to develop skills that I can apply to future academic and professional projects.\nOne thing I’m nervous about:One thing I am nervous about is troubleshooting technical problems when my code, Quarto documents, or GitHub workflow does not work as expected. I am still becoming familiar with the different tools involved, so errors can sometimes be difficult to understand"
+  },
+  {
+    "objectID": "about.html#about-me",
+    "href": "about.html#about-me",
+    "title": "About Me",
+    "section": "About Me",
+    "text": "About Me\nI am a geospatial professional and graduate student in Urban Spatial Analytics at the University of Pennsylvania. My work brings together spatial data science, GIS, surveying and mapping technology, and commercial strategy.\nI have experience in geospatial business development, strategic account management, and partnership development. My interests include GNSS, aerial mapping, optical monitoring, remote sensing, and the use of spatial data to support better urban and infrastructure decisions.\nThis portfolio documents my work in public-policy analytics and urban spatial analysis. It includes projects that use GIS, spatial statistics, data visualization, and reproducible analytical workflows to explore real-world questions."
+  },
+  {
+    "objectID": "about.html#areas-of-interest",
+    "href": "about.html#areas-of-interest",
+    "title": "About Me",
+    "section": "Areas of Interest",
+    "text": "Areas of Interest\n\nUrban spatial analytics and GIS\nSpatial data science and data visualization\nRemote sensing, aerial mapping, and GNSS\nSurveying and optical-monitoring technologies\nUrban infrastructure, resilience, and public policy\nGeospatial technology strategy and partnerships"
+  },
+  {
+    "objectID": "about.html#lets-connect",
+    "href": "about.html#lets-connect",
+    "title": "About Me",
+    "section": "Let’s Connect",
+    "text": "Let’s Connect\nI welcome conversations about urban spatial analytics, GIS, geospatial technology, mapping and monitoring solutions, and collaborative research or professional opportunities.\nYou can reach me through the following channels:\n\nEmail: sampsone@upenn.edu\nGitHub: github.com/emmanuelsampson-prog\nLocation: Philadelphia, Pennsylvania\n\nI am particularly interested in opportunities involving spatial data science, geospatial technology, urban analytics, infrastructure, and strategic partnerships."
   }
 ]

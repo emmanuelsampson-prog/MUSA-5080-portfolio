@@ -19,7 +19,7 @@ website:
       - href: assignments/index.qmd
         text: "Assignments"
       - href: contact.qmd
-        text: "Get in Touch"
+
 
     right:
       - icon: github
