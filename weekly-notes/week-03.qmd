@@ -1,8 +1,8 @@
-
-title: "Week 3: Data Visualization and Uncertainty"
+---
+title: "Week 2: Data Visualization and Uncertainty"
 description: "Grammar of Graphics, ggplot2, ACS reliability, derived uncertainty, and change over time."
-date: 2026-09-17
-----------------
+date: 2026-09-11
+---
 
 ## What We Did
 
