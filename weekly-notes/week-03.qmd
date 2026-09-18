@@ -1,0 +1,1058 @@
+
+title: "Week 3: Data Visualization and Uncertainty"
+description: "Grammar of Graphics, ggplot2, ACS reliability, derived uncertainty, and change over time."
+date: 2026-09-17
+----------------
+
+## What We Did
+
+This week focused on **data visualization using ggplot2** and how uncertainty should be considered when working with American Community Survey (ACS) estimates.
+
+The major topics were:
+
+* Anscombe's Quartet and why visualization matters
+* The Grammar of Graphics
+* Building plots with `ggplot2`
+* Aesthetic mappings using `aes()`
+* Choosing the appropriate `geom_*()`
+* Margin of Error (MOE) and Standard Error (SE)
+* Coefficient of Variation (CV)
+* Derived uncertainty
+* Comparing ACS estimates over time
+* Confidence intervals for change
+
+---
+
+## 1. Anscombe's Quartet: Why Visualization Matters
+
+Reference was made to **Anscombe's Quartet**, which demonstrates why we should visualize our data rather than relying only on summary statistics.
+
+Anscombe's Quartet consists of four datasets that have nearly identical statistical properties, including similar:
+
+* Means
+* Variances
+* Correlations
+* Regression lines
+
+However, when the datasets are plotted, they look very different.
+
+The important lesson is:
+
+> **Datasets can have similar summary statistics but very different underlying patterns. Always visualize your data.**
+
+A mean, correlation coefficient, or regression line alone may hide:
+
+* Outliers
+* Nonlinear relationships
+* Clusters
+* Unusual observations
+* Different distributions
+
+This is particularly important in urban spatial analysis because two neighborhoods, census tracts, counties, or cities may have similar summary statistics but very different underlying patterns.
+
+---
+
+## 2. Grammar of Graphics
+
+The **Grammar of Graphics** is the conceptual foundation behind `ggplot2`.
+
+A plot can be understood as a **mapping from columns in our data to visual properties on a page or canvas**.
+
+For example:
+
+| Your Data             | Visual Property    |
+| --------------------- | ------------------ |
+| Estimate              | Position on y-axis |
+| Population            | Position on x-axis |
+| Reliability           | Color              |
+| Margin of Error (MOE) | Size               |
+
+In other words:
+
+**Data variable → Visual property**
+
+Suppose our census tract dataset contains:
+
+```text
+tract | population | estimate | moe | reliability
+```
+
+We could map:
+
+* `population` → x-axis
+* `estimate` → y-axis
+* `reliability` → color
+* `moe` → size
+
+This allows one visualization to communicate several dimensions of the data simultaneously.
+
+---
+
+## 3. How to Build a ggplot
+
+A basic `ggplot2` visualization consists of three important components:
+
+```r
+#| eval: false
+ggplot(data) +
+  aes(...) +
+  geom_*()
+```
+
+Think of this as:
+
+1. **Data** — What dataset am I using?
+2. **Aesthetics** — Which variables should control visual properties?
+3. **Geometry** — What type of chart or graphical object should be drawn?
+
+---
+
+### Step 1: Create the Canvas
+
+```r
+#| eval: false
+p <- ggplot(data)
+```
+
+`ggplot(data)` tells R which dataset we want to visualize.
+
+At this stage, `ggplot()` creates essentially a **blank canvas**.
+
+For example:
+
+```r
+#| eval: false
+ggplot(tract_data)
+```
+
+---
+
+### Step 2: Define Aesthetic Mappings
+
+The `aes()` function defines the **aesthetic mappings**.
+
+```r
+#| eval: false
+aes(
+  x = population,
+  y = moe_pct
+)
+```
+
+This tells `ggplot2`:
+
+* Put `population` on the x-axis.
+* Put `moe_pct` on the y-axis.
+
+Aesthetics can include:
+
+* `x`
+* `y`
+* `color`
+* `fill`
+* `size`
+* `shape`
+* `alpha`
+
+For example:
+
+```r
+#| eval: false
+aes(
+  x = population,
+  y = moe_pct,
+  color = reliability
+)
+```
+
+Here, `reliability` determines the color of each observation.
+
+---
+
+### Step 3: Choose a Geometry
+
+The `geom_*()` function determines the **shape or type of chart**.
+
+For example:
+
+```r
+#| eval: false
+ggplot(tract_data) +
+  aes(
+    x = population,
+    y = moe_pct
+  ) +
+  geom_point()
+```
+
+This produces a **scatterplot**.
+
+Breaking it down:
+
+| Component                          | Purpose                          |
+| ---------------------------------- | -------------------------------- |
+| `ggplot(tract_data)`               | Selects the dataset              |
+| `aes(x = population, y = moe_pct)` | Maps variables to axes           |
+| `geom_point()`                     | Draws the observations as points |
+
+---
+
+## 4. Inside `aes()` vs. Outside `aes()`
+
+An important distinction in `ggplot2` is whether a visual property is placed **inside** or **outside** `aes()`.
+
+### Inside `aes()` = Map a Variable
+
+Suppose the dataset contains a variable called `reliability`.
+
+```r
+#| eval: false
+ggplot(tract_data) +
+  aes(
+    x = population,
+    y = moe_pct,
+    color = reliability
+  ) +
+  geom_point()
+```
+
+Here:
+
+```r
+#| eval: false
+aes(color = reliability)
+```
+
+means:
+
+> Change the color of the points according to the values of the `reliability` variable.
+
+The color therefore communicates information from the data.
+
+---
+
+### Outside `aes()` = Set a Constant
+
+Suppose we instead write:
+
+```r
+#| eval: false
+ggplot(tract_data) +
+  aes(
+    x = population,
+    y = moe_pct
+  ) +
+  geom_point(color = "blue")
+```
+
+Now every point is blue.
+
+`"blue"` is not a variable in the dataset. It is simply a decoration or constant visual property.
+
+### Rule to Remember
+
+> **Inside `aes()` = map a variable.**
+
+> **Outside `aes()` = set a constant or decoration.**
+
+For example:
+
+```r
+#| eval: false
+aes(color = reliability)
+```
+
+means color represents the variable `reliability`.
+
+Whereas:
+
+```r
+#| eval: false
+geom_point(color = "blue")
+```
+
+means make every point blue.
+
+This distinction also applies to:
+
+* `size`
+* `shape`
+* `fill`
+* `alpha`
+
+---
+
+## 5. Choosing the Correct `geom_*()`
+
+The geometry we use depends on the question we want the visualization to answer.
+
+| What do I want to know?         | GEOM               |
+| ------------------------------- | ------------------ |
+| How is a variable distributed?  | `geom_histogram()` |
+| How do two variables relate?    | `geom_point()`     |
+| How do groups compare?          | `geom_boxplot()`   |
+| How do things change over time? | `geom_line()`      |
+| How uncertain is a value?       | `geom_errorbar()`  |
+
+---
+
+### How Is a Variable Distributed?
+
+Use:
+
+```r
+#| eval: false
+geom_histogram()
+```
+
+Example:
+
+```r
+#| eval: false
+ggplot(county_data) +
+  aes(x = estimate) +
+  geom_histogram()
+```
+
+A histogram can help identify:
+
+* The center of a distribution
+* Spread
+* Skewness
+* Outliers
+* Multiple peaks
+
+---
+
+### How Do Two Variables Relate?
+
+Use:
+
+```r
+#| eval: false
+geom_point()
+```
+
+Example:
+
+```r
+#| eval: false
+ggplot(county_data) +
+  aes(
+    x = population,
+    y = estimate
+  ) +
+  geom_point()
+```
+
+This produces a scatterplot that can help us examine whether two variables appear to be related.
+
+---
+
+### How Do Groups Compare?
+
+Use:
+
+```r
+#| eval: false
+geom_boxplot()
+```
+
+Example:
+
+```r
+#| eval: false
+ggplot(county_data) +
+  aes(
+    x = reliability,
+    y = estimate
+  ) +
+  geom_boxplot()
+```
+
+Boxplots are useful for comparing distributions between different groups.
+
+---
+
+### How Do Things Change Over Time?
+
+Use:
+
+```r
+#| eval: false
+geom_line()
+```
+
+Example:
+
+```r
+#| eval: false
+ggplot(data) +
+  aes(
+    x = year,
+    y = estimate
+  ) +
+  geom_line()
+```
+
+Line charts are particularly useful for showing change over time.
+
+---
+
+### How Uncertain Is a Value?
+
+Use:
+
+```r
+#| eval: false
+geom_errorbar()
+```
+
+For example:
+
+```r
+#| eval: false
+ggplot(county_data) +
+  aes(
+    x = county,
+    y = estimate,
+    ymin = estimate - moe,
+    ymax = estimate + moe
+  ) +
+  geom_errorbar()
+```
+
+Error bars allow us to visualize the uncertainty surrounding an estimate.
+
+---
+
+## 6. ACS Estimates and Uncertainty
+
+The **American Community Survey (ACS)** is based on a sample of the population.
+
+Therefore, ACS values are **estimates**, not exact measurements.
+
+Each estimate comes with uncertainty.
+
+For example:
+
+$$
+\$45,000 \pm \$8,000
+$$
+
+Here:
+
+* **$45,000** is the estimate.
+* **$8,000** is the Margin of Error (MOE).
+
+The MOE tells us about the uncertainty surrounding the estimate.
+
+ACS published margins of error generally correspond to a **90% confidence level**.
+
+This is important when using ACS data for urban policy analysis because an estimate should not be interpreted without considering its uncertainty.
+
+---
+
+## 7. Margin of Error and Standard Error
+
+For a 90% confidence interval:
+
+$$
+MOE = 1.645 \times SE
+$$
+
+Therefore:
+
+$$
+SE = \frac{MOE}{1.645}
+$$
+
+where:
+
+* **MOE** = Margin of Error
+* **SE** = Standard Error
+* **1.645** = critical value associated with a 90% confidence interval
+
+### Example
+
+Suppose:
+
+$$
+Estimate = \$45,000
+$$
+
+and:
+
+$$
+MOE = \$8,000
+$$
+
+Then:
+
+$$
+SE = \frac{8,000}{1.645}
+$$
+
+Therefore:
+
+$$
+SE \approx \$4,863
+$$
+
+The standard error provides a measure of the sampling variability associated with the estimate.
+
+---
+
+## 8. Coefficient of Variation (CV)
+
+The **Coefficient of Variation (CV)** is a relative measure of sampling error.
+
+It measures uncertainty relative to the size of the estimate.
+
+The formula is:
+
+$$
+CV = \frac{SE}{Estimate} \times 100
+$$
+
+Since:
+
+$$
+SE = \frac{MOE}{1.645}
+$$
+
+we can also calculate CV as:
+
+$$
+CV = \frac{MOE/1.645}{Estimate} \times 100
+$$
+
+### Reliability Classification
+
+The classification discussed in class was:
+
+| Coefficient of Variation | Interpretation                               |
+| ------------------------ | -------------------------------------------- |
+| CV < 15%                 | Low sampling error / high reliability        |
+| CV = 15%–30%             | Medium sampling error / moderate reliability |
+| CV > 30%                 | High sampling error / lower reliability      |
+
+The general relationship is:
+
+> **Lower CV → greater relative precision**
+
+> **Higher CV → greater relative sampling uncertainty**
+
+These thresholds are useful for classifying estimates, but they should be understood as practical thresholds rather than universal statistical laws.
+
+---
+
+## 9. Example of Coefficient of Variation
+
+Consider two census tracts.
+
+### Tract A
+
+Suppose:
+
+$$
+Estimate = \$100,000
+$$
+
+and:
+
+$$
+SE = \$5,000
+$$
+
+Then:
+
+$$
+CV = \frac{5,000}{100,000} \times 100
+$$
+
+$$
+CV = 5\%
+$$
+
+This represents relatively low sampling error.
+
+### Tract B
+
+Suppose:
+
+$$
+Estimate = \$10,000
+$$
+
+and:
+
+$$
+SE = \$5,000
+$$
+
+Then:
+
+$$
+CV = \frac{5,000}{10,000} \times 100
+$$
+
+$$
+CV = 50\%
+$$
+
+Both estimates have the same standard error of **$5,000**, but the uncertainty is much larger relative to the estimate for Tract B.
+
+This demonstrates why CV is useful.
+
+> **Absolute uncertainty alone does not tell the whole story. The CV evaluates uncertainty relative to the size of the estimate.**
+
+---
+
+## 10. Derived Uncertainty
+
+Sometimes we use ACS estimates to calculate a new statistic.
+
+For example:
+
+$$
+Poverty\ Rate =
+\frac{Number\ of\ People\ in\ Poverty}
+{Total\ Population}
+$$
+
+Both the numerator and denominator have their own margins of error.
+
+Conceptually:
+
+$$
+Poverty\ Rate =
+\frac{Population\ in\ Poverty \pm MOE}
+{Total\ Population \pm MOE}
+$$
+
+We cannot simply calculate the poverty rate and ignore the uncertainty associated with the original estimates.
+
+Instead, we must **propagate the uncertainty** from the original variables into the new statistic.
+
+This is known as **derived uncertainty**.
+
+---
+
+## 11. Functions for Derived Margins of Error
+
+Different calculations require different approaches to uncertainty.
+
+### `moe_sum()`
+
+Use `moe_sum()` when **adding estimates together**.
+
+Conceptually:
+
+```r
+#| eval: false
+moe_sum(...)
+```
+
+For example, several age categories might be combined to calculate a larger population group.
+
+Importantly, we generally **do not simply add the margins of error together**.
+
+---
+
+### `moe_prop()`
+
+Use `moe_prop()` when one estimate is expressed as a **proportion of another** and the numerator is a subset of the denominator.
+
+For example:
+
+$$
+Poverty\ Rate =
+\frac{Population\ in\ Poverty}
+{Total\ Population}
+$$
+
+The population in poverty is part of the total population.
+
+Therefore, this is a **proportion**.
+
+Conceptually:
+
+```r
+#| eval: false
+moe_prop(...)
+```
+
+---
+
+### `moe_ratio()`
+
+Use `moe_ratio()` when calculating a ratio where the numerator is **not a subset of the denominator**.
+
+Conceptually:
+
+```r
+#| eval: false
+moe_ratio(...)
+```
+
+### Important Difference
+
+> **Proportion:** The numerator is contained within the denominator.
+
+> **Ratio:** The numerator is not contained within the denominator.
+
+This distinction matters because the uncertainty calculations are different.
+
+---
+
+## 12. Change Over Time with ACS Data
+
+Comparing ACS estimates over time requires special care.
+
+One important issue is **overlapping five-year estimates**.
+
+Consider:
+
+* 2018–2022 ACS 5-year estimate
+* 2019–2023 ACS 5-year estimate
+
+These two periods overlap substantially.
+
+They both contain data from:
+
+* 2019
+* 2020
+* 2021
+* 2022
+
+Therefore, they are not independent five-year periods.
+
+For a cleaner comparison, use **non-overlapping periods**.
+
+For example:
+
+**2014–2018 vs. 2019–2023**
+
+There are no overlapping years between these two periods.
+
+---
+
+## 13. Example: Measuring Change Over Time
+
+Suppose we have the following ACS estimates.
+
+### 2014–2018
+
+$$
+\$45,000 \pm \$8,000
+$$
+
+### 2019–2023
+
+$$
+\$62,000 \pm \$11,000
+$$
+
+The difference between the point estimates is:
+
+$$
+\$62,000 - \$45,000 = \$17,000
+$$
+
+At first glance, we might conclude that the value increased by **$17,000**.
+
+However, both estimates contain uncertainty.
+
+We therefore need to determine the uncertainty associated with the **difference between the two estimates**.
+
+---
+
+## 14. Standard Error of the Difference
+
+First, convert each MOE into a standard error.
+
+### First Period
+
+$$
+SE_1 = \frac{8,000}{1.645}
+$$
+
+$$
+SE_1 \approx 4,863
+$$
+
+### Second Period
+
+$$
+SE_2 = \frac{11,000}{1.645}
+$$
+
+$$
+SE_2 \approx 6,687
+$$
+
+For independent estimates, the standard error of the difference is:
+
+$$
+SE_{diff} =
+\sqrt{SE_1^2 + SE_2^2}
+$$
+
+Therefore:
+
+$$
+SE_{diff} =
+\sqrt{4,863^2 + 6,687^2}
+$$
+
+$$
+SE_{diff} \approx 8,268
+$$
+
+Notice that we did **not** calculate:
+
+$$
+8,000 + 11,000
+$$
+
+We do not simply add the margins of error.
+
+---
+
+## 15. Confidence Interval for the Change
+
+Our estimated change is:
+
+$$
+\$17,000
+$$
+
+and:
+
+$$
+SE_{diff} \approx \$8,268
+$$
+
+For a 90% confidence interval:
+
+$$
+Difference \pm (1.645 \times SE_{diff})
+$$
+
+Therefore:
+
+$$
+17,000 \pm (1.645 \times 8,268)
+$$
+
+$$
+17,000 \pm 13,601
+$$
+
+The approximate confidence interval is therefore:
+
+$$
+[\$3,399,\ \$30,601]
+$$
+
+The entire interval is above zero.
+
+Under the assumptions of this calculation, this provides evidence that the observed increase is statistically distinguishable from zero at the 90% confidence level.
+
+---
+
+## 16. Why Zero Matters
+
+Suppose instead that the confidence interval for a change was:
+
+$$
+[-\$4,000,\ \$20,000]
+$$
+
+This interval contains:
+
+$$
+0
+$$
+
+That means the data are compatible with:
+
+* A decrease
+* Essentially no change
+* An increase
+
+We therefore would **not** conclude that the estimated change is statistically distinguishable from zero at that confidence level.
+
+The important lesson is:
+
+> **A difference between two point estimates does not automatically mean that there has been a statistically distinguishable change.**
+
+We must consider the uncertainty surrounding both estimates.
+
+---
+
+## 17. Visualizing Reliability
+
+The concepts of visualization and uncertainty can be combined in `ggplot2`.
+
+For example:
+
+```r
+#| eval: false
+ggplot(tract_data) +
+  aes(
+    x = population,
+    y = estimate,
+    color = reliability
+  ) +
+  geom_point()
+```
+
+This visualization communicates three pieces of information:
+
+| Variable    | Visual Property |
+| ----------- | --------------- |
+| Population  | x-axis          |
+| Estimate    | y-axis          |
+| Reliability | Color           |
+
+This allows us to see not only the estimates themselves but also how reliable those estimates are.
+
+---
+
+## 18. Visualizing Margins of Error
+
+We can also display uncertainty directly using error bars.
+
+```r
+#| eval: false
+ggplot(county_data) +
+  aes(
+    x = county,
+    y = estimate,
+    ymin = estimate - moe,
+    ymax = estimate + moe
+  ) +
+  geom_point() +
+  geom_errorbar()
+```
+
+The point represents the estimate.
+
+The error bar represents the uncertainty around that estimate.
+
+This is particularly important when comparing ACS estimates because two point estimates may look different while still having substantial uncertainty around them.
+
+---
+
+## 19. Connecting the Main Ideas
+
+The topics from this week are closely connected.
+
+### Visualization
+
+Anscombe's Quartet teaches us:
+
+> Do not rely only on summary statistics. **Visualize the data.**
+
+### Grammar of Graphics
+
+A visualization maps:
+
+$$
+Data \rightarrow Visual\ Properties
+$$
+
+In `ggplot2`, the basic structure is:
+
+```r
+#| eval: false
+ggplot(data) +
+  aes(...) +
+  geom_*()
+```
+
+### Aesthetic Mapping
+
+Remember:
+
+```r
+#| eval: false
+aes(color = reliability)
+```
+
+means:
+
+**Map the variable `reliability` to color.**
+
+While:
+
+```r
+#| eval: false
+geom_point(color = "blue")
+```
+
+means:
+
+**Make every point blue.**
+
+### ACS Uncertainty
+
+For ACS data:
+
+$$
+SE = \frac{MOE}{1.645}
+$$
+
+The Coefficient of Variation is:
+
+$$
+CV = \frac{SE}{Estimate} \times 100
+$$
+
+For two independent estimates:
+
+$$
+SE_{diff} =
+\sqrt{SE_1^2 + SE_2^2}
+$$
+
+The 90% confidence interval for the difference is:
+
+$$
+Difference \pm 1.645(SE_{diff})
+$$
+
+---
+
+## 20. Key Concepts to Remember
+
+* **Anscombe's Quartet** demonstrates why data should be visualized rather than understood only through summary statistics.
+* The **Grammar of Graphics** treats a plot as a mapping between variables and visual properties.
+* `ggplot(data)` identifies the dataset and creates the canvas.
+* `aes()` defines aesthetic mappings.
+* `geom_*()` determines the type of graphical object.
+* Inside `aes()` means **map a variable**.
+* Outside `aes()` means **set a constant visual property**.
+* `geom_histogram()` shows the distribution of a variable.
+* `geom_point()` shows relationships between variables.
+* `geom_boxplot()` compares groups.
+* `geom_line()` shows change over time.
+* `geom_errorbar()` visualizes uncertainty.
+* ACS data are **estimates**, so uncertainty must be considered.
+* ACS margins of error generally correspond to a **90% confidence level**.
+* Standard Error can be calculated as `MOE / 1.645`.
+* The **Coefficient of Variation** measures uncertainty relative to the size of an estimate.
+* A high CV indicates relatively high sampling uncertainty.
+* Derived statistics require the uncertainty of the original estimates to be propagated.
+* `moe_sum()` is used when combining estimates.
+* `moe_prop()` is appropriate for proportions where the numerator is a subset of the denominator.
+* `moe_ratio()` is appropriate for ratios where the numerator is not a subset of the denominator.
+* Be careful when comparing **overlapping ACS 5-year periods**.
+* For straightforward change comparisons, non-overlapping periods are preferable.
+* A difference between two estimates does not automatically mean the change is statistically distinguishable from zero.
+* When the confidence interval for a difference includes zero, the evidence does not distinguish the estimated change from zero at that confidence level.
+
+---
+

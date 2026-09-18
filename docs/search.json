@@ -46,7 +46,7 @@
     "href": "weekly-notes/index.html",
     "title": "Weekly Notes",
     "section": "",
-    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 2: dplyr and census\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\nNo matching items"
+    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\ndate: 2026-09-17\n\n\n\n\n\n\n\n\n\n\n\n\n\nWeek 2: dplyr and census\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "data/readme.html",
@@ -411,5 +411,166 @@
     "title": "About Me",
     "section": "Let’s Connect",
     "text": "Let’s Connect\nI welcome conversations about urban spatial analytics, GIS, geospatial technology, mapping and monitoring solutions, and collaborative research or professional opportunities.\nYou can reach me through the following channels:\n\nEmail: sampsone@upenn.edu\nGitHub: github.com/emmanuelsampson-prog\nLocation: Philadelphia, Pennsylvania\n\nI am particularly interested in opportunities involving spatial data science, geospatial technology, urban analytics, infrastructure, and strategic partnerships."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html",
+    "href": "weekly-notes/week-03.html",
+    "title": "",
+    "section": "",
+    "text": "Code\ntitle: “Week 3: Data Visualization and Uncertainty” description: “Grammar of Graphics, ggplot2, ACS reliability, derived uncertainty, and change over time.” date: 2026-09-17 —————-"
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#what-we-did",
+    "href": "weekly-notes/week-03.html#what-we-did",
+    "title": "",
+    "section": "What We Did",
+    "text": "What We Did\nThis week focused on data visualization using ggplot2 and how uncertainty should be considered when working with American Community Survey (ACS) estimates.\nThe major topics were:\n\nAnscombe’s Quartet and why visualization matters\nThe Grammar of Graphics\nBuilding plots with ggplot2\nAesthetic mappings using aes()\nChoosing the appropriate geom_*()\nMargin of Error (MOE) and Standard Error (SE)\nCoefficient of Variation (CV)\nDerived uncertainty\nComparing ACS estimates over time\nConfidence intervals for change"
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#anscombes-quartet-why-visualization-matters",
+    "href": "weekly-notes/week-03.html#anscombes-quartet-why-visualization-matters",
+    "title": "",
+    "section": "1. Anscombe’s Quartet: Why Visualization Matters",
+    "text": "1. Anscombe’s Quartet: Why Visualization Matters\nReference was made to Anscombe’s Quartet, which demonstrates why we should visualize our data rather than relying only on summary statistics.\nAnscombe’s Quartet consists of four datasets that have nearly identical statistical properties, including similar:\n\nMeans\nVariances\nCorrelations\nRegression lines\n\nHowever, when the datasets are plotted, they look very different.\nThe important lesson is:\n\nDatasets can have similar summary statistics but very different underlying patterns. Always visualize your data.\n\nA mean, correlation coefficient, or regression line alone may hide:\n\nOutliers\nNonlinear relationships\nClusters\nUnusual observations\nDifferent distributions\n\nThis is particularly important in urban spatial analysis because two neighborhoods, census tracts, counties, or cities may have similar summary statistics but very different underlying patterns."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#grammar-of-graphics",
+    "href": "weekly-notes/week-03.html#grammar-of-graphics",
+    "title": "",
+    "section": "2. Grammar of Graphics",
+    "text": "2. Grammar of Graphics\nThe Grammar of Graphics is the conceptual foundation behind ggplot2.\nA plot can be understood as a mapping from columns in our data to visual properties on a page or canvas.\nFor example:\n\n\n\nYour Data\nVisual Property\n\n\n\n\nEstimate\nPosition on y-axis\n\n\nPopulation\nPosition on x-axis\n\n\nReliability\nColor\n\n\nMargin of Error (MOE)\nSize\n\n\n\nIn other words:\nData variable → Visual property\nSuppose our census tract dataset contains:\ntract | population | estimate | moe | reliability\nWe could map:\n\npopulation → x-axis\nestimate → y-axis\nreliability → color\nmoe → size\n\nThis allows one visualization to communicate several dimensions of the data simultaneously."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#how-to-build-a-ggplot",
+    "href": "weekly-notes/week-03.html#how-to-build-a-ggplot",
+    "title": "",
+    "section": "3. How to Build a ggplot",
+    "text": "3. How to Build a ggplot\nA basic ggplot2 visualization consists of three important components:\n#| eval: false\nggplot(data) +\n  aes(...) +\n  geom_*()\nThink of this as:\n\nData — What dataset am I using?\nAesthetics — Which variables should control visual properties?\nGeometry — What type of chart or graphical object should be drawn?\n\n\n\nStep 1: Create the Canvas\n#| eval: false\np &lt;- ggplot(data)\nggplot(data) tells R which dataset we want to visualize.\nAt this stage, ggplot() creates essentially a blank canvas.\nFor example:\n#| eval: false\nggplot(tract_data)\n\n\n\nStep 2: Define Aesthetic Mappings\nThe aes() function defines the aesthetic mappings.\n#| eval: false\naes(\n  x = population,\n  y = moe_pct\n)\nThis tells ggplot2:\n\nPut population on the x-axis.\nPut moe_pct on the y-axis.\n\nAesthetics can include:\n\nx\ny\ncolor\nfill\nsize\nshape\nalpha\n\nFor example:\n#| eval: false\naes(\n  x = population,\n  y = moe_pct,\n  color = reliability\n)\nHere, reliability determines the color of each observation.\n\n\n\nStep 3: Choose a Geometry\nThe geom_*() function determines the shape or type of chart.\nFor example:\n#| eval: false\nggplot(tract_data) +\n  aes(\n    x = population,\n    y = moe_pct\n  ) +\n  geom_point()\nThis produces a scatterplot.\nBreaking it down:\n\n\n\n\n\n\n\nComponent\nPurpose\n\n\n\n\nggplot(tract_data)\nSelects the dataset\n\n\naes(x = population, y = moe_pct)\nMaps variables to axes\n\n\ngeom_point()\nDraws the observations as points"
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#inside-aes-vs.-outside-aes",
+    "href": "weekly-notes/week-03.html#inside-aes-vs.-outside-aes",
+    "title": "",
+    "section": "4. Inside aes() vs. Outside aes()",
+    "text": "4. Inside aes() vs. Outside aes()\nAn important distinction in ggplot2 is whether a visual property is placed inside or outside aes().\n\nInside aes() = Map a Variable\nSuppose the dataset contains a variable called reliability.\n#| eval: false\nggplot(tract_data) +\n  aes(\n    x = population,\n    y = moe_pct,\n    color = reliability\n  ) +\n  geom_point()\nHere:\n#| eval: false\naes(color = reliability)\nmeans:\n\nChange the color of the points according to the values of the reliability variable.\n\nThe color therefore communicates information from the data.\n\n\n\nOutside aes() = Set a Constant\nSuppose we instead write:\n#| eval: false\nggplot(tract_data) +\n  aes(\n    x = population,\n    y = moe_pct\n  ) +\n  geom_point(color = \"blue\")\nNow every point is blue.\n\"blue\" is not a variable in the dataset. It is simply a decoration or constant visual property.\n\n\nRule to Remember\n\nInside aes() = map a variable.\n\n\nOutside aes() = set a constant or decoration.\n\nFor example:\n#| eval: false\naes(color = reliability)\nmeans color represents the variable reliability.\nWhereas:\n#| eval: false\ngeom_point(color = \"blue\")\nmeans make every point blue.\nThis distinction also applies to:\n\nsize\nshape\nfill\nalpha"
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#choosing-the-correct-geom_",
+    "href": "weekly-notes/week-03.html#choosing-the-correct-geom_",
+    "title": "",
+    "section": "5. Choosing the Correct geom_*()",
+    "text": "5. Choosing the Correct geom_*()\nThe geometry we use depends on the question we want the visualization to answer.\n\n\n\nWhat do I want to know?\nGEOM\n\n\n\n\nHow is a variable distributed?\ngeom_histogram()\n\n\nHow do two variables relate?\ngeom_point()\n\n\nHow do groups compare?\ngeom_boxplot()\n\n\nHow do things change over time?\ngeom_line()\n\n\nHow uncertain is a value?\ngeom_errorbar()\n\n\n\n\n\nHow Is a Variable Distributed?\nUse:\n#| eval: false\ngeom_histogram()\nExample:\n#| eval: false\nggplot(county_data) +\n  aes(x = estimate) +\n  geom_histogram()\nA histogram can help identify:\n\nThe center of a distribution\nSpread\nSkewness\nOutliers\nMultiple peaks\n\n\n\n\nHow Do Two Variables Relate?\nUse:\n#| eval: false\ngeom_point()\nExample:\n#| eval: false\nggplot(county_data) +\n  aes(\n    x = population,\n    y = estimate\n  ) +\n  geom_point()\nThis produces a scatterplot that can help us examine whether two variables appear to be related.\n\n\n\nHow Do Groups Compare?\nUse:\n#| eval: false\ngeom_boxplot()\nExample:\n#| eval: false\nggplot(county_data) +\n  aes(\n    x = reliability,\n    y = estimate\n  ) +\n  geom_boxplot()\nBoxplots are useful for comparing distributions between different groups.\n\n\n\nHow Do Things Change Over Time?\nUse:\n#| eval: false\ngeom_line()\nExample:\n#| eval: false\nggplot(data) +\n  aes(\n    x = year,\n    y = estimate\n  ) +\n  geom_line()\nLine charts are particularly useful for showing change over time.\n\n\n\nHow Uncertain Is a Value?\nUse:\n#| eval: false\ngeom_errorbar()\nFor example:\n#| eval: false\nggplot(county_data) +\n  aes(\n    x = county,\n    y = estimate,\n    ymin = estimate - moe,\n    ymax = estimate + moe\n  ) +\n  geom_errorbar()\nError bars allow us to visualize the uncertainty surrounding an estimate."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#acs-estimates-and-uncertainty",
+    "href": "weekly-notes/week-03.html#acs-estimates-and-uncertainty",
+    "title": "",
+    "section": "6. ACS Estimates and Uncertainty",
+    "text": "6. ACS Estimates and Uncertainty\nThe American Community Survey (ACS) is based on a sample of the population.\nTherefore, ACS values are estimates, not exact measurements.\nEach estimate comes with uncertainty.\nFor example:\n\\[\n\\$45,000 \\pm \\$8,000\n\\]\nHere:\n\n$45,000 is the estimate.\n$8,000 is the Margin of Error (MOE).\n\nThe MOE tells us about the uncertainty surrounding the estimate.\nACS published margins of error generally correspond to a 90% confidence level.\nThis is important when using ACS data for urban policy analysis because an estimate should not be interpreted without considering its uncertainty."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#margin-of-error-and-standard-error",
+    "href": "weekly-notes/week-03.html#margin-of-error-and-standard-error",
+    "title": "",
+    "section": "7. Margin of Error and Standard Error",
+    "text": "7. Margin of Error and Standard Error\nFor a 90% confidence interval:\n\\[\nMOE = 1.645 \\times SE\n\\]\nTherefore:\n\\[\nSE = \\frac{MOE}{1.645}\n\\]\nwhere:\n\nMOE = Margin of Error\nSE = Standard Error\n1.645 = critical value associated with a 90% confidence interval\n\n\nExample\nSuppose:\n\\[\nEstimate = \\$45,000\n\\]\nand:\n\\[\nMOE = \\$8,000\n\\]\nThen:\n\\[\nSE = \\frac{8,000}{1.645}\n\\]\nTherefore:\n\\[\nSE \\approx \\$4,863\n\\]\nThe standard error provides a measure of the sampling variability associated with the estimate."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#coefficient-of-variation-cv",
+    "href": "weekly-notes/week-03.html#coefficient-of-variation-cv",
+    "title": "",
+    "section": "8. Coefficient of Variation (CV)",
+    "text": "8. Coefficient of Variation (CV)\nThe Coefficient of Variation (CV) is a relative measure of sampling error.\nIt measures uncertainty relative to the size of the estimate.\nThe formula is:\n\\[\nCV = \\frac{SE}{Estimate} \\times 100\n\\]\nSince:\n\\[\nSE = \\frac{MOE}{1.645}\n\\]\nwe can also calculate CV as:\n\\[\nCV = \\frac{MOE/1.645}{Estimate} \\times 100\n\\]\n\nReliability Classification\nThe classification discussed in class was:\n\n\n\n\n\n\n\nCoefficient of Variation\nInterpretation\n\n\n\n\nCV &lt; 15%\nLow sampling error / high reliability\n\n\nCV = 15%–30%\nMedium sampling error / moderate reliability\n\n\nCV &gt; 30%\nHigh sampling error / lower reliability\n\n\n\nThe general relationship is:\n\nLower CV → greater relative precision\n\n\nHigher CV → greater relative sampling uncertainty\n\nThese thresholds are useful for classifying estimates, but they should be understood as practical thresholds rather than universal statistical laws."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#example-of-coefficient-of-variation",
+    "href": "weekly-notes/week-03.html#example-of-coefficient-of-variation",
+    "title": "",
+    "section": "9. Example of Coefficient of Variation",
+    "text": "9. Example of Coefficient of Variation\nConsider two census tracts.\n\nTract A\nSuppose:\n\\[\nEstimate = \\$100,000\n\\]\nand:\n\\[\nSE = \\$5,000\n\\]\nThen:\n\\[\nCV = \\frac{5,000}{100,000} \\times 100\n\\]\n\\[\nCV = 5\\%\n\\]\nThis represents relatively low sampling error.\n\n\nTract B\nSuppose:\n\\[\nEstimate = \\$10,000\n\\]\nand:\n\\[\nSE = \\$5,000\n\\]\nThen:\n\\[\nCV = \\frac{5,000}{10,000} \\times 100\n\\]\n\\[\nCV = 50\\%\n\\]\nBoth estimates have the same standard error of $5,000, but the uncertainty is much larger relative to the estimate for Tract B.\nThis demonstrates why CV is useful.\n\nAbsolute uncertainty alone does not tell the whole story. The CV evaluates uncertainty relative to the size of the estimate."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#derived-uncertainty",
+    "href": "weekly-notes/week-03.html#derived-uncertainty",
+    "title": "",
+    "section": "10. Derived Uncertainty",
+    "text": "10. Derived Uncertainty\nSometimes we use ACS estimates to calculate a new statistic.\nFor example:\n\\[\nPoverty\\ Rate =\n\\frac{Number\\ of\\ People\\ in\\ Poverty}\n{Total\\ Population}\n\\]\nBoth the numerator and denominator have their own margins of error.\nConceptually:\n\\[\nPoverty\\ Rate =\n\\frac{Population\\ in\\ Poverty \\pm MOE}\n{Total\\ Population \\pm MOE}\n\\]\nWe cannot simply calculate the poverty rate and ignore the uncertainty associated with the original estimates.\nInstead, we must propagate the uncertainty from the original variables into the new statistic.\nThis is known as derived uncertainty."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#functions-for-derived-margins-of-error",
+    "href": "weekly-notes/week-03.html#functions-for-derived-margins-of-error",
+    "title": "",
+    "section": "11. Functions for Derived Margins of Error",
+    "text": "11. Functions for Derived Margins of Error\nDifferent calculations require different approaches to uncertainty.\n\nmoe_sum()\nUse moe_sum() when adding estimates together.\nConceptually:\n#| eval: false\nmoe_sum(...)\nFor example, several age categories might be combined to calculate a larger population group.\nImportantly, we generally do not simply add the margins of error together.\n\n\n\nmoe_prop()\nUse moe_prop() when one estimate is expressed as a proportion of another and the numerator is a subset of the denominator.\nFor example:\n\\[\nPoverty\\ Rate =\n\\frac{Population\\ in\\ Poverty}\n{Total\\ Population}\n\\]\nThe population in poverty is part of the total population.\nTherefore, this is a proportion.\nConceptually:\n#| eval: false\nmoe_prop(...)\n\n\n\nmoe_ratio()\nUse moe_ratio() when calculating a ratio where the numerator is not a subset of the denominator.\nConceptually:\n#| eval: false\nmoe_ratio(...)\n\n\nImportant Difference\n\nProportion: The numerator is contained within the denominator.\n\n\nRatio: The numerator is not contained within the denominator.\n\nThis distinction matters because the uncertainty calculations are different."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#change-over-time-with-acs-data",
+    "href": "weekly-notes/week-03.html#change-over-time-with-acs-data",
+    "title": "",
+    "section": "12. Change Over Time with ACS Data",
+    "text": "12. Change Over Time with ACS Data\nComparing ACS estimates over time requires special care.\nOne important issue is overlapping five-year estimates.\nConsider:\n\n2018–2022 ACS 5-year estimate\n2019–2023 ACS 5-year estimate\n\nThese two periods overlap substantially.\nThey both contain data from:\n\n2019\n2020\n2021\n2022\n\nTherefore, they are not independent five-year periods.\nFor a cleaner comparison, use non-overlapping periods.\nFor example:\n2014–2018 vs. 2019–2023\nThere are no overlapping years between these two periods."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#example-measuring-change-over-time",
+    "href": "weekly-notes/week-03.html#example-measuring-change-over-time",
+    "title": "",
+    "section": "13. Example: Measuring Change Over Time",
+    "text": "13. Example: Measuring Change Over Time\nSuppose we have the following ACS estimates.\n\n2014–2018\n\\[\n\\$45,000 \\pm \\$8,000\n\\]\n\n\n2019–2023\n\\[\n\\$62,000 \\pm \\$11,000\n\\]\nThe difference between the point estimates is:\n\\[\n\\$62,000 - \\$45,000 = \\$17,000\n\\]\nAt first glance, we might conclude that the value increased by $17,000.\nHowever, both estimates contain uncertainty.\nWe therefore need to determine the uncertainty associated with the difference between the two estimates."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#standard-error-of-the-difference",
+    "href": "weekly-notes/week-03.html#standard-error-of-the-difference",
+    "title": "",
+    "section": "14. Standard Error of the Difference",
+    "text": "14. Standard Error of the Difference\nFirst, convert each MOE into a standard error.\n\nFirst Period\n\\[\nSE_1 = \\frac{8,000}{1.645}\n\\]\n\\[\nSE_1 \\approx 4,863\n\\]\n\n\nSecond Period\n\\[\nSE_2 = \\frac{11,000}{1.645}\n\\]\n\\[\nSE_2 \\approx 6,687\n\\]\nFor independent estimates, the standard error of the difference is:\n\\[\nSE_{diff} =\n\\sqrt{SE_1^2 + SE_2^2}\n\\]\nTherefore:\n\\[\nSE_{diff} =\n\\sqrt{4,863^2 + 6,687^2}\n\\]\n\\[\nSE_{diff} \\approx 8,268\n\\]\nNotice that we did not calculate:\n\\[\n8,000 + 11,000\n\\]\nWe do not simply add the margins of error."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#confidence-interval-for-the-change",
+    "href": "weekly-notes/week-03.html#confidence-interval-for-the-change",
+    "title": "",
+    "section": "15. Confidence Interval for the Change",
+    "text": "15. Confidence Interval for the Change\nOur estimated change is:\n\\[\n\\$17,000\n\\]\nand:\n\\[\nSE_{diff} \\approx \\$8,268\n\\]\nFor a 90% confidence interval:\n\\[\nDifference \\pm (1.645 \\times SE_{diff})\n\\]\nTherefore:\n\\[\n17,000 \\pm (1.645 \\times 8,268)\n\\]\n\\[\n17,000 \\pm 13,601\n\\]\nThe approximate confidence interval is therefore:\n\\[\n[\\$3,399,\\ \\$30,601]\n\\]\nThe entire interval is above zero.\nUnder the assumptions of this calculation, this provides evidence that the observed increase is statistically distinguishable from zero at the 90% confidence level."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#why-zero-matters",
+    "href": "weekly-notes/week-03.html#why-zero-matters",
+    "title": "",
+    "section": "16. Why Zero Matters",
+    "text": "16. Why Zero Matters\nSuppose instead that the confidence interval for a change was:\n\\[\n[-\\$4,000,\\ \\$20,000]\n\\]\nThis interval contains:\n\\[\n0\n\\]\nThat means the data are compatible with:\n\nA decrease\nEssentially no change\nAn increase\n\nWe therefore would not conclude that the estimated change is statistically distinguishable from zero at that confidence level.\nThe important lesson is:\n\nA difference between two point estimates does not automatically mean that there has been a statistically distinguishable change.\n\nWe must consider the uncertainty surrounding both estimates."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#visualizing-reliability",
+    "href": "weekly-notes/week-03.html#visualizing-reliability",
+    "title": "",
+    "section": "17. Visualizing Reliability",
+    "text": "17. Visualizing Reliability\nThe concepts of visualization and uncertainty can be combined in ggplot2.\nFor example:\n#| eval: false\nggplot(tract_data) +\n  aes(\n    x = population,\n    y = estimate,\n    color = reliability\n  ) +\n  geom_point()\nThis visualization communicates three pieces of information:\n\n\n\nVariable\nVisual Property\n\n\n\n\nPopulation\nx-axis\n\n\nEstimate\ny-axis\n\n\nReliability\nColor\n\n\n\nThis allows us to see not only the estimates themselves but also how reliable those estimates are."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#visualizing-margins-of-error",
+    "href": "weekly-notes/week-03.html#visualizing-margins-of-error",
+    "title": "",
+    "section": "18. Visualizing Margins of Error",
+    "text": "18. Visualizing Margins of Error\nWe can also display uncertainty directly using error bars.\n#| eval: false\nggplot(county_data) +\n  aes(\n    x = county,\n    y = estimate,\n    ymin = estimate - moe,\n    ymax = estimate + moe\n  ) +\n  geom_point() +\n  geom_errorbar()\nThe point represents the estimate.\nThe error bar represents the uncertainty around that estimate.\nThis is particularly important when comparing ACS estimates because two point estimates may look different while still having substantial uncertainty around them."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#connecting-the-main-ideas",
+    "href": "weekly-notes/week-03.html#connecting-the-main-ideas",
+    "title": "",
+    "section": "19. Connecting the Main Ideas",
+    "text": "19. Connecting the Main Ideas\nThe topics from this week are closely connected.\n\nVisualization\nAnscombe’s Quartet teaches us:\n\nDo not rely only on summary statistics. Visualize the data.\n\n\n\nGrammar of Graphics\nA visualization maps:\n\\[\nData \\rightarrow Visual\\ Properties\n\\]\nIn ggplot2, the basic structure is:\n#| eval: false\nggplot(data) +\n  aes(...) +\n  geom_*()\n\n\nAesthetic Mapping\nRemember:\n#| eval: false\naes(color = reliability)\nmeans:\nMap the variable reliability to color.\nWhile:\n#| eval: false\ngeom_point(color = \"blue\")\nmeans:\nMake every point blue.\n\n\nACS Uncertainty\nFor ACS data:\n\\[\nSE = \\frac{MOE}{1.645}\n\\]\nThe Coefficient of Variation is:\n\\[\nCV = \\frac{SE}{Estimate} \\times 100\n\\]\nFor two independent estimates:\n\\[\nSE_{diff} =\n\\sqrt{SE_1^2 + SE_2^2}\n\\]\nThe 90% confidence interval for the difference is:\n\\[\nDifference \\pm 1.645(SE_{diff})\n\\]"
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#key-concepts-to-remember",
+    "href": "weekly-notes/week-03.html#key-concepts-to-remember",
+    "title": "",
+    "section": "20. Key Concepts to Remember",
+    "text": "20. Key Concepts to Remember\n\nAnscombe’s Quartet demonstrates why data should be visualized rather than understood only through summary statistics.\nThe Grammar of Graphics treats a plot as a mapping between variables and visual properties.\nggplot(data) identifies the dataset and creates the canvas.\naes() defines aesthetic mappings.\ngeom_*() determines the type of graphical object.\nInside aes() means map a variable.\nOutside aes() means set a constant visual property.\ngeom_histogram() shows the distribution of a variable.\ngeom_point() shows relationships between variables.\ngeom_boxplot() compares groups.\ngeom_line() shows change over time.\ngeom_errorbar() visualizes uncertainty.\nACS data are estimates, so uncertainty must be considered.\nACS margins of error generally correspond to a 90% confidence level.\nStandard Error can be calculated as MOE / 1.645.\nThe Coefficient of Variation measures uncertainty relative to the size of an estimate.\nA high CV indicates relatively high sampling uncertainty.\nDerived statistics require the uncertainty of the original estimates to be propagated.\nmoe_sum() is used when combining estimates.\nmoe_prop() is appropriate for proportions where the numerator is a subset of the denominator.\nmoe_ratio() is appropriate for ratios where the numerator is not a subset of the denominator.\nBe careful when comparing overlapping ACS 5-year periods.\nFor straightforward change comparisons, non-overlapping periods are preferable.\nA difference between two estimates does not automatically mean the change is statistically distinguishable from zero.\nWhen the confidence interval for a difference includes zero, the evidence does not distinguish the estimated change from zero at that confidence level."
+  },
+  {
+    "objectID": "weekly-notes/week-03.html#week-3-quick-reference",
+    "href": "weekly-notes/week-03.html#week-3-quick-reference",
+    "title": "",
+    "section": "21. Week 3 Quick Reference",
+    "text": "21. Week 3 Quick Reference\n\n\n\n\n\n\n\nQuestion\nTool / Formula\n\n\n\n\nWhat data am I plotting?\nggplot(data)\n\n\nWhich variables control the visual properties?\naes()\n\n\nHow is one variable distributed?\ngeom_histogram()\n\n\nHow do two variables relate?\ngeom_point()\n\n\nHow do groups compare?\ngeom_boxplot()\n\n\nHow does something change over time?\ngeom_line()\n\n\nHow uncertain is an estimate?\ngeom_errorbar()\n\n\nConvert MOE to SE\nSE = MOE / 1.645\n\n\nRelative sampling uncertainty\nCV = (SE / Estimate) × 100\n\n\nAdd estimates\nmoe_sum()\n\n\nCalculate uncertainty for a proportion\nmoe_prop()\n\n\nCalculate uncertainty for a ratio\nmoe_ratio()\n\n\nCompare independent estimates\nSEdiff = sqrt(SE1^2 + SE2^2)\n\n\n90% CI for a difference\nDifference ± 1.645(SEdiff)"
   }
 ]
