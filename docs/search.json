@@ -46,7 +46,7 @@
     "href": "weekly-notes/index.html",
     "title": "Weekly Notes",
     "section": "",
-    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 3: Data Visualization and Uncertainty\n\n\nGrammar of Graphics, ggplot2, ACS reliability, derived uncertainty, and change over time.\n\n\n\n\n\nSep 11, 2026\n\n\n\n\n\n\n\nWeek 2: dplyr and census\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\nNo matching items"
+    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations\n\n\nAttribute joins, sf objects, coordinate reference systems, datums, map projections, UTM, spatial relationships, buffers, and spatial analysis in R.\n\n\n\n\n\nSep 18, 2026\n\n\n\n\n\n\n\nWeek 3: Data Visualization and Uncertainty\n\n\nGrammar of Graphics, ggplot2, ACS reliability, derived uncertainty, and change over time.\n\n\n\n\n\nSep 11, 2026\n\n\n\n\n\n\n\nWeek 2: dplyr and census\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "data/readme.html",
@@ -88,7 +88,7 @@
     "href": "assignments/index.html",
     "title": "Assignments",
     "section": "",
-    "text": "Completed assignments for MUSA 5080. New assignments appear here automatically once you add the .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nAssignment 3: Measuring Poverty in Philadelphia?\n\n\n\n\n\n\n\n\nSep 25, 2026\n\n\n\n\n\n\n\nAssignment 3: Measuring Poverty in Philadelphia\n\n\n\n\n\n\n\n\nSep 25, 2026\n\n\n\n\n\n\n\nAssignment 2: Who Do We Know the Least About?\n\n\n\n\n\n\n\n\nSep 25, 2026\n\n\n\n\n\nNo matching items"
+    "text": "Completed assignments for MUSA 5080, with findings, visualizations, and expandable code.\n\n\n\n\n\n\n\n\n\n\n\nAssignment 2: Who Do We Know the Least About?\n\n\n\n\n\n\n\n\nSep 25, 2026\n\n\n\n\n\n\n\nAssignment 3: Measuring Poverty in Philadelphia\n\n\n\n\n\n\n\n\nSep 25, 2026\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
@@ -614,5 +614,334 @@
     "title": "Assignment 3: Measuring Poverty in Philadelphia",
     "section": "Scope of the written responses",
     "text": "Scope of the written responses\nThe responses above explain the analysis implemented in this script. The original assignment HTML and its question prompts were not available in the project during review, so these responses have not yet been checked against the instructor’s exact questions."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html",
+    "href": "weekly-notes/week-04.html",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "",
+    "text": "GEOID\nMed_inc.23\nMed_inc.15\ngeometry\n\n\n\n\n100\n82,000\n61,000\nPOLYGON (…)\n\n\n200\n31,500\n27,000\nPOLYGON (…)\n\n\n300\n45,000\nNA\nPOLYGON (…)\nThe geometry tells R where the geographic feature is located and what shape it has.\nGeometry can represent:\nExamples include:\nPoint\nLine\nPolygon"
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#geometry-is-sticky-in-sf",
+    "href": "weekly-notes/week-04.html#geometry-is-sticky-in-sf",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "7. Geometry Is “Sticky” in sf",
+    "text": "7. Geometry Is “Sticky” in sf\nIn R, spatial data are commonly handled using the sf package.\nsf stands for:\n\nSimple Features\n\nAn sf object behaves much like a normal data frame, except that it contains a special geometry column.\nOne important characteristic is that:\n\nGeometry is sticky.\n\nThis means many data manipulation operations preserve the geometry column automatically.\nFor example:\n#| eval: false\ntracts %&gt;%\n  select(GEOID, med_income)\nIf tracts is an sf object, the resulting object will generally still retain its geometry.\nThis is useful because we can use familiar dplyr operations while keeping the spatial information attached."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#common-spatial-data-formats",
+    "href": "weekly-notes/week-04.html#common-spatial-data-formats",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "8. Common Spatial Data Formats",
+    "text": "8. Common Spatial Data Formats\nSpatial data can be stored in several formats.\nCommon examples include:\n\nShapefile\n.shp\nA shapefile is a traditional vector spatial data format.\nA shapefile is actually made up of several associated files, commonly including:\n.shp\n.shx\n.dbf\n.prj\nThese files work together to store:\n\nGeometry\nAttributes\nCoordinate system information\n\n\n\n\nFile Geodatabase\n.gdb\nA geodatabase can contain multiple spatial datasets and tables.\nIt is commonly associated with the ArcGIS ecosystem.\n\n\n\nSimple Features (sf)\nIn R, spatial vector data are commonly represented as sf objects.\nFor example:\n#| eval: false\nlibrary(sf)\n\ntracts &lt;- st_read(\"tracts.shp\")"
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#coordinate-reference-systems-crs",
+    "href": "weekly-notes/week-04.html#coordinate-reference-systems-crs",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "9. Coordinate Reference Systems (CRS)",
+    "text": "9. Coordinate Reference Systems (CRS)\nA Coordinate Reference System (CRS) tells us how coordinates correspond to locations on Earth.\nWithout a CRS, numbers such as:\n-75.16, 39.95\nor\n2,700,000, 240,000\ndo not tell us enough about where a location actually is.\nThe CRS provides the framework for interpreting those coordinates.\nThere are two major categories discussed in class:\n\n\n\n\n\n\n\nGeographic CRS\nProjected CRS\n\n\n\n\nCoordinates commonly expressed in angular units such as degrees\nCoordinates expressed in linear units\n\n\nRepresents locations relative to an Earth model\nRepresents locations on a flat map\n\n\nLongitude and latitude are common\nEasting and northing are common\n\n\nUseful for global location/reference\nOften useful for local or regional analysis\n\n\nUnits commonly degrees\nUnits commonly meters or feet"
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#geographic-coordinate-systems",
+    "href": "weekly-notes/week-04.html#geographic-coordinate-systems",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "10. Geographic Coordinate Systems",
+    "text": "10. Geographic Coordinate Systems\nA geographic coordinate system represents locations using angular coordinates.\nThe two most familiar coordinates are:\n\nLatitude\nLongitude\n\nLatitude measures position north or south of the Equator.\nLongitude measures position east or west of a reference meridian, conventionally the Prime Meridian through Greenwich.\nFor example:\nLongitude = -75.16°\nLatitude = 39.95°\napproximately identifies a location in Philadelphia.\nBecause these are angular measurements, the units are degrees, not meters or feet."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#the-equator",
+    "href": "weekly-notes/week-04.html#the-equator",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "11. The Equator",
+    "text": "11. The Equator\nThe Equator is an imaginary line around the Earth located at:\n\\[\n0^\\circ \\text{ latitude}\n\\]\nLatitude is measured north or south from the Equator.\nValues range approximately from:\n\\[\n90^\\circ S\n\\]\nto:\n\\[\n90^\\circ N\n\\]\nTherefore:\n\nThe Equator provides the zero reference for latitude."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#the-greenwich-meridian",
+    "href": "weekly-notes/week-04.html#the-greenwich-meridian",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "12. The Greenwich Meridian",
+    "text": "12. The Greenwich Meridian\nThe Prime Meridian, conventionally passing through Greenwich, England, is defined as:\n\\[\n0^\\circ \\text{ longitude}\n\\]\nLongitude is measured east or west from this reference.\nTherefore:\n\nThe Equator is the reference for latitude, while the Prime Meridian is the reference for longitude."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#why-we-need-an-earth-model",
+    "href": "weekly-notes/week-04.html#why-we-need-an-earth-model",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "13. Why We Need an Earth Model",
+    "text": "13. Why We Need an Earth Model\nThe Earth is not a perfect sphere.\nIt is slightly flattened near the poles and wider around the Equator.\nTo represent the Earth mathematically, geodesy uses simplified models.\nImportant terms include:\n\nEllipsoid\nGeoid\nFlattening ratio\nDatum\n\nThese concepts help connect locations on the real Earth to coordinate systems."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#ellipsoid",
+    "href": "weekly-notes/week-04.html#ellipsoid",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "14. Ellipsoid",
+    "text": "14. Ellipsoid\nAn ellipsoid is a smooth mathematical approximation of the Earth’s shape.\nInstead of modeling every mountain, valley, and variation in gravity, an ellipsoid provides a simplified mathematical surface.\nImportant properties include:\n\nSemi-major axis\nSemi-minor axis\nFlattening\n\nThe Earth is commonly modeled as an oblate ellipsoid because it is slightly wider around the Equator than from pole to pole."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#flattening-ratio",
+    "href": "weekly-notes/week-04.html#flattening-ratio",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "15. Flattening Ratio",
+    "text": "15. Flattening Ratio\nThe flattening of an ellipsoid describes how much the ellipsoid differs from a perfect sphere.\nConceptually:\n\\[\nf = \\frac{a-b}{a}\n\\]\nwhere:\n\n(a) = semi-major axis\n(b) = semi-minor axis\n(f) = flattening\n\nIf:\n\\[\na=b\n\\]\nthe object would be a perfect sphere.\nBecause the Earth is slightly flattened at the poles:\n\\[\na&gt;b\n\\]"
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#the-geoid",
+    "href": "weekly-notes/week-04.html#the-geoid",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "16. The Geoid",
+    "text": "16. The Geoid\nThe geoid is a model of the Earth’s gravity-based shape.\nIt can be thought of approximately as the surface that the oceans would follow under the influence of gravity if other forces such as tides and currents were removed and the surface extended through the continents.\nUnlike a smooth mathematical ellipsoid, the geoid is irregular because Earth’s gravity varies spatially.\nA useful distinction is:\n\nEllipsoid = simplified mathematical Earth\n\n\nGeoid = gravity-based representation of Earth’s shape"
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#datums",
+    "href": "weekly-notes/week-04.html#datums",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "17. Datums",
+    "text": "17. Datums\nA geodetic datum provides the reference framework used to connect coordinates to the Earth.\nA datum typically incorporates an Earth model and defines how that model is positioned or realized relative to the Earth.\nImportant examples include:\n\nNAD27\nNAD83\nWGS84\n\nChanging the datum can change the coordinates assigned to the same real-world location."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#clarke-1866-and-nad27",
+    "href": "weekly-notes/week-04.html#clarke-1866-and-nad27",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "18. Clarke 1866 and NAD27",
+    "text": "18. Clarke 1866 and NAD27\nThe Clarke 1866 ellipsoid was historically used because it provided a useful approximation of the Earth’s shape for North America.\nThe North American Datum of 1927 (NAD27) used the Clarke 1866 ellipsoid and was anchored to a reference location at Meades Ranch, Kansas.\nConceptually:\nClarke 1866 ellipsoid\n        +\nMeades Ranch reference\n        ↓\nNAD27\nNAD27 is an older datum and has largely been replaced by more modern systems."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#nad83-and-grs80",
+    "href": "weekly-notes/week-04.html#nad83-and-grs80",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "19. NAD83 and GRS80",
+    "text": "19. NAD83 and GRS80\nThe North American Datum of 1983 (NAD83) replaced NAD27 for much modern mapping in North America.\nNAD83 is closely associated with the GRS80 ellipsoid.\nGRS80 means:\n\nGeodetic Reference System 1980\n\nCompared with NAD27, NAD83 was developed using improved geodetic measurements and a geocentric approach.\nTherefore:\nNAD27 → Clarke 1866\nNAD83 → GRS80\nis a useful association to remember."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#wgs84",
+    "href": "weekly-notes/week-04.html#wgs84",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "20. WGS84",
+    "text": "20. WGS84\nWGS84 stands for:\n\nWorld Geodetic System 1984\n\nIt is the reference system widely associated with the Global Positioning System (GPS).\nA common geographic CRS based on WGS84 is:\nEPSG:4326\nIts coordinates are commonly represented as longitude and latitude.\nFor example:\nLongitude: -75.16\nLatitude:   39.95\nA useful association is:\n\nWGS84 → GPS"
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#geographic-vs.-projected-coordinate-systems",
+    "href": "weekly-notes/week-04.html#geographic-vs.-projected-coordinate-systems",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "21. Geographic vs. Projected Coordinate Systems",
+    "text": "21. Geographic vs. Projected Coordinate Systems\nA major distinction in spatial analysis is between geographic and projected coordinate systems.\n\nGeographic\nA geographic CRS commonly uses:\nlongitude\nlatitude\nwith angular units such as:\ndegrees\n\n\nProjected\nA projected CRS transforms locations onto a flat coordinate system.\nCoordinates are typically expressed as:\nEasting\nNorthing\nwith linear units such as:\nmeters\nfeet\nThe main idea is:\n\nWhen working in a projected coordinate system, we can often work directly with meaningful linear units such as feet or meters rather than angular degrees.\n\nThis can be especially useful for local spatial analysis involving distance, area, and buffers."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#the-projection-problem",
+    "href": "weekly-notes/week-04.html#the-projection-problem",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "22. The Projection Problem",
+    "text": "22. The Projection Problem\nThe Earth is curved.\nA map is flat.\nTherefore, converting the Earth’s curved surface into a flat map necessarily introduces some form of distortion.\nA projection may distort one or more of the following:\n\nShape\nArea\nDistance\nDirection\n\nA useful memory device from class is:\n\nSADD\n\nS = Shape\nA = Area\nD = Distance\nD = Direction\nNo flat map projection can preserve all of these properties perfectly everywhere.\nTherefore:\n\nThe appropriate projection depends on what we need to preserve for our analysis."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#conformal-projections",
+    "href": "weekly-notes/week-04.html#conformal-projections",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "23. Conformal Projections",
+    "text": "23. Conformal Projections\nA conformal projection is designed to preserve local angles and shapes.\nIt is useful when maintaining local shape is particularly important.\nHowever, preserving shape comes at the cost of distortion in other properties, especially area over larger regions.\nThe Mercator projection is a well-known example of a conformal projection."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#equal-area-projections",
+    "href": "weekly-notes/week-04.html#equal-area-projections",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "24. Equal-Area Projections",
+    "text": "24. Equal-Area Projections\nAn equal-area projection preserves area.\nThis means that areas shown on the map maintain their correct proportional relationship.\nThis can be particularly important when mapping phenomena where the size of geographic areas matters.\nFor example:\nAlbers Equal Area\nis a commonly used equal-area projection.\n\nEqual-area → preserve area"
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#equidistant-projections",
+    "href": "weekly-notes/week-04.html#equidistant-projections",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "25. Equidistant Projections",
+    "text": "25. Equidistant Projections\nAn equidistant projection preserves certain distances from specified points or along specified lines.\nIt does not mean that every possible distance everywhere on the map is perfectly preserved.\n\nEquidistant → preserves particular distances under the design of the projection"
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#projection-surfaces",
+    "href": "weekly-notes/week-04.html#projection-surfaces",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "26. Projection Surfaces",
+    "text": "26. Projection Surfaces\nProjection concepts are often described using geometric surfaces.\nCommon families include:\n\nCylindrical\nConceptually, the globe is projected onto a cylinder.\n\n\nConic\nConceptually, the globe is projected onto a cone.\nConic projections are often useful for regions extending predominantly east-west in the mid-latitudes.\n\n\nPlanar / Azimuthal\nConceptually, the globe is projected onto a plane."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#line-of-tangency",
+    "href": "weekly-notes/week-04.html#line-of-tangency",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "27. Line of Tangency",
+    "text": "27. Line of Tangency\nA line of tangency is where a projection surface touches the globe or reference surface.\nDistortion is generally lowest along or near the contact between the projection surface and the reference surface.\nFor example, a cone may touch the globe along a particular latitude.\nThat line of contact is related to where the projection provides particularly good geometric correspondence.\nSome projection systems instead use secant surfaces that intersect the globe along two lines.\nThe broader principle is:\n\nDistortion generally increases as we move away from the projection’s areas of optimal contact."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#transverse-cylindrical-projections",
+    "href": "weekly-notes/week-04.html#transverse-cylindrical-projections",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "28. Transverse Cylindrical Projections",
+    "text": "28. Transverse Cylindrical Projections\nA standard cylindrical projection can be imagined as wrapping a cylinder around the Earth.\nIn a transverse cylindrical projection, the cylinder is conceptually rotated so that its orientation is better suited to regions extending north-south.\nThe Transverse Mercator projection is extremely important in modern GIS.\nIt forms the basis of the UTM system."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#examples-of-coordinate-systems",
+    "href": "weekly-notes/week-04.html#examples-of-coordinate-systems",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "29. Examples of Coordinate Systems",
+    "text": "29. Examples of Coordinate Systems\n\n\n\n\n\n\n\nCRS / Projection\nTypical Units\n\n\n\n\nPennsylvania State Plane\nUS survey feet or meters depending on CRS definition\n\n\nAlbers Equal Area\nCommonly meters\n\n\nWGS84 geographic CRS\nDegrees\n\n\nNAD83 geographic CRS\nDegrees\n\n\n\nThe exact units should always be checked from the CRS rather than assumed from its name."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#state-plane-coordinate-systems",
+    "href": "weekly-notes/week-04.html#state-plane-coordinate-systems",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "30. State Plane Coordinate Systems",
+    "text": "30. State Plane Coordinate Systems\nThe State Plane Coordinate System was designed to provide relatively accurate mapping within smaller regions of the United States.\nStates may be divided into multiple zones to minimize distortion.\nFor example, Pennsylvania has State Plane zones including:\nPennsylvania North\nPennsylvania South\nA commonly encountered Pennsylvania South State Plane CRS is:\nEPSG:2272\nwhich uses US survey feet.\nState Plane systems are particularly useful for local and regional work where accurate linear measurements are important."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#universal-transverse-mercator-utm",
+    "href": "weekly-notes/week-04.html#universal-transverse-mercator-utm",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "31. Universal Transverse Mercator (UTM)",
+    "text": "31. Universal Transverse Mercator (UTM)\nThe Universal Transverse Mercator (UTM) system divides most of the world into zones.\nUTM has:\n\n60 zones\n\nEach zone is:\n\n6 degrees of longitude wide\n\nThis is an important correction:\n6 degrees\nnot:\n6 meters\nEach zone uses its own Transverse Mercator projection."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#utm-coordinates",
+    "href": "weekly-notes/week-04.html#utm-coordinates",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "32. UTM Coordinates",
+    "text": "32. UTM Coordinates\nUTM coordinates are expressed primarily as:\n\nEasting\nNorthing\n\nand the units are:\nmeters\nA false easting is used so that the central meridian of each UTM zone is assigned an easting of:\n\\[\n500,000 \\text{ meters}\n\\]\nThis helps avoid negative easting values within a normal UTM zone.\nBecause each UTM zone has its own coordinate system, the same numerical coordinate values can occur in different zones.\nTherefore, a UTM coordinate is incomplete unless we also know information such as:\n\nUTM zone\nHemisphere\nDatum / CRS"
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#epsg-codes",
+    "href": "weekly-notes/week-04.html#epsg-codes",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "33. EPSG Codes",
+    "text": "33. EPSG Codes\nCRSs are often identified using EPSG codes.\nFor example:\nEPSG:4326\nis commonly used for WGS84 longitude/latitude.\nAnother example relevant to Philadelphia is:\nEPSG:2272\nwhich corresponds to a Pennsylvania South State Plane CRS using US survey feet.\nEPSG codes make it much easier to specify exactly which coordinate reference system we are using."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#checking-a-crs-with-st_crs",
+    "href": "weekly-notes/week-04.html#checking-a-crs-with-st_crs",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "34. Checking a CRS with st_crs()",
+    "text": "34. Checking a CRS with st_crs()\nBefore conducting spatial analysis, it is good practice to check the CRS.\n#| eval: false\nst_crs(data)\nThis can tell us information such as:\n\nCRS name\nEPSG code\nDatum\nProjection\nCoordinate units\n\nThis is particularly important because spatial functions such as buffers and distances depend on the coordinate system and its units.\n\nGood Practice\n\nCheck the CRS before performing spatial analysis.\n\n#| eval: false\nst_crs(data)"
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#st_set_crs-assigning-a-crs",
+    "href": "weekly-notes/week-04.html#st_set_crs-assigning-a-crs",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "35. st_set_crs() — Assigning a CRS",
+    "text": "35. st_set_crs() — Assigning a CRS\nst_set_crs() assigns CRS information to spatial data.\nConceptually, it says:\n\nThese existing coordinate values should be interpreted using this CRS.\n\nFor example:\n#| eval: false\ndata &lt;- st_set_crs(data, 2272)\nThis does not mathematically transform the coordinates.\nIt changes or assigns the CRS metadata.\n\nImportant\n\nst_set_crs() changes the CRS label, not the underlying coordinate values.\n\nUse it when the coordinates are already in a known CRS but that CRS information is missing or incorrect."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#st_transform-transforming-coordinates",
+    "href": "weekly-notes/week-04.html#st_transform-transforming-coordinates",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "36. st_transform() — Transforming Coordinates",
+    "text": "36. st_transform() — Transforming Coordinates\nst_transform() is different.\nIt mathematically transforms the coordinates from one CRS to another.\nFor example:\n#| eval: false\ndata_wgs84 &lt;- st_transform(data, 4326)\nIf data is currently in EPSG:2272, this converts the coordinates into EPSG:4326.\nThe actual coordinate values change.\nFor example, projected coordinates might look conceptually like:\n2,700,000\n240,000\nAfter transformation to WGS84, they might look like:\n-75.16\n39.95\nTherefore:\n\nst_set_crs() assigns or corrects the CRS label.\n\n\nst_transform() actually changes the coordinate representation."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#st_set_crs-vs.-st_transform",
+    "href": "weekly-notes/week-04.html#st_set_crs-vs.-st_transform",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "37. st_set_crs() vs. st_transform()",
+    "text": "37. st_set_crs() vs. st_transform()\nThis distinction is extremely important.\n\n\n\nFunction\nWhat does it do?\nCoordinates change?\n\n\n\n\nst_crs()\nChecks CRS information\nNo\n\n\nst_set_crs()\nAssigns/replaces CRS metadata\nNo\n\n\nst_transform()\nConverts coordinates to another CRS\nYes\n\n\n\nA useful workflow is:\n#| eval: false\n\n# Check CRS\nst_crs(data)\n\n# Transform if necessary\ndata_projected &lt;- st_transform(data, 2272)"
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#buffers",
+    "href": "weekly-notes/week-04.html#buffers",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "38. Buffers",
+    "text": "38. Buffers\nA buffer creates an area around a spatial feature.\nFor example:\n#| eval: false\nstation_buffer &lt;- st_buffer(stations, 500)\nThis creates a buffer around each station.\nBut what does 500 mean?\nThat depends on the CRS and how sf interprets its units.\nFor projected data, it generally corresponds to the linear units associated with the CRS.\nTherefore, before creating a buffer:\n#| eval: false\nst_crs(stations)\nCheck the CRS and units.\n\nImportant Principle\n\nNever interpret a buffer distance without knowing the CRS and units."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#example-half-mile-station-buffer",
+    "href": "weekly-notes/week-04.html#example-half-mile-station-buffer",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "39. Example: Half-Mile Station Buffer",
+    "text": "39. Example: Half-Mile Station Buffer\nSuppose our data use a State Plane CRS measured in feet.\nHalf a mile is:\n\\[\n0.5 \\times 5,280 = 2,640 \\text{ feet}\n\\]\nWe could therefore create:\n#| eval: false\nstation_buffer &lt;- st_buffer(\n  stations,\n  dist = 2640\n)\nThis represents a half-mile buffer if the CRS uses feet.\nThis demonstrates why checking:\n#| eval: false\nst_crs(stations)\nis essential."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#spatial-relationships",
+    "href": "weekly-notes/week-04.html#spatial-relationships",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "40. Spatial Relationships",
+    "text": "40. Spatial Relationships\nSpatial analysis often asks whether two geographic objects have a particular relationship.\nFor example:\n\nDo they intersect?\nDo they touch?\nIs one within another?\nHow far apart are they?\n\nSuppose we have geographic objects:\nA\nB\nC\nDifferent spatial predicates answer different questions about their relationships."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#st_intersects",
+    "href": "weekly-notes/week-04.html#st_intersects",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "41. st_intersects()",
+    "text": "41. st_intersects()\nst_intersects() asks whether two geometries share any spatial location.\nConceptually:\n#| eval: false\nst_intersects(A, B)\nIf A and B overlap or touch, they intersect.\nAn object also intersects itself.\nConceptually:\n\n\n\nRelationship\nst_intersects()\n\n\n\n\nA with B\nTRUE if they share any point\n\n\nA with C\nTRUE if they share any point\n\n\nA with A\nTRUE\n\n\n\nThe key idea is:\n\nIntersect means the geometries have at least one point in common."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#st_touches",
+    "href": "weekly-notes/week-04.html#st_touches",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "42. st_touches()",
+    "text": "42. st_touches()\nst_touches() asks whether two geometries share a boundary but their interiors do not overlap.\nFor example, two neighboring census tracts may share a border.\nThey:\ntouch = TRUE\nbut one is not inside the other.\nConceptually:\n#| eval: false\nst_touches(A, B)\nThis is particularly useful for identifying neighboring polygons."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#st_within",
+    "href": "weekly-notes/week-04.html#st_within",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "43. st_within()",
+    "text": "43. st_within()\nst_within() asks whether one geometry lies completely inside another geometry.\nFor example:\nStation → Census tract\nIf a station point lies inside a census tract polygon:\n#| eval: false\nst_within(station, tract)\nwould return a spatial relationship indicating that the station is within that tract.\nThe order matters.\n\nst_within(A, B) asks whether A is within B."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#comparing-spatial-predicates",
+    "href": "weekly-notes/week-04.html#comparing-spatial-predicates",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "44. Comparing Spatial Predicates",
+    "text": "44. Comparing Spatial Predicates\nA simplified conceptual comparison is:\n\n\n\n\n\n\n\nFunction\nQuestion\n\n\n\n\nst_intersects(A, B)\nDo A and B share any spatial location?\n\n\nst_touches(A, B)\nDo their boundaries touch without interior overlap?\n\n\nst_within(A, B)\nIs A inside B?\n\n\n\nThese relationships are not interchangeable.\nThe correct function depends on the spatial question being asked."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#st_filter",
+    "href": "weekly-notes/week-04.html#st_filter",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "45. st_filter()",
+    "text": "45. st_filter()\nst_filter() filters one spatial dataset based on its spatial relationship with another.\nFor example:\n#| eval: false\nnearby_tracts &lt;- st_filter(\n  tracts,\n  station_buffer\n)\nThis can be used to identify tracts that spatially interact with the station buffer.\nA question such as:\n\nHow many census tracts are within or intersect a half-mile station area?\n\ncould begin with a buffer followed by a spatial filter.\n#| eval: false\nstation_buffer &lt;- st_buffer(stations, 2640)\n\nnearby_tracts &lt;- st_filter(\n  tracts,\n  station_buffer\n)\n\nnrow(nearby_tracts)\nassuming the data are projected in feet."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#st_intersection",
+    "href": "weekly-notes/week-04.html#st_intersection",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "46. st_intersection()",
+    "text": "46. st_intersection()\nst_intersection() actually creates the geometry representing the overlap between spatial objects.\nFor example:\n#| eval: false\ntract_station_overlap &lt;- st_intersection(\n  tracts,\n  station_buffer\n)\nUnlike a simple predicate, this can change the geometry.\nA census tract may be clipped to only the portion falling inside a station buffer.\nTherefore:\n\nst_intersects() asks whether an intersection exists.\n\n\nst_intersection() creates the overlapping geometry.\n\nThis distinction is important."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#st_union",
+    "href": "weekly-notes/week-04.html#st_union",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "47. st_union()",
+    "text": "47. st_union()\nst_union() combines spatial geometries.\nFor example:\n#| eval: false\ncombined_buffer &lt;- st_union(station_buffer)\nIf several station buffers overlap, st_union() can dissolve them into a combined geometry.\nConceptually:\nMultiple geometries\n        ↓\n    st_union()\n        ↓\nCombined geometry\nThis can be useful when we care about the overall service area rather than the individual station buffers."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#st_distance",
+    "href": "weekly-notes/week-04.html#st_distance",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "48. st_distance()",
+    "text": "48. st_distance()\nst_distance() calculates distances between spatial features.\nFor example:\n#| eval: false\nst_distance(stations, tracts)\nWhen given multiple stations and multiple tracts, the result can be a distance matrix containing distances between combinations of features.\nFor example:\n\n\n\n\nTract 1\nTract 2\nTract 3\n\n\n\n\nStation A\nDistance\nDistance\nDistance\n\n\nStation B\nDistance\nDistance\nDistance\n\n\n\nTherefore:\n\nst_distance() can return many pairwise distances, not just one distance.\n\nAgain, understanding the CRS and units is essential when interpreting those distances."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#a-typical-spatial-analysis-workflow",
+    "href": "weekly-notes/week-04.html#a-typical-spatial-analysis-workflow",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "49. A Typical Spatial Analysis Workflow",
+    "text": "49. A Typical Spatial Analysis Workflow\nSuppose the research question is:\n\nHow many census tracts are near a transit station?\n\n\nStep 1: Check the CRS\n#| eval: false\nst_crs(stations)\nst_crs(tracts)\n\n\nStep 2: Make sure both layers use an appropriate common CRS\n#| eval: false\nstations &lt;- st_transform(stations, 2272)\ntracts &lt;- st_transform(tracts, 2272)\n\n\nStep 3: Create the station buffer\nIf the units are feet and we want half a mile:\n#| eval: false\nstation_buffer &lt;- st_buffer(\n  stations,\n  dist = 2640\n)\n\n\nStep 4: Find intersecting tracts\n#| eval: false\nnearby_tracts &lt;- st_filter(\n  tracts,\n  station_buffer\n)\n\n\nStep 5: Count the tracts\n#| eval: false\nnrow(nearby_tracts)\nThis demonstrates how CRS, buffers, spatial relationships, and filtering work together in a real spatial analysis."
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#key-distinction-attribute-joins-vs.-spatial-joins",
+    "href": "weekly-notes/week-04.html#key-distinction-attribute-joins-vs.-spatial-joins",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "50. Key Distinction: Attribute Joins vs. Spatial Joins",
+    "text": "50. Key Distinction: Attribute Joins vs. Spatial Joins\nThere are two important ways of connecting datasets.\n\nAttribute Join\nAn attribute join uses a common variable such as:\nGEOID\nExample:\n#| eval: false\nleft_join(\n  tracts,\n  income,\n  by = \"GEOID\"\n)\nThe relationship is determined by matching values.\n\n\nSpatial Join / Spatial Filter\nA spatial operation uses the geographic relationship between geometries.\nFor example:\n#| eval: false\nst_filter(\n  tracts,\n  station_buffer\n)\nThe relationship is determined by location rather than a common ID.\n\n\nImportant Difference\n\nAttribute join → “Do these records have the same key?”\n\n\nSpatial relationship → “Do these geographic objects occupy related locations?”"
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#week-4-quick-reference",
+    "href": "weekly-notes/week-04.html#week-4-quick-reference",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "51. Week 4 Quick Reference",
+    "text": "51. Week 4 Quick Reference\n\n\n\nConcept / Question\nTool / Answer\n\n\n\n\nKeep everything from left dataset\nleft_join()\n\n\nKeep only matching observations\ninner_join()\n\n\nKeep everything from both datasets\nfull_join()\n\n\nUnique geographic identifier\nGEOID\n\n\nR spatial vector framework\nsf\n\n\nCheck coordinate system\nst_crs()\n\n\nAssign/correct CRS metadata\nst_set_crs()\n\n\nConvert coordinates to another CRS\nst_transform()\n\n\nWGS84 longitude/latitude\nEPSG:4326\n\n\nCommon PA South State Plane CRS\nEPSG:2272\n\n\nWGS84 geographic units\nDegrees\n\n\nState Plane units\nFeet or meters depending on CRS\n\n\nUTM units\nMeters\n\n\nNumber of UTM zones\n60\n\n\nWidth of UTM zone\n6° longitude\n\n\nUTM central-meridian false easting\n500,000 m\n\n\nGPS reference system\nWGS84\n\n\nNAD27 ellipsoid\nClarke 1866\n\n\nNAD83-associated ellipsoid\nGRS80\n\n\nPreserve local angles/shape\nConformal projection\n\n\nPreserve area\nEqual-area projection\n\n\nPreserve selected distances\nEquidistant projection\n\n\nCreate an area around a feature\nst_buffer()\n\n\nDo geometries share any points?\nst_intersects()\n\n\nDo boundaries touch?\nst_touches()\n\n\nIs A inside B?\nst_within(A, B)\n\n\nFilter features spatially\nst_filter()\n\n\nCreate overlapping geometry\nst_intersection()\n\n\nCombine geometries\nst_union()\n\n\nCalculate distances\nst_distance()"
+  },
+  {
+    "objectID": "weekly-notes/week-04.html#key-concepts-to-remember",
+    "href": "weekly-notes/week-04.html#key-concepts-to-remember",
+    "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
+    "section": "52. Key Concepts to Remember",
+    "text": "52. Key Concepts to Remember\n\nA GEOID can be used as the key for joining Census and ACS datasets.\nleft_join() keeps all observations from the left dataset.\ninner_join() keeps only observations appearing in both datasets.\nfull_join() keeps observations from both datasets.\nsf stands for Simple Features.\nAn sf object contains normal attributes plus a geometry column.\nGeometry is described as sticky because it is generally retained during many dplyr operations.\nA CRS tells us how coordinates correspond to locations on Earth.\nGeographic CRSs commonly use longitude and latitude expressed in degrees.\nProjected CRSs use planar coordinates commonly expressed in meters or feet.\nThe Earth is not a perfect sphere.\nAn ellipsoid is a smooth mathematical approximation of Earth’s shape.\nThe geoid represents a gravity-based model of Earth’s shape.\nNAD27 is associated with the Clarke 1866 ellipsoid and the historical Meades Ranch reference.\nNAD83 is closely associated with GRS80.\nWGS84 is the reference system associated with GPS.\nEPSG:4326 is commonly used for WGS84 longitude/latitude.\nEvery flat map projection introduces distortion.\nRemember SADD: Shape, Area, Distance, Direction.\nConformal projections preserve local angles and shapes.\nEqual-area projections preserve area.\nEquidistant projections preserve particular distances.\nState Plane systems are designed for accurate regional and local mapping in the United States.\nUTM divides most of the world into 60 zones, each 6 degrees of longitude wide.\nUTM coordinates are measured in meters.\nst_crs() checks the CRS.\nst_set_crs() assigns or corrects CRS metadata without transforming coordinate values.share any points.\nst_touches() tests whether geometries touch at their boundaries without interior overlap.\nst_within(A, B) tests whether A lies inside B.\nst_filter() selects features based on a spatial relationship.\nst_intersection() creates new geometry from overlapping areas.\nst_union() combines geometries.\nst_distance() calculates distances between spatial features.\nAttribute joins use common identifiers such as GEOID; spatial operations use\nst_transform() converts coordinates from one CRS to another.\nAlways check the CRS and units before calculating buffers or distances.\nst_intersects() tests whether geometries geographic relationships."
   }
 ]
