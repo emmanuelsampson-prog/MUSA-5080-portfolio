@@ -1,16 +1,22 @@
 ---
 title: "Assignments"
 description: "Graded work for MUSA 5080."
-listing:
-  contents:
-    - assignment2.qmd
-    - Assignment3.qmd
-  sort: "date desc"
-  type: default
-  fields: [title, date, description]
-  sort-ui: false
-  filter-ui: false
+format:
+  html:
+    toc: false
+    code-tools: false
 ---
 
 Completed assignments for MUSA 5080, with findings, visualizations, and
 expandable code.
+
+## [Assignment 3: Measuring Poverty in Philadelphia](Assignment3.qmd)
+
+How did poverty change across Philadelphia? Compare poverty estimates for
+2006–2010 and 2013–2017, with margins of error and a graph showing which
+tract-level changes are statistically significant.
+
+## [Assignment 2: Who Do We Know the Least About?](assignment2.qmd)
+
+Explore uncertainty in American Community Survey estimates and what margins
+of error reveal about the reliability of the data.

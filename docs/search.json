@@ -88,7 +88,7 @@
     "href": "assignments/index.html",
     "title": "Assignments",
     "section": "",
-    "text": "Completed assignments for MUSA 5080, with findings, visualizations, and expandable code.\n\n\n\n\n\n\n\n\n\n\n\nAssignment 2: Who Do We Know the Least About?\n\n\n\n\n\n\n\n\nSep 25, 2026\n\n\n\n\n\n\n\nAssignment 3: Measuring Poverty in Philadelphia\n\n\n\n\n\n\n\n\nSep 25, 2026\n\n\n\n\n\nNo matching items"
+    "text": "Completed assignments for MUSA 5080, with findings, visualizations, and expandable code."
   },
   {
     "objectID": "index.html",
@@ -943,5 +943,19 @@
     "title": "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations",
     "section": "52. Key Concepts to Remember",
     "text": "52. Key Concepts to Remember\n\nA GEOID can be used as the key for joining Census and ACS datasets.\nleft_join() keeps all observations from the left dataset.\ninner_join() keeps only observations appearing in both datasets.\nfull_join() keeps observations from both datasets.\nsf stands for Simple Features.\nAn sf object contains normal attributes plus a geometry column.\nGeometry is described as sticky because it is generally retained during many dplyr operations.\nA CRS tells us how coordinates correspond to locations on Earth.\nGeographic CRSs commonly use longitude and latitude expressed in degrees.\nProjected CRSs use planar coordinates commonly expressed in meters or feet.\nThe Earth is not a perfect sphere.\nAn ellipsoid is a smooth mathematical approximation of Earth’s shape.\nThe geoid represents a gravity-based model of Earth’s shape.\nNAD27 is associated with the Clarke 1866 ellipsoid and the historical Meades Ranch reference.\nNAD83 is closely associated with GRS80.\nWGS84 is the reference system associated with GPS.\nEPSG:4326 is commonly used for WGS84 longitude/latitude.\nEvery flat map projection introduces distortion.\nRemember SADD: Shape, Area, Distance, Direction.\nConformal projections preserve local angles and shapes.\nEqual-area projections preserve area.\nEquidistant projections preserve particular distances.\nState Plane systems are designed for accurate regional and local mapping in the United States.\nUTM divides most of the world into 60 zones, each 6 degrees of longitude wide.\nUTM coordinates are measured in meters.\nst_crs() checks the CRS.\nst_set_crs() assigns or corrects CRS metadata without transforming coordinate values.share any points.\nst_touches() tests whether geometries touch at their boundaries without interior overlap.\nst_within(A, B) tests whether A lies inside B.\nst_filter() selects features based on a spatial relationship.\nst_intersection() creates new geometry from overlapping areas.\nst_union() combines geometries.\nst_distance() calculates distances between spatial features.\nAttribute joins use common identifiers such as GEOID; spatial operations use\nst_transform() converts coordinates from one CRS to another.\nAlways check the CRS and units before calculating buffers or distances.\nst_intersects() tests whether geometries geographic relationships."
+  },
+  {
+    "objectID": "assignments/index.html#assignment-3-measuring-poverty-in-philadelphia",
+    "href": "assignments/index.html#assignment-3-measuring-poverty-in-philadelphia",
+    "title": "Assignments",
+    "section": "Assignment 3: Measuring Poverty in Philadelphia",
+    "text": "Assignment 3: Measuring Poverty in Philadelphia\nHow did poverty change across Philadelphia? Compare poverty estimates for 2006–2010 and 2013–2017, with margins of error and a graph showing which tract-level changes are statistically significant."
+  },
+  {
+    "objectID": "assignments/index.html#assignment-2-who-do-we-know-the-least-about",
+    "href": "assignments/index.html#assignment-2-who-do-we-know-the-least-about",
+    "title": "Assignments",
+    "section": "Assignment 2: Who Do We Know the Least About?",
+    "text": "Assignment 2: Who Do We Know the Least About?\nExplore uncertainty in American Community Survey estimates and what margins of error reveal about the reliability of the data."
   }
 ]
