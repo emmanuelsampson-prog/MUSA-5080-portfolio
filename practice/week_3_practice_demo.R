@@ -3,9 +3,12 @@ library(tidycensus)
 
 county_data <- get_acs(
   geography = "county",
-  variables = "B07012_001",
-  state = "NY",
-  year = 2023,
+  variables = c(
+    total_pop = "B17001_001",
+    poverty = "B17001_002"
+    )
+  state = "Philadelphia",
+  year = 2017,
   survey = "acs5"
 )
 

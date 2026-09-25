@@ -1,0 +1,119 @@
+---
+title: "Assignment 3: Measuring Poverty in Philadelphia?"
+subtitle: "Measuring uncertainty in American Community Survey data"
+author: "Emmanuel Sampson"
+date: today
+format:
+  html:
+    toc: true
+    code-fold: false
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+library(tidyverse)
+library(tidycensus)
+```
+
+
+```{r}
+poverty_2010 <- get_acs(
+  geography = "tract",
+  variables = c(
+  total_pop = "B07001_001",
+  poverty = "B07001_002"
+  ),
+  state = "PA",
+  county = "Philadelphia",
+  year = 2010,
+  survey = "acs5",
+  output = "wide",
+  geometry = TRUE
+  )
+  head(poverty_2010)
+```
+```{r}  
+poverty_2017 <- get_acs(
+  geography = "tract",
+  variables = c(
+  total_pop = "B07001_001",
+  poverty = "B07001_002"
+  ),
+  state = "PA",
+  county = "Philadelphia",
+  year = 2017,
+  survey = "acs5",
+  output = "wide",
+  geometry = TRUE
+  )
+  head(poverty_2017)
+```
+```{r}
+  poverty_2010 <- poverty_2010 %>%
+  mutate(
+    poverty_rate = (povertyE / total_popE * 100),
+    poverty_rate_moe = moe_prop(povertyE, total_popE, povertyM, total_popM)*100
+  )
+```
+  
+```{r}
+  poverty_2017 <- poverty_2017 %>%
+  mutate(
+    poverty_rate = (povertyE / total_popE * 100),
+    poverty_rate_moe = moe_prop(povertyE, total_popE, povertyM, total_popM)*100
+  )
+```
+```{r}
+poverty_2010 <- poverty_2010 %>%
+  mutate(moe_pct = poverty_rate_moe / poverty_rate * 100)
+
+poverty_2010 <- poverty_2010 %>%
+  mutate(reliability = case_when(
+    moe_pct < 12  ~ "Reliable",
+    moe_pct < 40 ~ "Somewhat reliable",
+    TRUE         ~ "Unreliable"
+  ))
+```
+```{r}
+poverty_2017 <- poverty_2017 %>%
+  mutate(moe_pct = poverty_rate_moe / poverty_rate * 100)
+
+poverty_2017 <- poverty_2017 %>%
+  mutate(reliability = case_when(
+    moe_pct < 12  ~ "Reliable",
+    moe_pct < 40 ~ "Somewhat reliable",
+    TRUE         ~ "Unreliable"
+  ))
+```
+```{r}
+poverty_2010 <- poverty_2010 %>%
+  mutate(period = "2006-2010")
+
+poverty_2017 <- poverty_2017 %>%
+  mutate(period = "2013-2017")
+```
+```{r}
+poverty_change <- bind_rows(
+  poverty_2010,
+  poverty_2017
+)
+```
+```{r}
+  poverty_wide <- poverty_change %>%
+  select(
+    GEOID,
+    NAME,
+    period,
+    poverty_rate,
+    poverty_rate_moe
+  ) %>%
+  pivot_wider(
+    names_from = period,
+    values_from = c(
+      poverty_rate,
+      poverty_rate_moe
+    )
+  )
+```

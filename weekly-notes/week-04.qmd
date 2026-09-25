@@ -1,0 +1,1305 @@
+---
+title: "Week 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations"
+description: "Attribute joins, sf objects, coordinate reference systems, datums, map projections, UTM, spatial relationships, buffers, and spatial analysis in R."
+date: 2026-09-18
+---
+
+| GEOID | Med_inc.23 | Med_inc.15 | geometry |
+|---|---:|---:|---|
+| 100 | 82,000 | 61,000 | POLYGON (...) |
+| 200 | 31,500 | 27,000 | POLYGON (...) |
+| 300 | 45,000 | NA | POLYGON (...) |
+
+The geometry tells R **where the geographic feature is located and what shape it has**.
+
+Geometry can represent:
+
+- Points
+- Lines
+- Polygons
+- Multipolygons
+- Other spatial objects
+
+Examples include:
+
+**Point**
+
+```text
+Train station
+```
+
+**Line**
+
+```text
+Road
+```
+
+**Polygon**
+
+```text
+Census tract
+```
+
+---
+
+## 7. Geometry Is "Sticky" in `sf`
+
+In R, spatial data are commonly handled using the **`sf` package**.
+
+`sf` stands for:
+
+> **Simple Features**
+
+An `sf` object behaves much like a normal data frame, except that it contains a special geometry column.
+
+One important characteristic is that:
+
+> **Geometry is sticky.**
+
+This means many data manipulation operations preserve the geometry column automatically.
+
+For example:
+
+```r
+#| eval: false
+tracts %>%
+  select(GEOID, med_income)
+```
+
+If `tracts` is an `sf` object, the resulting object will generally still retain its geometry.
+
+This is useful because we can use familiar `dplyr` operations while keeping the spatial information attached.
+
+---
+
+## 8. Common Spatial Data Formats
+
+Spatial data can be stored in several formats.
+
+Common examples include:
+
+### Shapefile
+
+```text
+.shp
+```
+
+A shapefile is a traditional vector spatial data format.
+
+A shapefile is actually made up of several associated files, commonly including:
+
+```text
+.shp
+.shx
+.dbf
+.prj
+```
+
+These files work together to store:
+
+- Geometry
+- Attributes
+- Coordinate system information
+
+---
+
+### File Geodatabase
+
+```text
+.gdb
+```
+
+A geodatabase can contain multiple spatial datasets and tables.
+
+It is commonly associated with the ArcGIS ecosystem.
+
+---
+
+### Simple Features (`sf`)
+
+In R, spatial vector data are commonly represented as `sf` objects.
+
+For example:
+
+```r
+#| eval: false
+library(sf)
+
+tracts <- st_read("tracts.shp")
+```
+
+---
+
+## 9. Coordinate Reference Systems (CRS)
+
+A **Coordinate Reference System (CRS)** tells us how coordinates correspond to locations on Earth.
+
+Without a CRS, numbers such as:
+
+```text
+-75.16, 39.95
+```
+
+or
+
+```text
+2,700,000, 240,000
+```
+
+do not tell us enough about where a location actually is.
+
+The CRS provides the framework for interpreting those coordinates.
+
+There are two major categories discussed in class:
+
+| Geographic CRS | Projected CRS |
+|---|---|
+| Coordinates commonly expressed in angular units such as degrees | Coordinates expressed in linear units |
+| Represents locations relative to an Earth model | Represents locations on a flat map |
+| Longitude and latitude are common | Easting and northing are common |
+| Useful for global location/reference | Often useful for local or regional analysis |
+| Units commonly degrees | Units commonly meters or feet |
+
+---
+
+## 10. Geographic Coordinate Systems
+
+A geographic coordinate system represents locations using angular coordinates.
+
+The two most familiar coordinates are:
+
+- **Latitude**
+- **Longitude**
+
+Latitude measures position north or south of the Equator.
+
+Longitude measures position east or west of a reference meridian, conventionally the **Prime Meridian through Greenwich**.
+
+For example:
+
+```text
+Longitude = -75.16°
+Latitude = 39.95°
+```
+
+approximately identifies a location in Philadelphia.
+
+Because these are angular measurements, the units are **degrees**, not meters or feet.
+
+---
+
+## 11. The Equator
+
+The **Equator** is an imaginary line around the Earth located at:
+
+$$
+0^\circ \text{ latitude}
+$$
+
+Latitude is measured north or south from the Equator.
+
+Values range approximately from:
+
+$$
+90^\circ S
+$$
+
+to:
+
+$$
+90^\circ N
+$$
+
+Therefore:
+
+> **The Equator provides the zero reference for latitude.**
+
+---
+
+## 12. The Greenwich Meridian
+
+The **Prime Meridian**, conventionally passing through Greenwich, England, is defined as:
+
+$$
+0^\circ \text{ longitude}
+$$
+
+Longitude is measured east or west from this reference.
+
+Therefore:
+
+> **The Equator is the reference for latitude, while the Prime Meridian is the reference for longitude.**
+
+---
+
+## 13. Why We Need an Earth Model
+
+The Earth is not a perfect sphere.
+
+It is slightly flattened near the poles and wider around the Equator.
+
+To represent the Earth mathematically, geodesy uses simplified models.
+
+Important terms include:
+
+- Ellipsoid
+- Geoid
+- Flattening ratio
+- Datum
+
+These concepts help connect locations on the real Earth to coordinate systems.
+
+---
+
+## 14. Ellipsoid
+
+An **ellipsoid** is a smooth mathematical approximation of the Earth's shape.
+
+Instead of modeling every mountain, valley, and variation in gravity, an ellipsoid provides a simplified mathematical surface.
+
+Important properties include:
+
+- Semi-major axis
+- Semi-minor axis
+- Flattening
+
+The Earth is commonly modeled as an **oblate ellipsoid** because it is slightly wider around the Equator than from pole to pole.
+
+---
+
+## 15. Flattening Ratio
+
+The flattening of an ellipsoid describes how much the ellipsoid differs from a perfect sphere.
+
+Conceptually:
+
+$$
+f = \frac{a-b}{a}
+$$
+
+where:
+
+- \(a\) = semi-major axis
+- \(b\) = semi-minor axis
+- \(f\) = flattening
+
+If:
+
+$$
+a=b
+$$
+
+the object would be a perfect sphere.
+
+Because the Earth is slightly flattened at the poles:
+
+$$
+a>b
+$$
+
+---
+
+## 16. The Geoid
+
+The **geoid** is a model of the Earth's gravity-based shape.
+
+It can be thought of approximately as the surface that the oceans would follow under the influence of gravity if other forces such as tides and currents were removed and the surface extended through the continents.
+
+Unlike a smooth mathematical ellipsoid, the geoid is irregular because Earth's gravity varies spatially.
+
+A useful distinction is:
+
+> **Ellipsoid = simplified mathematical Earth**
+
+> **Geoid = gravity-based representation of Earth's shape**
+
+---
+
+## 17. Datums
+
+A **geodetic datum** provides the reference framework used to connect coordinates to the Earth.
+
+A datum typically incorporates an Earth model and defines how that model is positioned or realized relative to the Earth.
+
+Important examples include:
+
+- NAD27
+- NAD83
+- WGS84
+
+Changing the datum can change the coordinates assigned to the same real-world location.
+
+---
+
+## 18. Clarke 1866 and NAD27
+
+The **Clarke 1866 ellipsoid** was historically used because it provided a useful approximation of the Earth's shape for North America.
+
+The **North American Datum of 1927 (NAD27)** used the Clarke 1866 ellipsoid and was anchored to a reference location at **Meades Ranch, Kansas**.
+
+Conceptually:
+
+```text
+Clarke 1866 ellipsoid
+        +
+Meades Ranch reference
+        ↓
+NAD27
+```
+
+NAD27 is an older datum and has largely been replaced by more modern systems.
+
+---
+
+## 19. NAD83 and GRS80
+
+The **North American Datum of 1983 (NAD83)** replaced NAD27 for much modern mapping in North America.
+
+NAD83 is closely associated with the **GRS80 ellipsoid**.
+
+GRS80 means:
+
+> **Geodetic Reference System 1980**
+
+Compared with NAD27, NAD83 was developed using improved geodetic measurements and a geocentric approach.
+
+Therefore:
+
+```text
+NAD27 → Clarke 1866
+NAD83 → GRS80
+```
+
+is a useful association to remember.
+
+---
+
+## 20. WGS84
+
+**WGS84** stands for:
+
+> **World Geodetic System 1984**
+
+It is the reference system widely associated with the **Global Positioning System (GPS)**.
+
+A common geographic CRS based on WGS84 is:
+
+```text
+EPSG:4326
+```
+
+Its coordinates are commonly represented as longitude and latitude.
+
+For example:
+
+```text
+Longitude: -75.16
+Latitude:   39.95
+```
+
+A useful association is:
+
+> **WGS84 → GPS**
+
+---
+
+## 21. Geographic vs. Projected Coordinate Systems
+
+A major distinction in spatial analysis is between geographic and projected coordinate systems.
+
+### Geographic
+
+A geographic CRS commonly uses:
+
+```text
+longitude
+latitude
+```
+
+with angular units such as:
+
+```text
+degrees
+```
+
+### Projected
+
+A projected CRS transforms locations onto a flat coordinate system.
+
+Coordinates are typically expressed as:
+
+```text
+Easting
+Northing
+```
+
+with linear units such as:
+
+```text
+meters
+feet
+```
+
+The main idea is:
+
+> **When working in a projected coordinate system, we can often work directly with meaningful linear units such as feet or meters rather than angular degrees.**
+
+This can be especially useful for local spatial analysis involving distance, area, and buffers.
+
+---
+
+## 22. The Projection Problem
+
+The Earth is curved.
+
+A map is flat.
+
+Therefore, converting the Earth's curved surface into a flat map necessarily introduces some form of distortion.
+
+A projection may distort one or more of the following:
+
+- **Shape**
+- **Area**
+- **Distance**
+- **Direction**
+
+A useful memory device from class is:
+
+> **SADD**
+
+```text
+S = Shape
+A = Area
+D = Distance
+D = Direction
+```
+
+No flat map projection can preserve all of these properties perfectly everywhere.
+
+Therefore:
+
+> **The appropriate projection depends on what we need to preserve for our analysis.**
+
+---
+
+## 23. Conformal Projections
+
+A **conformal projection** is designed to preserve local angles and shapes.
+
+It is useful when maintaining local shape is particularly important.
+
+However, preserving shape comes at the cost of distortion in other properties, especially area over larger regions.
+
+The **Mercator projection** is a well-known example of a conformal projection.
+
+---
+
+## 24. Equal-Area Projections
+
+An **equal-area projection** preserves area.
+
+This means that areas shown on the map maintain their correct proportional relationship.
+
+This can be particularly important when mapping phenomena where the size of geographic areas matters.
+
+For example:
+
+```text
+Albers Equal Area
+```
+
+is a commonly used equal-area projection.
+
+> **Equal-area → preserve area**
+
+---
+
+## 25. Equidistant Projections
+
+An **equidistant projection** preserves certain distances from specified points or along specified lines.
+
+It does **not** mean that every possible distance everywhere on the map is perfectly preserved.
+
+> **Equidistant → preserves particular distances under the design of the projection**
+
+---
+
+## 26. Projection Surfaces
+
+Projection concepts are often described using geometric surfaces.
+
+Common families include:
+
+### Cylindrical
+
+Conceptually, the globe is projected onto a cylinder.
+
+### Conic
+
+Conceptually, the globe is projected onto a cone.
+
+Conic projections are often useful for regions extending predominantly east-west in the mid-latitudes.
+
+### Planar / Azimuthal
+
+Conceptually, the globe is projected onto a plane.
+
+---
+
+## 27. Line of Tangency
+
+A **line of tangency** is where a projection surface touches the globe or reference surface.
+
+Distortion is generally lowest along or near the contact between the projection surface and the reference surface.
+
+For example, a cone may touch the globe along a particular latitude.
+
+That line of contact is related to where the projection provides particularly good geometric correspondence.
+
+Some projection systems instead use **secant** surfaces that intersect the globe along two lines.
+
+The broader principle is:
+
+> **Distortion generally increases as we move away from the projection's areas of optimal contact.**
+
+---
+
+## 28. Transverse Cylindrical Projections
+
+A standard cylindrical projection can be imagined as wrapping a cylinder around the Earth.
+
+In a **transverse** cylindrical projection, the cylinder is conceptually rotated so that its orientation is better suited to regions extending north-south.
+
+The **Transverse Mercator** projection is extremely important in modern GIS.
+
+It forms the basis of the UTM system.
+
+---
+
+## 29. Examples of Coordinate Systems
+
+| CRS / Projection | Typical Units |
+|---|---|
+| Pennsylvania State Plane | US survey feet or meters depending on CRS definition |
+| Albers Equal Area | Commonly meters |
+| WGS84 geographic CRS | Degrees |
+| NAD83 geographic CRS | Degrees |
+
+The exact units should always be checked from the CRS rather than assumed from its name.
+
+---
+
+## 30. State Plane Coordinate Systems
+
+The **State Plane Coordinate System** was designed to provide relatively accurate mapping within smaller regions of the United States.
+
+States may be divided into multiple zones to minimize distortion.
+
+For example, Pennsylvania has State Plane zones including:
+
+```text
+Pennsylvania North
+Pennsylvania South
+```
+
+A commonly encountered Pennsylvania South State Plane CRS is:
+
+```text
+EPSG:2272
+```
+
+which uses US survey feet.
+
+State Plane systems are particularly useful for local and regional work where accurate linear measurements are important.
+
+---
+
+## 31. Universal Transverse Mercator (UTM)
+
+The **Universal Transverse Mercator (UTM)** system divides most of the world into zones.
+
+UTM has:
+
+> **60 zones**
+
+Each zone is:
+
+> **6 degrees of longitude wide**
+
+This is an important correction:
+
+```text
+6 degrees
+```
+
+not:
+
+```text
+6 meters
+```
+
+Each zone uses its own Transverse Mercator projection.
+
+---
+
+## 32. UTM Coordinates
+
+UTM coordinates are expressed primarily as:
+
+- **Easting**
+- **Northing**
+
+and the units are:
+
+```text
+meters
+```
+
+A **false easting** is used so that the central meridian of each UTM zone is assigned an easting of:
+
+$$
+500,000 \text{ meters}
+$$
+
+This helps avoid negative easting values within a normal UTM zone.
+
+Because each UTM zone has its own coordinate system, the same numerical coordinate values can occur in different zones.
+
+Therefore, a UTM coordinate is incomplete unless we also know information such as:
+
+- UTM zone
+- Hemisphere
+- Datum / CRS
+
+---
+
+## 33. EPSG Codes
+
+CRSs are often identified using **EPSG codes**.
+
+For example:
+
+```text
+EPSG:4326
+```
+
+is commonly used for WGS84 longitude/latitude.
+
+Another example relevant to Philadelphia is:
+
+```text
+EPSG:2272
+```
+
+which corresponds to a Pennsylvania South State Plane CRS using US survey feet.
+
+EPSG codes make it much easier to specify exactly which coordinate reference system we are using.
+
+---
+
+## 34. Checking a CRS with `st_crs()`
+
+Before conducting spatial analysis, it is good practice to check the CRS.
+
+```r
+#| eval: false
+st_crs(data)
+```
+
+This can tell us information such as:
+
+- CRS name
+- EPSG code
+- Datum
+- Projection
+- Coordinate units
+
+This is particularly important because spatial functions such as buffers and distances depend on the coordinate system and its units.
+
+### Good Practice
+
+> **Check the CRS before performing spatial analysis.**
+
+```r
+#| eval: false
+st_crs(data)
+```
+
+---
+
+## 35. `st_set_crs()` — Assigning a CRS
+
+`st_set_crs()` assigns CRS information to spatial data.
+
+Conceptually, it says:
+
+> **These existing coordinate values should be interpreted using this CRS.**
+
+For example:
+
+```r
+#| eval: false
+data <- st_set_crs(data, 2272)
+```
+
+This does **not** mathematically transform the coordinates.
+
+It changes or assigns the CRS metadata.
+
+### Important
+
+> **`st_set_crs()` changes the CRS label, not the underlying coordinate values.**
+
+Use it when the coordinates are already in a known CRS but that CRS information is missing or incorrect.
+
+---
+
+## 36. `st_transform()` — Transforming Coordinates
+
+`st_transform()` is different.
+
+It mathematically transforms the coordinates from one CRS to another.
+
+For example:
+
+```r
+#| eval: false
+data_wgs84 <- st_transform(data, 4326)
+```
+
+If `data` is currently in EPSG:2272, this converts the coordinates into EPSG:4326.
+
+The actual coordinate values change.
+
+For example, projected coordinates might look conceptually like:
+
+```text
+2,700,000
+240,000
+```
+
+After transformation to WGS84, they might look like:
+
+```text
+-75.16
+39.95
+```
+
+Therefore:
+
+> **`st_set_crs()` assigns or corrects the CRS label.**
+
+> **`st_transform()` actually changes the coordinate representation.**
+
+---
+
+## 37. `st_set_crs()` vs. `st_transform()`
+
+This distinction is extremely important.
+
+| Function | What does it do? | Coordinates change? |
+|---|---|---|
+| `st_crs()` | Checks CRS information | No |
+| `st_set_crs()` | Assigns/replaces CRS metadata | No |
+| `st_transform()` | Converts coordinates to another CRS | **Yes** |
+
+A useful workflow is:
+
+```r
+#| eval: false
+
+# Check CRS
+st_crs(data)
+
+# Transform if necessary
+data_projected <- st_transform(data, 2272)
+```
+
+---
+
+## 38. Buffers
+
+A buffer creates an area around a spatial feature.
+
+For example:
+
+```r
+#| eval: false
+station_buffer <- st_buffer(stations, 500)
+```
+
+This creates a buffer around each station.
+
+But what does `500` mean?
+
+That depends on the CRS and how `sf` interprets its units.
+
+For projected data, it generally corresponds to the linear units associated with the CRS.
+
+Therefore, before creating a buffer:
+
+```r
+#| eval: false
+st_crs(stations)
+```
+
+Check the CRS and units.
+
+### Important Principle
+
+> **Never interpret a buffer distance without knowing the CRS and units.**
+
+---
+
+## 39. Example: Half-Mile Station Buffer
+
+Suppose our data use a State Plane CRS measured in feet.
+
+Half a mile is:
+
+$$
+0.5 \times 5,280 = 2,640 \text{ feet}
+$$
+
+We could therefore create:
+
+```r
+#| eval: false
+station_buffer <- st_buffer(
+  stations,
+  dist = 2640
+)
+```
+
+This represents a half-mile buffer **if the CRS uses feet**.
+
+This demonstrates why checking:
+
+```r
+#| eval: false
+st_crs(stations)
+```
+
+is essential.
+
+---
+
+## 40. Spatial Relationships
+
+Spatial analysis often asks whether two geographic objects have a particular relationship.
+
+For example:
+
+- Do they intersect?
+- Do they touch?
+- Is one within another?
+- How far apart are they?
+
+Suppose we have geographic objects:
+
+```text
+A
+B
+C
+```
+
+Different spatial predicates answer different questions about their relationships.
+
+---
+
+## 41. `st_intersects()`
+
+`st_intersects()` asks whether two geometries share **any spatial location**.
+
+Conceptually:
+
+```r
+#| eval: false
+st_intersects(A, B)
+```
+
+If A and B overlap or touch, they intersect.
+
+An object also intersects itself.
+
+Conceptually:
+
+| Relationship | `st_intersects()` |
+|---|---|
+| A with B | TRUE if they share any point |
+| A with C | TRUE if they share any point |
+| A with A | TRUE |
+
+The key idea is:
+
+> **Intersect means the geometries have at least one point in common.**
+
+---
+
+## 42. `st_touches()`
+
+`st_touches()` asks whether two geometries share a boundary but their interiors do not overlap.
+
+For example, two neighboring census tracts may share a border.
+
+They:
+
+```text
+touch = TRUE
+```
+
+but one is not inside the other.
+
+Conceptually:
+
+```r
+#| eval: false
+st_touches(A, B)
+```
+
+This is particularly useful for identifying neighboring polygons.
+
+---
+
+## 43. `st_within()`
+
+`st_within()` asks whether one geometry lies completely inside another geometry.
+
+For example:
+
+```text
+Station → Census tract
+```
+
+If a station point lies inside a census tract polygon:
+
+```r
+#| eval: false
+st_within(station, tract)
+```
+
+would return a spatial relationship indicating that the station is within that tract.
+
+The order matters.
+
+> **`st_within(A, B)` asks whether A is within B.**
+
+---
+
+## 44. Comparing Spatial Predicates
+
+A simplified conceptual comparison is:
+
+| Function | Question |
+|---|---|
+| `st_intersects(A, B)` | Do A and B share any spatial location? |
+| `st_touches(A, B)` | Do their boundaries touch without interior overlap? |
+| `st_within(A, B)` | Is A inside B? |
+
+These relationships are not interchangeable.
+
+The correct function depends on the spatial question being asked.
+
+---
+
+## 45. `st_filter()`
+
+`st_filter()` filters one spatial dataset based on its spatial relationship with another.
+
+For example:
+
+```r
+#| eval: false
+nearby_tracts <- st_filter(
+  tracts,
+  station_buffer
+)
+```
+
+This can be used to identify tracts that spatially interact with the station buffer.
+
+A question such as:
+
+> **How many census tracts are within or intersect a half-mile station area?**
+
+could begin with a buffer followed by a spatial filter.
+
+```r
+#| eval: false
+station_buffer <- st_buffer(stations, 2640)
+
+nearby_tracts <- st_filter(
+  tracts,
+  station_buffer
+)
+
+nrow(nearby_tracts)
+```
+
+assuming the data are projected in feet.
+
+---
+
+## 46. `st_intersection()`
+
+`st_intersection()` actually creates the geometry representing the overlap between spatial objects.
+
+For example:
+
+```r
+#| eval: false
+tract_station_overlap <- st_intersection(
+  tracts,
+  station_buffer
+)
+```
+
+Unlike a simple predicate, this can **change the geometry**.
+
+A census tract may be clipped to only the portion falling inside a station buffer.
+
+Therefore:
+
+> **`st_intersects()` asks whether an intersection exists.**
+
+> **`st_intersection()` creates the overlapping geometry.**
+
+This distinction is important.
+
+---
+
+## 47. `st_union()`
+
+`st_union()` combines spatial geometries.
+
+For example:
+
+```r
+#| eval: false
+combined_buffer <- st_union(station_buffer)
+```
+
+If several station buffers overlap, `st_union()` can dissolve them into a combined geometry.
+
+Conceptually:
+
+```text
+Multiple geometries
+        ↓
+    st_union()
+        ↓
+Combined geometry
+```
+
+This can be useful when we care about the overall service area rather than the individual station buffers.
+
+---
+
+## 48. `st_distance()`
+
+`st_distance()` calculates distances between spatial features.
+
+For example:
+
+```r
+#| eval: false
+st_distance(stations, tracts)
+```
+
+When given multiple stations and multiple tracts, the result can be a **distance matrix** containing distances between combinations of features.
+
+For example:
+
+| | Tract 1 | Tract 2 | Tract 3 |
+|---|---:|---:|---:|
+| Station A | Distance | Distance | Distance |
+| Station B | Distance | Distance | Distance |
+
+Therefore:
+
+> **`st_distance()` can return many pairwise distances, not just one distance.**
+
+Again, understanding the CRS and units is essential when interpreting those distances.
+
+---
+
+## 49. A Typical Spatial Analysis Workflow
+
+Suppose the research question is:
+
+> **How many census tracts are near a transit station?**
+
+### Step 1: Check the CRS
+
+```r
+#| eval: false
+st_crs(stations)
+st_crs(tracts)
+```
+
+### Step 2: Make sure both layers use an appropriate common CRS
+
+```r
+#| eval: false
+stations <- st_transform(stations, 2272)
+tracts <- st_transform(tracts, 2272)
+```
+
+### Step 3: Create the station buffer
+
+If the units are feet and we want half a mile:
+
+```r
+#| eval: false
+station_buffer <- st_buffer(
+  stations,
+  dist = 2640
+)
+```
+
+### Step 4: Find intersecting tracts
+
+```r
+#| eval: false
+nearby_tracts <- st_filter(
+  tracts,
+  station_buffer
+)
+```
+
+### Step 5: Count the tracts
+
+```r
+#| eval: false
+nrow(nearby_tracts)
+```
+
+This demonstrates how CRS, buffers, spatial relationships, and filtering work together in a real spatial analysis.
+
+---
+
+## 50. Key Distinction: Attribute Joins vs. Spatial Joins
+
+There are two important ways of connecting datasets.
+
+### Attribute Join
+
+An attribute join uses a common variable such as:
+
+```text
+GEOID
+```
+
+Example:
+
+```r
+#| eval: false
+left_join(
+  tracts,
+  income,
+  by = "GEOID"
+)
+```
+
+The relationship is determined by matching values.
+
+### Spatial Join / Spatial Filter
+
+A spatial operation uses the **geographic relationship between geometries**.
+
+For example:
+
+```r
+#| eval: false
+st_filter(
+  tracts,
+  station_buffer
+)
+```
+
+The relationship is determined by location rather than a common ID.
+
+### Important Difference
+
+> **Attribute join → "Do these records have the same key?"**
+
+> **Spatial relationship → "Do these geographic objects occupy related locations?"**
+
+---
+
+## 51. Week 4 Quick Reference
+
+| Concept / Question | Tool / Answer |
+|---|---|
+| Keep everything from left dataset | `left_join()` |
+| Keep only matching observations | `inner_join()` |
+| Keep everything from both datasets | `full_join()` |
+| Unique geographic identifier | `GEOID` |
+| R spatial vector framework | `sf` |
+| Check coordinate system | `st_crs()` |
+| Assign/correct CRS metadata | `st_set_crs()` |
+| Convert coordinates to another CRS | `st_transform()` |
+| WGS84 longitude/latitude | `EPSG:4326` |
+| Common PA South State Plane CRS | `EPSG:2272` |
+| WGS84 geographic units | Degrees |
+| State Plane units | Feet or meters depending on CRS |
+| UTM units | Meters |
+| Number of UTM zones | 60 |
+| Width of UTM zone | 6° longitude |
+| UTM central-meridian false easting | 500,000 m |
+| GPS reference system | WGS84 |
+| NAD27 ellipsoid | Clarke 1866 |
+| NAD83-associated ellipsoid | GRS80 |
+| Preserve local angles/shape | Conformal projection |
+| Preserve area | Equal-area projection |
+| Preserve selected distances | Equidistant projection |
+| Create an area around a feature | `st_buffer()` |
+| Do geometries share any points? | `st_intersects()` |
+| Do boundaries touch? | `st_touches()` |
+| Is A inside B? | `st_within(A, B)` |
+| Filter features spatially | `st_filter()` |
+| Create overlapping geometry | `st_intersection()` |
+| Combine geometries | `st_union()` |
+| Calculate distances | `st_distance()` |
+
+---
+
+## 52. Key Concepts to Remember
+
+- A `GEOID` can be used as the key for joining Census and ACS datasets.
+- `left_join()` keeps all observations from the left dataset.
+- `inner_join()` keeps only observations appearing in both datasets.
+- `full_join()` keeps observations from both datasets.
+- `sf` stands for **Simple Features**.
+- An `sf` object contains normal attributes plus a geometry column.
+- Geometry is described as **sticky** because it is generally retained during many `dplyr` operations.
+- A CRS tells us how coordinates correspond to locations on Earth.
+- Geographic CRSs commonly use longitude and latitude expressed in degrees.
+- Projected CRSs use planar coordinates commonly expressed in meters or feet.
+- The Earth is not a perfect sphere.
+- An ellipsoid is a smooth mathematical approximation of Earth's shape.
+- The geoid represents a gravity-based model of Earth's shape.
+- NAD27 is associated with the Clarke 1866 ellipsoid and the historical Meades Ranch reference.
+- NAD83 is closely associated with GRS80.
+- WGS84 is the reference system associated with GPS.
+- `EPSG:4326` is commonly used for WGS84 longitude/latitude.
+- Every flat map projection introduces distortion.
+- Remember **SADD: Shape, Area, Distance, Direction**.
+- Conformal projections preserve local angles and shapes.
+- Equal-area projections preserve area.
+- Equidistant projections preserve particular distances.
+- State Plane systems are designed for accurate regional and local mapping in the United States.
+- UTM divides most of the world into **60 zones**, each **6 degrees of longitude wide**.
+- UTM coordinates are measured in meters.
+- `st_crs()` checks the CRS.
+- `st_set_crs()` assigns or corrects CRS metadata without transforming coordinate values.share any points.
+- `st_touches()` tests whether geometries touch at their boundaries without interior overlap.
+- `st_within(A, B)` tests whether A lies inside B.
+- `st_filter()` selects features based on a spatial relationship.
+- `st_intersection()` creates new geometry from overlapping areas.
+- `st_union()` combines geometries.
+- `st_distance()` calculates distances between spatial features.
+- Attribute joins use common identifiers such as `GEOID`; spatial operations use
+- `st_transform()` converts coordinates from one CRS to another.
+- Always check the CRS and units before calculating buffers or distances.
+- `st_intersects()` tests whether geometries  geographic relationships.

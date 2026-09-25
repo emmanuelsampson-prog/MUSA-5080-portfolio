@@ -1,0 +1,293 @@
+---
+title: "Assignment 3: Measuring Poverty in Philadelphia"
+subtitle: "Measuring uncertainty in American Community Survey data"
+author: "Emmanuel Sampson"
+date: today
+format:
+  html:
+    toc: true
+    code-fold: true
+    code-summary: "Show code"
+    embed-resources: true
+execute:
+  freeze: false
+  warning: true
+  message: false
+---
+
+## Data and definition of poverty
+
+How did poverty change across Philadelphia, and how much confidence can we
+place in those changes? This analysis compares estimates from the American
+Community Survey (ACS) for 2006–2010 and 2013–2017. It examines census tracts,
+small statistical areas that help describe conditions within the city.
+Each estimate represents a five-year period.
+
+The poverty rate measures the percentage of people living below the poverty
+level among those whose poverty status is determined by the survey. For
+example, a rate of 25% means one in four people in that group lives below
+the poverty level. The data come from the Census Bureau's
+[poverty-status table](https://api.census.gov/data/2017/acs/acs5/groups/B17001.html).
+
+```{r}
+#| label: setup
+#| include: false
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(tidycensus)
+  library(sf)
+})
+
+poverty_variables <- c(total_pop = "B17001_001", poverty = "B17001_002")
+fetch_poverty <- function(year) {
+  suppressMessages(get_acs(
+    geography = "tract", variables = poverty_variables,
+    state = "PA", county = "Philadelphia", year = year,
+    survey = "acs5", output = "wide", geometry = TRUE, moe_level = 90
+  ))
+}
+```
+
+```{r}
+#| label: download-data
+#| include: false
+#| message: false
+#| warning: false
+#| results: hide
+poverty_2010 <- fetch_poverty(2010)
+poverty_2017 <- fetch_poverty(2017)
+```
+
+## Poverty rates and margins of error
+
+The ACS surveys a sample of residents, so its estimates carry sampling
+uncertainty. A margin of error (MOE) describes that uncertainty: a larger
+MOE means a less precise estimate. A poverty rate of 25% with an MOE of
+5 **percentage points** gives an approximate 90% confidence interval of
+20%–30%. Across repeated samples, intervals calculated this way would
+contain the true value about 90% of the time.
+
+The calculations account for uncertainty in both the number of people below
+the poverty level and the population used to calculate the rate, using the
+[proportion method documented by tidycensus](https://walker-data.com/tidycensus/articles/margins-of-error.html).
+
+```{r}
+#| label: calculate-rates
+calculate_rates <- function(data, period_label) {
+  data %>%
+    mutate(
+      # Treat unavailable values and Census missing-data codes as missing.
+      across(c(total_popE, total_popM, povertyE, povertyM),
+             ~ replace(.x, !is.finite(.x) | .x < 0, NA_real_)),
+      denominator = if_else(total_popE > 0 & !is.na(povertyE) &
+                              povertyE <= total_popE, total_popE, NA_real_),
+      poverty_rate = 100 * povertyE / denominator,
+      poverty_rate_moe = 100 * moe_prop(
+        povertyE, denominator, povertyM, total_popM
+      ),
+      lower_90 = pmax(0, poverty_rate - poverty_rate_moe),
+      upper_90 = pmin(100, poverty_rate + poverty_rate_moe),
+      period = period_label
+    ) %>% select(-denominator)
+}
+poverty_2010 <- calculate_rates(poverty_2010, "2006-2010")
+poverty_2017 <- calculate_rates(poverty_2017, "2013-2017")
+
+poverty_2017 %>% st_drop_geometry() %>%
+  select(GEOID, poverty_rate, poverty_rate_moe, lower_90, upper_90) %>%
+  head(10) %>%
+  knitr::kable(digits = 2,
+               col.names = c("Tract ID", "Poverty rate (%)", "Margin of error (points)",
+                             "90% lower bound (%)", "90% upper bound (%)"),
+               caption = "Poverty estimates for ten tracts, 2013–2017")
+```
+
+## Reliability of tract estimates
+
+To compare precision across tracts, this analysis expresses each margin of
+error as a percentage of its estimated poverty rate. This **relative MOE**
+is smaller when the estimate is more precise. For example, an MOE of
+5 percentage points around a rate of 25% gives a relative MOE of 20%.
+
+This analysis labels relative MOEs below 12% as reliable, 12% to less than
+40% as somewhat reliable, and 40% or above as unreliable. These thresholds
+are specific to this analysis. A relative margin of error cannot be
+calculated when the estimated poverty rate is zero, because that would
+require dividing by zero. These cases and missing data are listed separately.
+
+```{r}
+#| label: reliability
+classify_reliability <- function(data) {
+  data %>% mutate(
+    moe_pct = 100 * poverty_rate_moe /
+      if_else(poverty_rate > 0, poverty_rate, NA_real_),
+    reliability = case_when(
+      is.na(poverty_rate) | is.na(poverty_rate_moe) ~ "No valid estimate/MOE",
+      poverty_rate == 0 ~ "Zero estimate: relative MOE undefined",
+      moe_pct < 12 ~ "Reliable",
+      moe_pct < 40 ~ "Somewhat reliable",
+      TRUE ~ "Unreliable"
+    )
+  )
+}
+poverty_2010 <- classify_reliability(poverty_2010) %>% st_transform(4326)
+poverty_2017 <- classify_reliability(poverty_2017) %>% st_transform(4326)
+poverty_change <- bind_rows(poverty_2010, poverty_2017)
+
+reliability_summary <- poverty_change %>% st_drop_geometry() %>%
+  count(period, reliability, name = "tracts") %>%
+  group_by(period) %>% mutate(percent = 100 * tracts / sum(tracts)) %>%
+  ungroup()
+knitr::kable(reliability_summary, digits = 1,
+             col.names = c("Period", "Reliability", "Number of tracts", "Share of tracts (%)"),
+             caption = "Reliability by period (including unavailable estimates)")
+```
+
+Estimates labeled unreliable have large margins of error compared with the
+estimated rates. This makes it difficult to rank those tracts confidently
+by poverty rate. Even a modest margin of error can be large relative to a
+very low poverty rate.
+
+## Change between periods
+
+Tracts are matched across periods using their Census geographic identifiers
+(`GEOID`). The table below shows how many appear in both periods or only
+one. Comparisons assume the matched tracts represent comparable areas;
+matching identifiers alone does not verify that boundaries are identical.
+The Census Bureau documents the geographic definitions in its
+[ACS geography guidance](https://www.census.gov/programs-surveys/acs/geography-acs/geography-boundaries-by-year/2010.html).
+
+```{r}
+#| label: match-tracts
+tract_data <- poverty_change %>% st_drop_geometry()
+stopifnot(!anyDuplicated(tract_data[c("GEOID", "period")]))
+coverage <- full_join(
+  st_drop_geometry(poverty_2010) %>% transmute(GEOID, in_2010 = TRUE),
+  st_drop_geometry(poverty_2017) %>% transmute(GEOID, in_2017 = TRUE),
+  by = "GEOID"
+) %>% mutate(coverage = case_when(
+  is.na(in_2010) ~ "2017 only",
+  is.na(in_2017) ~ "2010 only",
+  TRUE ~ "Both periods"
+))
+knitr::kable(count(coverage, coverage, name = "tracts"),
+             col.names = c("Data availability", "Number of tracts"))
+
+poverty_wide <- tract_data %>%
+  select(GEOID, period, poverty_rate, poverty_rate_moe) %>%
+  pivot_wider(id_cols = GEOID, names_from = period,
+              values_from = c(poverty_rate, poverty_rate_moe))
+```
+
+The change is the later poverty rate minus the earlier rate. For example,
+an increase from 20% to 25% is a rise of 5 percentage points. Assuming independent estimates for these
+non-overlapping periods, the change MOE is the square root of the sum of
+the squared MOEs. A change is significant at approximately the 90% level
+when its absolute value exceeds this MOE. Each tract is tested separately,
+without adjusting for the number of tests. With many tests, some changes
+may appear significant by chance. Failure to detect a change does not prove
+poverty stayed constant.
+
+```{r}
+#| label: test-change
+poverty_wide <- poverty_wide %>% mutate(
+  change_pp = `poverty_rate_2013-2017` - `poverty_rate_2006-2010`,
+  change_moe = sqrt(`poverty_rate_moe_2013-2017`^2 +
+                      `poverty_rate_moe_2006-2010`^2),
+  change_lower_90 = change_pp - change_moe,
+  change_upper_90 = change_pp + change_moe,
+  change_result = case_when(
+    is.na(change_pp) | is.na(change_moe) ~ "Not estimable",
+    change_lower_90 > 0 ~ "Significant increase",
+    change_upper_90 < 0 ~ "Significant decrease",
+    TRUE ~ "No significant change"
+  )
+)
+change_summary <- count(poverty_wide, change_result, name = "tracts")
+knitr::kable(change_summary,
+             col.names = c("Change assessment", "Number of tracts"),
+             caption = "Tract changes at the 90% confidence level")
+
+poverty_wide %>% filter(!is.na(change_moe), !is.na(change_pp)) %>%
+  arrange(desc(abs(change_pp))) %>%
+  select(GEOID, change_pp, change_moe, change_result) %>% head(10) %>%
+  knitr::kable(digits = 2,
+               col.names = c("Tract ID", "Change (points)", "Margin of error (points)",
+                             "Change assessment"),
+               caption = "Ten largest absolute estimated changes (percentage points)")
+```
+
+### Plot of change and its uncertainty
+
+In the formulas below, $p$ is the poverty rate, $\Delta$ is the change
+between periods, and $MOE$ is the margin of error. Rates and changes are
+expressed in percentage points for these calculations.
+
+$$
+\Delta = p_{2013-2017} - p_{2006-2010}, \qquad
+MOE_{\Delta} = \sqrt{MOE_{2013-2017}^{2} + MOE_{2006-2010}^{2}}.
+$$
+
+The graph shows every tract for which a change can be calculated, ordered from the
+largest decrease to the largest increase. Each point is an estimated change;
+each vertical line spans $\Delta \pm MOE_{\Delta}$. Both are in percentage
+points. A confidence interval entirely above or below the dashed zero line
+indicates a statistically significant change at 90% confidence. Intervals
+that touch or cross zero do not establish a change at this confidence level.
+The intervals use a normal approximation and are shown in full. For a few
+tracts, large margins of error extend beyond the possible range of -100 to
+100 percentage points. These wide intervals show how uncertain the estimates
+are; changes beyond that range are not physically possible.
+
+```{r}
+#| label: fig-poverty-change
+#| fig-width: 10
+#| fig-height: 6
+#| fig-dpi: 180
+#| fig-cap: "Philadelphia tract poverty-rate changes, 2006–2010 to 2013–2017. Points show estimated changes; vertical lines show 90% confidence intervals for those changes. Tracts are ordered by estimated change, not geographic location."
+change_plot_data <- poverty_wide %>%
+  filter(is.finite(change_pp), is.finite(change_moe)) %>%
+  arrange(change_pp, GEOID) %>%
+  mutate(tract_rank = row_number())
+
+ggplot(change_plot_data,
+       aes(x = tract_rank, y = change_pp, color = change_result)) +
+  geom_linerange(aes(ymin = change_lower_90, ymax = change_upper_90),
+                 linewidth = 0.35, alpha = 0.55) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  geom_point(size = 1.2) +
+  scale_color_manual(
+    values = c("Significant decrease" = "#0072B2",
+               "No significant change" = "#777777",
+               "Significant increase" = "#D55E00"),
+    breaks = c("Significant decrease", "No significant change",
+               "Significant increase"),
+    drop = FALSE
+  ) +
+  labs(
+    title = "Change in poverty rates across Philadelphia census tracts",
+    subtitle = "2013-2017 minus 2006-2010; intervals show uncertainty in the change",
+    x = "Tracts ordered by estimated change",
+    y = "Change in poverty rate (percentage points)",
+    color = NULL,
+    caption = paste(nrow(change_plot_data), "tracts shown;",
+                    nrow(poverty_wide) - nrow(change_plot_data),
+                    "tracts omitted because change cannot be estimated.")
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "bottom", panel.grid.minor = element_blank(),
+        plot.caption = element_text(hjust = 0))
+```
+
+**Results.** Of `r nrow(poverty_wide)` census tracts across the two periods,
+`r sum(poverty_wide$change_result == "Significant increase")` show a significant
+increase and `r sum(poverty_wide$change_result == "Significant decrease")` show
+a significant decrease at the 90% level.
+There are `r sum(poverty_wide$change_result == "No significant change")` tracts
+with no statistically detectable change and
+`r sum(poverty_wide$change_result == "Not estimable")` without sufficient data.
+These counts describe how many areas experienced detectable changes.
+Because tracts have different populations, the counts alone do not show
+whether Philadelphia's overall poverty rate increased or decreased.
+
+
