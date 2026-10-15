@@ -146,7 +146,7 @@ philly_tracts %>%
   st_drop_geometry() %>%
   summarize(
     n_tracts = n(),
-    no_2015_match = sum(is.na(med_inc_15E.x))
+    no_2015_match = sum(is.na(med_inc_15E))
   )
 ```
 
@@ -157,7 +157,7 @@ Now look at which tracts failed to match:
 # 2023 tracts with no 2015 partner
 philly_tracts %>%
   st_drop_geometry() %>%
-  filter(is.na(med_inc_15M.x)) %>%
+  filter(is.na(med_inc_15M)) %>%
   select(GEOID, NAME) %>%
   head(10)
 
@@ -192,7 +192,7 @@ Now check the CRS of both layers.
 ```{r}
 #| label: crs-check
 st_crs(philly_tracts)$epsg
-st_crs(___)$epsg
+st_crs(stations)$epsg
 ```
 
 **Predict before you run:** The two numbers are different. What will happen if you try to join them?
@@ -212,8 +212,8 @@ That error is sf protecting you. Fix it by **translating** both layers into Penn
 
 ```{r}
 #| label: transform
-philly_tracts <- philly_tracts %>% ___(crs = 2272)
-stations      <- stations %>% ___(crs = 2272)
+philly_tracts <- philly_tracts %>% st_transform(crs = 2272)
+stations      <- stations %>% st_transform(crs = 2272)
 
 st_crs(philly_tracts)$units   # what units are we in now?
 ```
@@ -244,7 +244,7 @@ Now go the other way and count stations **per tract**. The first route is the We
 #| label: count-route1
 station_counts <- stations_with_tract %>%
   st_drop_geometry() %>%
-  ___(GEOID)
+  count(GEOID)
 ```
 
 The second route counts directly:
@@ -284,14 +284,14 @@ Instead, find the nearest station for each tract, then measure only that one dis
 
 ```{r}
 #| label: nearest
-nearest_idx <- st_nearest_feature(centroids, ___)
+nearest_idx <- st_nearest_feature(centroids, stations)
 
 philly_tracts <- philly_tracts %>%
   mutate(
     dist_ft = as.numeric(
-      st_distance(centroids, stations[nearest_idx, ], by_element = ___)
+      st_distance(centroids, stations[nearest_idx, ], by_element = TRUE)
     ),
-    dist_mi = dist_ft / ___
+    dist_mi = dist_ft / 5280
   )
 
 summary(philly_tracts$dist_mi)
@@ -306,7 +306,7 @@ Build a **half-mile** zone around every station and merge the circles into one s
 ```{r}
 #| label: buffer
 station_zone <- stations %>%
-  st_buffer(dist = ___) %>%
+  st_buffer(dist = 2640) %>%
   st_union()
 ```
 
@@ -315,7 +315,7 @@ station_zone <- stations %>%
 ```{r}
 #| label: filter-disjoint
 outside_zone <- philly_tracts %>%
-  st_filter(station_zone, .predicate = ___)
+  st_filter(station_zone, .predicate = st_disjoint)
 
 nrow(outside_zone)
 ```
