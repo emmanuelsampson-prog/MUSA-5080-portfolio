@@ -10,6 +10,10 @@ format:
 Completed assignments for MUSA 5080, with findings, visualizations, and
 expandable code.
 
+## [Assignment 4](Assignment4.qmd)
+
+Assignment 4 write-up.
+
 ## [Assignment 3: Measuring Poverty in Philadelphia](Assignment3.qmd)
 
 How did poverty change across Philadelphia? Compare poverty estimates for
