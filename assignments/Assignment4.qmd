@@ -141,7 +141,7 @@ tracts <- philly_tracts %>%
          !is.na(median_age))
 ```
 
-The analysis keeps `r nrow(tracts)` of `r nrow(philly_tracts)` tracts. Of the `r nrow(philly_tracts) - nrow(tracts)` dropped, `r sum(philly_tracts$total_popE == 0)` have no residents (the 98xx special tracts, such as the airport, the Navy Yard and large parks), and a few more have almost no households; there is nothing to predict there. Six others are residential tracts with roughly 900 to 2,600 households each (tracts 165, 285, 148, 277, 301 and 205) for which the Census reports no median household income. They are likely student-heavy, and their no-vehicle shares are high (30–55%), so dropping them may slightly understate car-free areas.
+The analysis keeps `r nrow(tracts)` of `r nrow(philly_tracts)` tracts. Of the `r nrow(philly_tracts) - nrow(tracts)` dropped, `r sum(philly_tracts$total_popE == 0)` have no residents (the 98xx special tracts, such as the airport, the Navy Yard and large parks), and a few more have almost no households; there is nothing to predict there. Six others are residential tracts with roughly 900 to 2,600 households each (tracts 165, 285, 148, 277, 301 and 205) for which the Census reports no median household income. They are likely student-heavy, and their no-vehicle shares are high (30–55%), so dropping them may slightly understate car-free areas in Philadelphia.
 
 ## Baseline model
 
@@ -474,4 +474,4 @@ The largest misses do not rise with the CV of the estimate (correlation `r round
 
 **What's still missing.** The final residual map still shows underprediction in North Philadelphia. Next I would measure transit service quality, not just access to bike share, for example weekday bus and rail frequency within a quarter mile from SEPTA's GTFS feeds, and off-street parking supply and estimated from the Office of Property Assessment's property data on garages.
 
-**How much is noise.** The largest misses are not concentrated in unreliable tracts, so most of the remaining error reflects real neighborhood differences that the features do not yet capture, rather than uncertainty in the ACS estimates.
+**How much is noise.** The largest misses are not concentrated in unreliable tracts, so most of the remaining error reflects real neighborhood differences that the features do not yet capture rather than uncertainty in the ACS estimate itself.
