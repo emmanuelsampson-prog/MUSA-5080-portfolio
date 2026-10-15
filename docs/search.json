@@ -1188,5 +1188,12 @@
     "title": "Assignments",
     "section": "Assignment 4",
     "text": "Assignment 4\nAssignment 4 write-up."
+  },
+  {
+    "objectID": "assignments/index.html#assignment-4-predicting-car-free-households-in-philadelphia",
+    "href": "assignments/index.html#assignment-4-predicting-car-free-households-in-philadelphia",
+    "title": "Assignments",
+    "section": "Assignment 4: Predicting Car-Free Households in Philadelphia",
+    "text": "Assignment 4: Predicting Car-Free Households in Philadelphia\nBuild spatial features and test how each one changes the cross-validated error of a model predicting car-free households across Philadelphia tracts."
   }
 ]

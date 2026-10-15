@@ -10,9 +10,10 @@ format:
 Completed assignments for MUSA 5080, with findings, visualizations, and
 expandable code.
 
-## [Assignment 4](Assignment4.qmd)
+## [Assignment 4: Predicting Car-Free Households in Philadelphia](Assignment4.qmd)
 
-Assignment 4 write-up.
+Build spatial features and test how each one changes the cross-validated
+error of a model predicting car-free households across Philadelphia tracts.
 
 ## [Assignment 3: Measuring Poverty in Philadelphia](Assignment3.qmd)
 
