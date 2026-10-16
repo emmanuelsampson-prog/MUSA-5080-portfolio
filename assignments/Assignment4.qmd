@@ -474,4 +474,5 @@ The largest misses do not rise with the CV of the estimate (correlation `r round
 
 **What's still missing.** The final residual map still shows underprediction in North Philadelphia. Next I would measure transit service quality, not just access to bike share, for example weekday bus and rail frequency within a quarter mile from SEPTA's GTFS feeds, and off-street parking supply and estimated from the Office of Property Assessment's property data on garages.
 
-**How much is noise.** The largest misses are not concentrated in unreliable tracts, so most of the remaining error reflects real neighborhood differences that the features do not yet capture rather than uncertainty in the ACS estimates.
+**How much is noise.** The largest misses are not concentrated in unreliable tracts, so
+most of the remaining error reflects real neighborhood differences that the features do not yet capture rather than uncertainty in the ACS estimates.

@@ -46,7 +46,7 @@
     "href": "weekly-notes/index.html",
     "title": "Weekly Notes",
     "section": "",
-    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations\n\n\nAttribute joins, sf objects, coordinate reference systems, datums, map projections, UTM, spatial relationships, buffers, and spatial analysis in R.\n\n\n\n\n\nSep 18, 2026\n\n\n\n\n\n\n\nWeek 3: Data Visualization and Uncertainty\n\n\nGrammar of Graphics, ggplot2, ACS reliability, derived uncertainty, and change over time.\n\n\n\n\n\nSep 11, 2026\n\n\n\n\n\n\n\nWeek 2: dplyr and census\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\nNo matching items"
+    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 7: Feature Engineering for Linear Regression\n\n\nChanging the shape of features: log transformations, polynomial terms, categorical variables, dummy coding, interaction terms, and fixed effects, all evaluated with consistent k-fold cross-validation in R.\n\n\n\n\n\nOct 9, 2026\n\n\n\n\n\n\n\nWeek 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations\n\n\nAttribute joins, sf objects, coordinate reference systems, datums, map projections, UTM, spatial relationships, buffers, and spatial analysis in R.\n\n\n\n\n\nSep 18, 2026\n\n\n\n\n\n\n\nWeek 3: Data Visualization and Uncertainty\n\n\nGrammar of Graphics, ggplot2, ACS reliability, derived uncertainty, and change over time.\n\n\n\n\n\nSep 11, 2026\n\n\n\n\n\n\n\nWeek 2: dplyr and census\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "data/readme.html",
@@ -1195,5 +1195,278 @@
     "title": "Assignments",
     "section": "Assignment 4: Predicting Car-Free Households in Philadelphia",
     "text": "Assignment 4: Predicting Car-Free Households in Philadelphia\nBuild spatial features and test how each one changes the cross-validated error of a model predicting car-free households across Philadelphia tracts."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html",
+    "href": "weekly-notes/week-07.html",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "",
+    "text": "Each week builds on the previous ones:\nCollect data\n     ↓\nSpatial operations\n     ↓\nRegression for prediction\n     ↓\nCross-validation (RMSE matters more than R²)\n     ↓\nFeature engineering: changing the \"shape\" of features   ← this week\n     ↓\nk-nearest-neighbour (KNN) spatial features              ← next week\nAssignment 4 is a training exercise. Next week, teams will be asked to build the best model they can to predict home values.\n\nStudy the code and the concepts now, so you can design your own model later.\n\nThis week’s lecture was recorded remotely (from Pittsburgh) and walks through the same steps as Assignment 4, Part 5."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#where-this-week-fits",
+    "href": "weekly-notes/week-07.html#where-this-week-fits",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "",
+    "text": "Each week builds on the previous ones:\nCollect data\n     ↓\nSpatial operations\n     ↓\nRegression for prediction\n     ↓\nCross-validation (RMSE matters more than R²)\n     ↓\nFeature engineering: changing the \"shape\" of features   ← this week\n     ↓\nk-nearest-neighbour (KNN) spatial features              ← next week\nAssignment 4 is a training exercise. Next week, teams will be asked to build the best model they can to predict home values.\n\nStudy the code and the concepts now, so you can design your own model later.\n\nThis week’s lecture was recorded remotely (from Pittsburgh) and walks through the same steps as Assignment 4, Part 5."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#why-feature-engineering",
+    "href": "weekly-notes/week-07.html#why-feature-engineering",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "2. Why Feature Engineering?",
+    "text": "2. Why Feature Engineering?\nThe machine learning method we are using is linear regression.\nA linear model can only fit a straight line through the data.\nMore flexible machine learning methods can fit more complicated shapes. We are not using those yet.\nInstead, we ask:\n\nHow much can we improve a linear regression by changing the shape of the features we give it?\n\nLinear regression has real advantages:\n\nIt is interpretable\nWe can explain how it works\nWe understand what is happening “under the hood”\n\nTherefore:\n\nMore complex methods are not automatically better. Linear regression is tried and tested, and it is a good model."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#when-a-straight-line-is-not-enough",
+    "href": "weekly-notes/week-07.html#when-a-straight-line-is-not-enough",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "3. When a Straight Line Is Not Enough",
+    "text": "3. When a Straight Line Is Not Enough\nSuppose we predict rent as a function of income.\nRegression finds the best-fitting line between the dependent variable and the independent variables.\nBut what if the true relationship is not a straight line?\nWe can transform the features so that a straight line fits them better.\nFor each transformation, we will check whether it improves the cross-validated RMSE.\n\n\n\n\n\n\n\nTechnique\nProblem it addresses\n\n\n\n\nLogs\nSkewed data, or percentage changes matter more than raw changes\n\n\nSquared (polynomial) terms\nCurved relationships\n\n\nCategorical variables\nGroups or thresholds\n\n\nInteraction terms\nSlopes that differ by group\n\n\nFixed effects\nUnmeasured characteristics of a place"
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#the-example-dataset",
+    "href": "weekly-notes/week-07.html#the-example-dataset",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "4. The Example Dataset",
+    "text": "4. The Example Dataset\nThe examples follow Assignment 4.\n\n\n\n\n\n\n\nItem\nValue\n\n\n\n\nUnit of analysis\nPhiladelphia census tracts\n\n\nSource\n2023 ACS 5-year estimates\n\n\nOutcome (dependent variable)\nMedian gross rent\n\n\nPredictors\nMedian household income, % renters, building age, distance to City Hall\n\n\nNew variable this week\nMedian year structure built\n\n\nCRS\nTransformed to PA South State Plane (feet), EPSG:2272\n\n\n\nData are transformed to State Plane feet straight away so that distance measurements are meaningful.\n#| eval: false\nlibrary(tidyverse)\nlibrary(tidycensus)\nlibrary(sf)\n\nraw_tracts &lt;- get_acs(\n  geography = \"tract\",\n  state = \"PA\",\n  county = \"Philadelphia\",\n  variables = c(\n    rent       = \"B25064_001\",  # median gross rent\n    income     = \"B19013_001\",  # median household income\n    year_built = \"B25035_001\",  # median year structure built\n    total_hh   = \"B25003_001\",  # occupied housing units\n    renters    = \"B25003_003\"   # renter-occupied units\n  ),\n  year = 2023,\n  output = \"wide\",\n  geometry = TRUE,\n  progress_bar = FALSE\n) %&gt;%\n  st_transform(2272)\nThe variable codes above are the standard ACS table codes. Check them against the course code."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#tip-removing-the-progress-bars",
+    "href": "weekly-notes/week-07.html#tip-removing-the-progress-bars",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "5. Tip: Removing the Progress Bars",
+    "text": "5. Tip: Removing the Progress Bars\nWhen geometry = TRUE, the download prints long progress bars into the rendered QMD.\nTo remove them, add a progress argument inside the call:\n#| eval: false\nprogress_bar = FALSE\nThe lecture wrote this as “progress = FALSE”. In tidycensus and tigris, the argument is progress_bar = FALSE.\n\nAsk in class to confirm."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#creating-a-point-feature-for-city-hall",
+    "href": "weekly-notes/week-07.html#creating-a-point-feature-for-city-hall",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "6. Creating a Point Feature for City Hall",
+    "text": "6. Creating a Point Feature for City Hall\n\nWhy?\nOne reason rents differ between neighbourhoods may be closeness to Center City.\nTo operationalize that idea, we create a point at City Hall and measure each tract’s distance to it.\nThis is the work of a feature engineer: turning an idea into a measurable variable.\n\n\nHow?\nIt is easiest to find coordinates as latitude and longitude. For example, click a location in Google Maps.\nThose coordinates are in WGS84 (EPSG:4326), so:\n\nCreate the point in EPSG:4326\nTransform it to State Plane feet (EPSG:2272) to match the tracts\n\n#| eval: false\ncity_hall &lt;- st_sfc(\n  st_point(c(-75.1635, 39.9526)),  # longitude, latitude\n  crs = 4326\n) %&gt;%\n  st_transform(2272)\n\nAlways know which CRS your input coordinates are in before creating a point.\n\nNote that st_point() takes longitude first, then latitude (x, y)."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#tidying-the-data-with-mutate",
+    "href": "weekly-notes/week-07.html#tidying-the-data-with-mutate",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "7. Tidying the Data with mutate()",
+    "text": "7. Tidying the Data with mutate()\n#| eval: false\ntracts &lt;- raw_tracts %&gt;%\n  mutate(\n    rent         = rentE,\n    rent_moe     = rentM,\n    income       = incomeE,\n    building_age = 2023 - year_builtE,\n    pct_renters  = renters / total_hh * 100,\n    dist_ch_mi   = as.numeric(st_distance(geometry, city_hall)) / 5280\n  ) %&gt;%\n  select(GEOID, rent, rent_moe, income, building_age,\n         pct_renters, dist_ch_mi) %&gt;%\n  filter(\n    !is.na(rent),\n    !is.na(income),\n    !is.na(building_age),\n    !is.na(pct_renters)\n  )\n\n\n\nNew variable\nCalculation\n\n\n\n\nbuilding_age\n2023 (ACS year) − median year built\n\n\npct_renters\nrenter households ÷ total households × 100\n\n\ndist_ch_mi\ndistance to City Hall in feet ÷ 5,280\n\n\n\nThere are 5,280 feet in a mile.\nas.numeric() drops the units attached by st_distance() and returns a plain number."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#why-drop-missing-values-first",
+    "href": "weekly-notes/week-07.html#why-drop-missing-values-first",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "8. Why Drop Missing Values First?",
+    "text": "8. Why Drop Missing Values First?\nIn R:\n!\nmeans NOT. So !is.na(rent) keeps records where rent is not missing.\nIf a row has a missing value, lm() will quietly drop it, without telling you.\nThat creates a problem:\n\nDifferent models could be estimated on different sets of tracts, so their RMSEs would not be directly comparable.\n\nFor fair comparisons, every model must use:\n\nExactly the same records\nExactly the same folds\n\nAfter filtering, the dataset has:\n\n377 census tracts"
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#a-consistent-cross-validation-helper-function",
+    "href": "weekly-notes/week-07.html#a-consistent-cross-validation-helper-function",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "9. A Consistent Cross-Validation Helper Function",
+    "text": "9. A Consistent Cross-Validation Helper Function\n\nGoal\nThis week we want to see how changing the features changes the same model.\nSo we remove randomness in the fold assignment:\n\nIf a tract is in fold 1 the first time, it stays in fold 1 every time.\n\nThe caret package can also do train/test splits. Here, however, fixing the folds ourselves guarantees identical comparisons.\n\n\nSetting the folds\n#| eval: false\nset.seed(5080)\n\nfolds &lt;- sample(rep(1:10, length.out = nrow(tracts)))\nset.seed() makes the random number generator reproducible. The course number, 5080, is used as the seed.\nThis randomly assigns each tract to one of 10 folds.\n\n\nThe function\n#| eval: false\ncv_rmse &lt;- function(f, data, log_y = FALSE) {\n\n  preds &lt;- rep(NA, nrow(data))\n\n  for (k in 1:10) {\n    # Train on every fold except k\n    m &lt;- lm(f, data = data[folds != k, ])\n\n    # Predict for the held-out fold k\n    preds[folds == k] &lt;- predict(m, newdata = data[folds == k, ])\n  }\n\n  # If the outcome was logged, convert predictions back to dollars\n  if (log_y) preds &lt;- exp(preds)\n\n  sqrt(mean((data$rent - preds)^2))\n}\n\n\nHow it works\nFor each fold k:\nFold k steps aside (test set)\n        ↓\nFit lm() on all other folds (training set) → model m\n        ↓\npredict() rents for fold k using m's coefficients\n        ↓\nCompare predictions with actual rents\nEvery tract gets a turn in the test set.\nA function is just a set of instructions that runs whenever it is called. Here we give it:\n\nf: the regression formula\ndata: the dataset\nlog_y: whether the outcome was logged (explained in Section 14)"
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#root-mean-square-error-rmse",
+    "href": "weekly-notes/week-07.html#root-mean-square-error-rmse",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "10. Root Mean Square Error (RMSE)",
+    "text": "10. Root Mean Square Error (RMSE)\n\\[\nRMSE = \\sqrt{\\frac{1}{n}\\sum_{i=1}^{n}(y_i - \\hat{y}_i)^2}\n\\]\nwhere:\n\n\\(y_i\\) = actual rent\n\\(\\hat{y}_i\\) = predicted rent\n\nRMSE is in the same units as the outcome: dollars of rent.\n\nLower RMSE = better out-of-sample prediction."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#the-baseline-model-and-the-model-log",
+    "href": "weekly-notes/week-07.html#the-baseline-model-and-the-model-log",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "11. The Baseline Model and the Model Log",
+    "text": "11. The Baseline Model and the Model Log\nA model log is simply a record of each model and its result.\n\n“Log” here means a record, not a logarithm.\n\nIt is stored as a tibble, and we add a row for every new model.\n#| eval: false\nf0 &lt;- rent ~ income + pct_renters + building_age + dist_ch_mi\n\nm0 &lt;- lm(f0, data = tracts)\n\nmodel_log &lt;- tibble(\n  model = \"M0: Baseline\",\n  rmse  = cv_rmse(f0, tracts)\n)\nThe baseline predicts rent as a function of:\n\nMedian household income\nPercent renters\nBuilding age\nDistance to City Hall\n\n\nResult\n\nBaseline RMSE ≈ $265\n\nOn average, the baseline prediction for a tract’s median rent is off by about $265.\nIs that good enough? The lecture’s answer: “I don’t know, I’m not your boss.”"
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#trick-1-log-transformations",
+    "href": "weekly-notes/week-07.html#trick-1-log-transformations",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "12. Trick 1: Log Transformations",
+    "text": "12. Trick 1: Log Transformations\n\nWhen to use a log\n1. Skewed distributions\nIf a variable has a long tail rather than a roughly normal distribution, taking the log can help. Linear regression works best with roughly normal data.\n2. Theoretical reasons: percentage change matters\nConsider income:\n\n\n\n\n\n\n\n\n\nChange\nRaw increase\nPercentage change\nMeaning\n\n\n\n\n$30,000 → $60,000\n+$30,000\n+100%\nIncome doubles. A neighbourhood may move out of poverty\n\n\n$170,000 → $200,000\n+$30,000\n≈ +18%\nA modest bonus\n\n\n\nThe raw increase is identical, but the consequences are very different.\n\nWhen percentage changes matter more than unit changes, consider a log.\n\n\n\nWorkflow\nLook at the distribution\n        ↓\nDoes it look skewed?\n        ↓\nTry a log and compare cross-validated RMSE"
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#logging-a-predictor",
+    "href": "weekly-notes/week-07.html#logging-a-predictor",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "13. Logging a Predictor",
+    "text": "13. Logging a Predictor\nThe outcome (rent) stays the same. Simply write log() in the formula:\n#| eval: false\nf1 &lt;- rent ~ log(income) + pct_renters + building_age + dist_ch_mi\n\nm1 &lt;- lm(f1, data = tracts)\ncoef(m1)\nNo separate transformation step is needed.\n\nInterpreting the coefficient\n\\[\n\\hat{\\beta}_{\\log(income)} = 502\n\\]\nFor a 1% increase in income:\n\\[\n\\frac{\\beta}{100} = \\frac{502}{100} \\approx \\$5\n\\]\n\nA 1% increase in median income is associated with about $5 more rent, holding the other variables constant.\n\nFor a 10% increase in income:\n\\[\n\\beta \\times \\log(1.10) = 502 \\times 0.0953 \\approx \\$48\n\\]\n\nA 10% increase in income is associated with roughly $50 more rent.\n\nInterpreting coefficients is not our main goal in prediction. But it is worth checking that they pass a sniff test.\n\n\nAdding it to the model log\n#| eval: false\nmodel_log &lt;- model_log %&gt;%\n  add_row(model = \"M1: log(income)\", rmse = cv_rmse(f1, tracts))\n\n\nResult\n\nThe RMSE did not really improve.\n\nA log transformation does not guarantee a better fit."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#warning-logs-and-zeros",
+    "href": "weekly-notes/week-07.html#warning-logs-and-zeros",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "14. Warning: Logs and Zeros",
+    "text": "14. Warning: Logs and Zeros\n\\[\n\\log(0) = -\\infty\n\\]\nIf a variable contains real zeros, lm() will fail.\nExample: counts of crimes or 311 calls per tract. A zero means “no crimes”. It is real information, not missing data.\n\nDo not drop zero observations just to take a log.\n\nInstead, use:\n#| eval: false\nlog1p(x)\nwhich computes:\n\\[\n\\log(1 + x)\n\\]\nso that:\n\\[\n\\log(1 + 0) = 0\n\\]\nThe transcript records this as “log1px”. The correct R function is log1p()."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#logging-the-outcome-variable",
+    "href": "weekly-notes/week-07.html#logging-the-outcome-variable",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "15. Logging the Outcome Variable",
+    "text": "15. Logging the Outcome Variable\nIf rent is skewed, we can log the outcome instead of, or as well as, the predictors.\n#| eval: false\nf2 &lt;- log(rent) ~ log(income) + pct_renters + building_age + dist_ch_mi\nThis is a log–log model for income.\nYou can go “log crazy”, but this is not recommended."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#interpreting-log-models",
+    "href": "weekly-notes/week-07.html#interpreting-log-models",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "16. Interpreting Log Models",
+    "text": "16. Interpreting Log Models\n\n\n\n\n\n\n\n\nModel\nForm\nInterpretation of β\n\n\n\n\nLevel–level\n\\(y \\sim x\\)\n1-unit ↑ in x → β units change in y (the slope)\n\n\nLevel–log\n\\(y \\sim \\log(x)\\)\n1% ↑ in x → β / 100 units change in y\n\n\nLog–level\n\\(\\log(y) \\sim x\\)\n1-unit ↑ in x → approx. 100 × β % change in y\n\n\nLog–log\n\\(\\log(y) \\sim \\log(x)\\)\n1% ↑ in x → approx. β % change in y\n\n\n\nThe log–log coefficient is an elasticity, a familiar idea from economics.\nIn the lecture, the level–level case was described as “a β percent increase in y”. The correct reading is β units of y.\n\nYou do not need to memorize these. Prediction is our main focus. But you should know where to look them up."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#critical-warning-log-dollars",
+    "href": "weekly-notes/week-07.html#critical-warning-log-dollars",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "17. Critical Warning: Log Dollars",
+    "text": "17. Critical Warning: Log Dollars\nWhen the outcome is logged, the RMSE suddenly looks amazing:\nBefore: RMSE ≈ 265\nAfter:  RMSE ≈ 0.18\nThis is not a breakthrough.\nThe second number is in log dollars.\n\nYour boss does not speak log dollars. They want to know how many dollars the model is off by.\n\nSo we must convert predictions back to dollars by taking the exponent:\n\\[\n\\hat{y} = e^{\\widehat{\\log(y)}}\n\\]\nThis is what the log_y = TRUE argument in cv_rmse() does:\n#| eval: false\nmodel_log &lt;- model_log %&gt;%\n  add_row(\n    model = \"M2: log(rent) + log(income)\",\n    rmse  = cv_rmse(f2, tracts, log_y = TRUE)\n  )\n\nResult\n\nThe RMSE improved by about $2."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#trick-2-squared-polynomial-terms",
+    "href": "weekly-notes/week-07.html#trick-2-squared-polynomial-terms",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "18. Trick 2: Squared (Polynomial) Terms",
+    "text": "18. Trick 2: Squared (Polynomial) Terms\n\nNon-linear relationships\nIf a scatter plot shows a curve, we can still use a linear model. We just “trick” it by adding a squared term.\n\n\nClassic example: building age\nNew buildings      → higher rent (new and shiny; built in desirable areas)\nMiddle-aged        → lower rent (dated, not updated)\nVery old buildings → higher rent again (\"vintage\")\nSo the relationship between age and rent is often U-shaped:\nRent\n │ ●                       ●\n │   ●                   ●\n │     ●             ●\n │        ●  ●  ●\n └──────────────────────────── Building age\n   new     middle-aged     old\n\n\nA data artifact to watch for\nThe Census records every building built before 1940 as “1939 or earlier”.\nAll of those tracts get the same value, which creates a pile-up at the oldest ages.\n\nDiscover artifacts like this through exploratory data analysis. Always plot your data (scatter plots!) after collecting it."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#adding-a-squared-term-with-i",
+    "href": "weekly-notes/week-07.html#adding-a-squared-term-with-i",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "19. Adding a Squared Term with I()",
+    "text": "19. Adding a Squared Term with I()\n#| eval: false\nf3 &lt;- rent ~ log(income) + pct_renters + building_age +\n  I(building_age^2) + dist_ch_mi\n\nm3 &lt;- lm(f3, data = tracts)\nI() means “do the math”: compute building_age^2 as a new variable.\n\nWithout I(), R quietly ignores the squared term or gives a syntax error.\n\nKeep both the linear term and the squared term in the model."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#reading-the-two-coefficients-together",
+    "href": "weekly-notes/week-07.html#reading-the-two-coefficients-together",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "20. Reading the Two Coefficients Together",
+    "text": "20. Reading the Two Coefficients Together\nThe model now estimates:\n\\[\ny = \\beta_0 + \\beta_1 x + \\beta_2 x^2 + \\dots\n\\]\nThe signs of \\(\\beta_1\\) and \\(\\beta_2\\) together describe the shape:\n\n\n\nLinear term \\(\\beta_1\\)\nSquared term \\(\\beta_2\\)\nShape\n\n\n\n\n+\n−\nRises, then levels off or falls (∩)\n\n\n−\n+\nFalls, then rises (∪)\n\n\n\nIn our model:\n\n\\(\\beta_1\\) (building age) is negative → rent falls as buildings age\n\\(\\beta_2\\) (building age²) is positive → eventually rent rises again\n\n\nThis picks up the non-linear “vintage” pattern we expected."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#the-turning-point",
+    "href": "weekly-notes/week-07.html#the-turning-point",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "21. The Turning Point",
+    "text": "21. The Turning Point\nWhere does the effect switch from negative to positive?\n\\[\nx^* = -\\frac{\\beta_1}{2\\beta_2}\n\\]\nwhere:\n\n\\(\\beta_1\\) = coefficient on the linear term\n\\(\\beta_2\\) = coefficient on the squared term\n\n#| eval: false\nb1 &lt;- coef(m3)[\"building_age\"]\nb2 &lt;- coef(m3)[\"I(building_age^2)\"]\n\nturning_point &lt;- -b1 / (2 * b2)\nturning_point\n\nResult\n\\[\nx^* \\approx 76.8 \\text{ years}\n\\]\n\nAround 77 years old, buildings become “vintage enough” that age starts to add to rent.\n\n\n\nCheck: is the turning point inside your data?\n#| eval: false\nmax(tracts$building_age)\nIn our data, the maximum building age is about 85 years, so the turning point is within the observed range.\nIf the turning point were far outside your data (for example, 200 years), the parabola would only bend. It would not actually turn within the data.\n\nDon’t tell a story about a turn you never observed.\n\n\n\nResult\n#| eval: false\nmodel_log &lt;- model_log %&gt;%\n  add_row(model = \"M3: + building age²\", rmse = cv_rmse(f3, tracts))\n\nRMSE fell by about another $2, to roughly $261."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#trick-3-categorical-variables",
+    "href": "weekly-notes/week-07.html#trick-3-categorical-variables",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "22. Trick 3: Categorical Variables",
+    "text": "22. Trick 3: Categorical Variables\n\nTwo reasons to use categories\n1. The data already come in categories\n\nZoning class\nHousing type\nInside a TOD area or not\nPlanning district\n\nCategories may be binary (yes/no) or have several groups.\n2. We create our own categories\nWhen a continuous variable seems to behave like groups rather than a straight line.\n\n\nExample: distance rings\nInstead of assuming rent declines steadily with distance from City Hall, we might assume:\n\n\n\nRing\nDistance from City Hall\n\n\n\n\nCore\nUnder 2 miles\n\n\nInner\n2 to under 5 miles\n\n\nOuter\n5 miles or more\n\n\n\nThe idea: being 0.2 miles or 2 miles from City Hall has roughly the same effect. Both are “core”."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#creating-categories-with-case_when",
+    "href": "weekly-notes/week-07.html#creating-categories-with-case_when",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "23. Creating Categories with case_when()",
+    "text": "23. Creating Categories with case_when()\n#| eval: false\ntracts &lt;- tracts %&gt;%\n  mutate(\n    ring = case_when(\n      dist_ch_mi &lt; 2 ~ \"Core\",\n      dist_ch_mi &lt; 5 ~ \"Inner\",\n      TRUE           ~ \"Outer\"\n    ),\n    ring = factor(ring)\n  )\n\nConditions are checked in order\nTRUE catches everyone else who did not meet the earlier conditions\n\n\nWhy factor()?\nA factor tells R that the values are groups, not numbers.\nThis matters most when categories are labelled with numbers:\n1, 2, 3\nWithout factor(), R treats them as ordinal or continuous numbers, as if 1 &lt; 2 &lt; 3.\n\nUse factor() so categories are treated as labels, not quantities."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#always-count-your-categories",
+    "href": "weekly-notes/week-07.html#always-count-your-categories",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "24. Always Count Your Categories",
+    "text": "24. Always Count Your Categories\n#| eval: false\ntracts %&gt;%\n  st_drop_geometry() %&gt;%\n  count(ring)\n\nThis is where 99% of your cross-validation problems will come from.\n\n\nWhy?\nSuppose only 3 tracts are in the core, and all three land in the same test fold:\nTraining data: no core tracts\n        ↓\nModel never estimates a coefficient for \"Core\"\n        ↓\nTest data: \"We're core!\"\n        ↓\nModel: \"I've never heard of core\" → error\n\nMake sure every category has enough observations for both the regression and cross-validation."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#evenly-spaced-bins-with-cut",
+    "href": "weekly-notes/week-07.html#evenly-spaced-bins-with-cut",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "25. Evenly Spaced Bins with cut()",
+    "text": "25. Evenly Spaced Bins with cut()\nInstead of choosing thresholds from theory, cut() divides a variable into evenly spaced bins.\n#| eval: false\ntracts &lt;- tracts %&gt;%\n  mutate(\n    renter_group = cut(\n      pct_renters,\n      breaks = 3,\n      labels = c(\"Mostly Owners\", \"Mixed\", \"Mostly Renters\")\n    )\n  )\n\n\n\nCategory\nNumber of tracts\n\n\n\n\nMostly Owners\n88\n\n\nMixed\n210\n\n\nMostly Renters\n79\n\n\nTotal\n377"
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#dummy-coding-and-the-reference-category",
+    "href": "weekly-notes/week-07.html#dummy-coding-and-the-reference-category",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "26. Dummy Coding and the Reference Category",
+    "text": "26. Dummy Coding and the Reference Category\nBehind the scenes, R converts each category into binary (0/1) variables:\n\n\n\nTract\nring\nInner\nOuter\n\n\n\n\nA\nCore\n0\n0\n\n\nB\nInner\n1\n0\n\n\nC\nOuter\n0\n1\n\n\n\nA tract that is neither Inner nor Outer must be Core.\n\nWhy k − 1?\nBecause of the math, a model cannot include all category dummies and an intercept.\nWith \\(k\\) categories, R estimates:\n\\[\nk - 1\n\\]\ndummy variables.\nHere:\n\\[\nk = 3 \\quad (\\text{Core, Inner, Outer}) \\Rightarrow k - 1 = 2\n\\]\nThe left-out category is the reference category. Its effect is absorbed into the intercept.\n\nCategory coefficients are always interpreted relative to the reference category."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#interpreting-category-coefficients",
+    "href": "weekly-notes/week-07.html#interpreting-category-coefficients",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "27. Interpreting Category Coefficients",
+    "text": "27. Interpreting Category Coefficients\n#| eval: false\nf4 &lt;- rent ~ log(income) + pct_renters + building_age +\n  I(building_age^2) + ring\n\nm4 &lt;- lm(f4, data = tracts)\ncoef(m4)\n\n\n\n\n\n\n\n\nRing\nCoefficient\nInterpretation\n\n\n\n\nCore\nReference\n(absorbed in intercept)\n\n\nInner\n−122\nInner-ring tracts rent for $122 less than core tracts, all else equal\n\n\nOuter\n−164\nOuter-ring tracts rent for $164 less than core tracts, all else equal\n\n\n\n\nChanging the reference category\nBy default, R chooses the reference alphabetically (“Core” comes first).\n#| eval: false\ntracts &lt;- tracts %&gt;%\n  mutate(ring = relevel(ring, ref = \"Outer\"))\nNow the interpretation becomes:\n\nCompared with the outer ring, core tracts rent for about $160 more.\n\n\nChanging the reference category changes the interpretation, not the predictions."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#trade-off-categories-throw-away-information",
+    "href": "weekly-notes/week-07.html#trade-off-categories-throw-away-information",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "28. Trade-off: Categories Throw Away Information",
+    "text": "28. Trade-off: Categories Throw Away Information\nReplacing continuous distance with three rings means:\n2.1 miles → Inner\n4.9 miles → Inner\nBoth are treated identically, even though they are almost 3 miles apart.\nYou can include both the continuous variable and the categories, but check that this does not destabilize the model.\n\nResult\n#| eval: false\nmodel_log &lt;- model_log %&gt;%\n  add_row(model = \"M4: rings instead of distance\", rmse = cv_rmse(f4, tracts))\n\nThe RMSE got worse.\n\nIt was not a great example, but it does not hurt to try. Consider categories when:\n\nThe data look jumpy or grouped\nYou have a strong theoretical reason"
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#trick-4-interaction-terms",
+    "href": "weekly-notes/week-07.html#trick-4-interaction-terms",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "29. Trick 4: Interaction Terms",
+    "text": "29. Trick 4: Interaction Terms\n\nCategories vs. interactions\n\n\n\n\n\n\n\nTechnique\nWhat changes by group?\n\n\n\n\nCategorical variable\nThe intercept (the level shifts up or down)\n\n\nInteraction term\nThe slope (the relationship itself differs)\n\n\n\n\n\nHypothesis\nThe relationship between income and rent may differ by ring:\n\nSteeper in Center City\nFlatter further out, where income matters less\n\n\n\nCode\nMultiply the terms inside the formula:\n#| eval: false\nf5 &lt;- rent ~ log(income) * ring + pct_renters +\n  building_age + I(building_age^2)\n\nm5 &lt;- lm(f5, data = tracts)\ncoef(m5)\nlog(income) * ring includes:\n\nlog(income) main effect\nring main effects\nlog(income):ring interaction terms"
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#interpreting-interaction-coefficients",
+    "href": "weekly-notes/week-07.html#interpreting-interaction-coefficients",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "30. Interpreting Interaction Coefficients",
+    "text": "30. Interpreting Interaction Coefficients\n\n\n\n\n\n\n\n\nTerm\nCoefficient\nMeaning\n\n\n\n\nlog(income)\n653\nSlope in the Core (reference)\n\n\nlog(income):ringInner\n−219\nInner-ring slope is 219 less → ≈ 434\n\n\nlog(income):ringOuter\n−244\nOuter-ring slope is 244 less → ≈ 409\n\n\n\nSo the income–rent relationship is indeed strongest in the core.\n\nResult\n#| eval: false\nmodel_log &lt;- model_log %&gt;%\n  add_row(model = \"M5: log(income) × ring\", rmse = cv_rmse(f5, tracts))\n\nRMSE ≈ $264: better than M4, but worse than the best model so far.\n\n\nUse interactions when you have a reason, not “willy-nilly”. Models quickly become untenable."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#trick-5-fixed-effects",
+    "href": "weekly-notes/week-07.html#trick-5-fixed-effects",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "31. Trick 5: Fixed Effects",
+    "text": "31. Trick 5: Fixed Effects\n\nThe idea\nSuppose you have included everything you can measure:\n\nDistance to the core\nIncome\nShare of people with a bachelor’s degree\nBike share stations\n…\n\nThere may still be unmeasurable factors that explain why rent is higher in some places:\n\nSense of place\nPerception\nReputation\n\nA fixed effect is a catch-all:\n\nA dummy variable for an area that absorbs the remaining variation explained simply by being located there.\n\n\n\nChoosing the area\nOur outcome is already measured at the tract level, so the fixed effect must be a larger area.\nWe use Philadelphia’s:\n\n18 planning districts"
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#assigning-tracts-to-planning-districts",
+    "href": "weekly-notes/week-07.html#assigning-tracts-to-planning-districts",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "32. Assigning Tracts to Planning Districts",
+    "text": "32. Assigning Tracts to Planning Districts\n#| eval: false\ndistricts &lt;- st_read(\"planning_districts.geojson\") %&gt;%\n  st_transform(2272)\n\ntracts &lt;- tracts %&gt;%\n  st_join(\n    districts %&gt;% select(district = DIST_NAME),\n    largest = TRUE\n  ) %&gt;%\n  mutate(district = factor(district))\nThe file name and the DIST_NAME field are illustrative. Use the names in the course code.\n\nSpatial join with largest = TRUE\nWhat if a tract is split by two districts?\n┌───────────────┐\n│ District 1    │ District 2\n│   ███████████ │ ████\n│   ███ tract ██│ ████\n└───────────────┘\nlargest = TRUE assigns the whole tract to the district containing the largest share of its area.\n\nUnlike st_intersection(), the tract is not cut. It receives one district value.\n\n\n\nWhy factor() again?\nDistrict numbers are labels, not rankings. District 1 is not “less than” District 2."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#small-categories-break-cross-validation",
+    "href": "weekly-notes/week-07.html#small-categories-break-cross-validation",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "33. Small Categories Break Cross-Validation",
+    "text": "33. Small Categories Break Cross-Validation\n#| eval: false\ntracts %&gt;%\n  st_drop_geometry() %&gt;%\n  count(district, sort = TRUE)\nIn the lecture, one district (Lower South) contained very few tracts.\nThis caused two problems:\n\nWhen those tracts were in the test fold, the training model had never learned their coefficient → error\nEstimating a coefficient from one observation is highly unstable\n\n\nFix\n\nMake sure every category has at least about 10 observations.\n\nOptions:\n\nCombine small categories into an “Other” group (works, but not ideal)\nMerge a small district with a neighbouring district (better)\n\n#| eval: false\nsmall &lt;- tracts %&gt;%\n  st_drop_geometry() %&gt;%\n  count(district) %&gt;%\n  filter(n &lt; 10) %&gt;%\n  pull(district)\n\ntracts &lt;- tracts %&gt;%\n  mutate(\n    district = as.character(district),\n    district = if_else(district %in% small, \"Other\", district),\n    district = factor(district)\n  )"
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#estimating-the-fixed-effects-model",
+    "href": "weekly-notes/week-07.html#estimating-the-fixed-effects-model",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "34. Estimating the Fixed Effects Model",
+    "text": "34. Estimating the Fixed Effects Model\n#| eval: false\nf6 &lt;- log(rent) ~ log(income) + pct_renters + building_age +\n  I(building_age^2) + dist_ch_mi + district\n\nm6 &lt;- lm(f6, data = tracts)\nHere the fixed effects are added to the best model so far. Check the course code for the exact formula.\n\nWhat do we get?\nEach district gets its own intercept.\nMapping these intercepts shows the “value” of being in each district, which is useful information in itself.\n\n\nDid the fixed effects absorb spatial clustering?\nComparing maps of residuals before and after adding district fixed effects shows only minor differences.\n\n\nResult\n#| eval: false\nmodel_log &lt;- model_log %&gt;%\n  add_row(model = \"M6: + district fixed effects\",\n          rmse  = cv_rmse(f6, tracts, log_y = TRUE))\n\nRMSE ≈ $256: the best model.\n\n\nAdding fixed effects is a reliable way to lower RMSE in geographic price prediction.\n\nThe lecturer also mentioned her research modelling neighbourhood fixed effects for Chicago. Ask about it in class."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#comparing-all-models",
+    "href": "weekly-notes/week-07.html#comparing-all-models",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "35. Comparing All Models",
+    "text": "35. Comparing All Models\n\n\n\n\n\n\n\n\n\nModel\nChange\nCV RMSE ($)\nEffect\n\n\n\n\nM0\nBaseline: income + % renters + building age + distance\n≈ 265\n—\n\n\nM1\nlog(income)\n≈ 265\nLittle or no improvement\n\n\nM2\nlog(rent) + log(income), back-transformed\n≈ 263\nImproved ≈ $2\n\n\nM3\n+ I(building_age^2)\n≈ 261\nImproved ≈ $2 more\n\n\nM4\nDistance rings instead of distance\nHigher\nWorse\n\n\nM5\nlog(income) × ring\n≈ 264\nWorse than best\n\n\nM6\n+ planning district fixed effects\n≈ 256\nBest\n\n\n\nValues are approximate. The lecture did not give exact RMSEs for M1 and M4.\n#| eval: false\nmodel_log %&gt;%\n  ggplot(aes(x = reorder(model, rmse), y = rmse)) +\n  geom_col() +\n  coord_flip() +\n  labs(x = NULL, y = \"Cross-validated RMSE ($)\")\n\nSome changes helped modestly, some hurt. That is the finding."
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#reminders-and-to-do",
+    "href": "weekly-notes/week-07.html#reminders-and-to-do",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "36. Reminders and To Do",
+    "text": "36. Reminders and To Do\n\nAssignment 4, Part 5: collect your own data and test these techniques. It is exploratory. You are not trying to build the winning model yet.\nNext week: KNN spatial features, plus the team assignment to predict home values.\nBring questions to the start of class (next Friday).\nAsk the professor about:\n\nThe progress-bar argument (progress = FALSE vs. progress_bar = FALSE)\nHer research on neighbourhood fixed effects in Chicago\n\nRead more on:\n\nInterpreting log models and elasticity\nDummy coding and reference categories"
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#week-7-quick-reference",
+    "href": "weekly-notes/week-07.html#week-7-quick-reference",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "37. Week 7 Quick Reference",
+    "text": "37. Week 7 Quick Reference\n\n\n\n\n\n\n\nConcept / Question\nTool / Answer\n\n\n\n\nRemove progress bars in a rendered QMD\nprogress_bar = FALSE\n\n\nMake a point from lat/long\nst_sfc(st_point(c(lon, lat)), crs = 4326)\n\n\nDistance in miles from State Plane feet\nas.numeric(st_distance(...)) / 5280\n\n\nKeep rows that are not missing\nfilter(!is.na(x))\n\n\nReproducible randomness\nset.seed(5080)\n\n\nFixed fold assignment\nsample(rep(1:10, length.out = n))\n\n\nPrediction error in dollars\nRMSE\n\n\nModel log\nA tibble record of models and RMSEs\n\n\nSkewed variable / % change matters\nlog(x)\n\n\nLog with zeros\nlog1p(x) = log(1 + x)\n\n\nLevel–log interpretation\n1% ↑ x → β/100 units y\n\n\nLog–level interpretation\n1 unit ↑ x → ≈ 100β % y\n\n\nLog–log interpretation\n1% ↑ x → ≈ β % y (elasticity)\n\n\nBack-transform logged predictions\nexp()\n\n\nSquared term\nI(x^2)\n\n\nTurning point\n−β₁ / (2β₂)\n\n\nCreate categories from rules\ncase_when()\n\n\nEvenly spaced bins\ncut()\n\n\nTreat values as groups\nfactor()\n\n\nChange reference category\nrelevel(x, ref = \"...\")\n\n\nNumber of dummies for k categories\nk − 1\n\n\nSlope varies by group\nx * group\n\n\nAssign polygon to the district with the most overlap\nst_join(..., largest = TRUE)\n\n\nUnmeasured place effects\nFixed effects (+ district)\n\n\nMinimum observations per category\nAbout 10"
+  },
+  {
+    "objectID": "weekly-notes/week-07.html#key-concepts-to-remember",
+    "href": "weekly-notes/week-07.html#key-concepts-to-remember",
+    "title": "Week 7: Feature Engineering for Linear Regression",
+    "section": "38. Key Concepts to Remember",
+    "text": "38. Key Concepts to Remember\n\nLinear regression fits a straight line, but feature engineering lets it capture more complex relationships.\nLinear regression is interpretable. More complex methods are not automatically better.\nFeature engineering means operationalizing ideas (such as “closeness to Center City”) as measurable variables.\nCreate points from latitude/longitude in EPSG:4326, then transform to the project CRS.\nlm() quietly drops rows with missing values, so filter NAs before comparing models.\nCompare models using the same records and the same folds.\nA model log is a record of models and RMSEs, not a logarithm.\nLog transformations help with skewed data and when percentage changes matter.\nlog(0) is −∞. Use log1p() for variables with real zeros.\nWith a logged outcome, back-transform predictions with exp() before computing RMSE. Otherwise the error is in log dollars.\nLog–log coefficients are elasticities.\nSquared terms, written with I(x^2), capture curved relationships.\nRead the linear and squared coefficients together to understand the shape.\nThe turning point is −β₁ / (2β₂). Check that it falls inside the data range.\nAlways do exploratory analysis. The Census groups all pre-1940 buildings as “1939 or earlier”.\nUse factor() so categories are treated as groups, not numbers.\nCategorical variables are dummy coded into k − 1 variables. The omitted group is the reference category.\nCategory coefficients are interpreted relative to the reference. Changing the reference changes interpretation, not predictions.\nTurning a continuous variable into categories throws away information.\nCategorical variables shift the intercept. Interaction terms let the slope vary by group.\nUse interactions only when you have a reason.\nFixed effects absorb unmeasured characteristics of place, such as reputation and sense of place.\nst_join(..., largest = TRUE) assigns each polygon to the area containing most of it.\nAlways count observations per category. Small categories break cross-validation. Aim for at least ~10.\nFixed effects gave the best model (≈ $256 RMSE).\nAssignment 4, Part 5 is exploratory: try these techniques on your own data.\nNext week: KNN spatial features, then a team challenge to predict home values."
   }
 ]
