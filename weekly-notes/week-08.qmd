@@ -1,6 +1,6 @@
 ---
-title: "Week 8: Where Is the Model Wrong? Spatial Autocorrelation in Errors"
-description: "From tracts to house sales, cleaning sales data, buffer and kNN spatial features, residual maps, spatial lags, Moran's I and permutation tests, why not a spatial lag model, and the Chicago house price prediction assignment."
+title: "Week 8: Where Is the Model Wrong? Spatial Autocorrelation and Spatial Modelling"
+description: "From tracts to house sales, cleaning sales data, buffer and kNN spatial features, residual maps, spatial lags, Moran's I and permutation tests."
 date: 2026-10-16
 ---
 
