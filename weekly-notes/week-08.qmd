@@ -1,0 +1,748 @@
+---
+title: "Week 8: Where Is the Model Wrong? Spatial Autocorrelation in Errors"
+description: "From tracts to house sales, cleaning sales data, buffer and kNN spatial features, residual maps, spatial lags, Moran's I and permutation tests, why not a spatial lag model, and the Chicago house price prediction assignment."
+date: 2026-10-16
+---
+
+## 1. Overview
+
+This week has three parts:
+
+1. **From tracts to houses.** We apply the same tools to individual house sales instead of census tracts.
+2. **Where is the model wrong?** We map the errors and measure whether they **cluster in space**, using **Moran's I**.
+3. **Assignment 4: House Price Prediction, Chicago.** This is a team competition with a real, hidden test set.
+
+The big idea:
+
+> **If nearby houses have related errors, the model is missing something about place.**
+
+---
+
+## 2. Recap: Reading a Logged Predictor
+
+From the Week 7 lecture (Oct 9), we predicted tract rent using the log of median income:
+
+$$
+\widehat{\text{rent}} = \beta_0 + 210 \cdot \log(\text{income})
+$$
+
+### Reading the coefficient ($\hat{\beta}$)
+
+A **1% increase** in income goes with about:
+
+$$
+\frac{210}{100} = \$2.10
+$$
+
+more rent.
+
+### Reading the prediction ($\hat{y}$)
+
+Logging income lets the model **bend**. It flattens out at high incomes, so it does not over-predict rent in the richest tracts.
+
+### The rule
+
+> **Log X, keep Y in dollars: β / 100 = the change in Y for a 1% change in X.**
+
+---
+
+## 3. Recap: The Fold That Broke
+
+In Week 7, cross-validation with planning-district fixed effects failed with this error:
+
+```text
+Error: factor district has new levels Upper Far Northeast
+```
+
+### What happened?
+
+- One small district had **all** of its tracts in the **test fold**.
+- So the model was trained **without ever seeing** that district.
+- It had no coefficient for it, so it could not make a prediction.
+
+### Fix
+
+> **Merge small groups before cross-validation.**
+
+### Why it matters this week
+
+The same problem comes back with **neighborhoods**. Philadelphia has about **150** of them, and some have only a handful of sales.
+
+---
+
+## 4. From Tracts to Houses
+
+The tools are the same. What changes is the **unit of analysis** and its **shape**.
+
+| | Previous assignment | House price prediction |
+|---|---|---|
+| **Unit** | Census tract (polygon) | Single sale (point) |
+| **n** | ~400 | ~20,000 |
+| **Count feature** | Crimes **in** the tract | Crimes **within 660 ft** of the house |
+| **Nearest feature** | Distance to the nearest station | Mean distance to the **5 nearest** |
+| **Place feature** | Distance to City Hall | Same |
+
+660 feet is **1/8 of a mile** (5,280 ÷ 8).
+
+> **Nothing here is new. A buffer is just a polygon you draw yourself.**
+
+With points, there is no tract boundary to count "inside". So we draw our own area around each house with a buffer and count what falls in it.
+
+---
+
+## 5. Loading the Sales Data
+
+The data come from Philadelphia's **Office of Property Assessment (OPA)** properties table, queried through the city's Carto SQL API.
+
+`carto_get()` is the **course helper function** for sending a SQL query to Carto.
+
+```r
+#| eval: false
+library(tidyverse)
+library(sf)
+library(spdep)   # spatial weights and Moran's I
+library(nngeo)   # st_nn() for k-nearest neighbors
+
+sales <- carto_get(
+  "SELECT the_geom, parcel_number, sale_price, sale_date, total_livable_area,
+          number_of_bedrooms, number_of_bathrooms, year_built, interior_condition
+   FROM opa_properties_public
+   WHERE category_code = '1'
+     AND sale_date >= '2023-01-01' AND sale_date < '2025-01-01'"
+) %>%
+  st_transform(2272)
+```
+
+### What the query does
+
+| Part | Meaning |
+|---|---|
+| `SELECT ...` | The columns we want: location, price, date, size, rooms, age, condition |
+| `FROM opa_properties_public` | The OPA properties table |
+| `category_code = '1'` | Residential properties |
+| `sale_date` filter | Sales from 2023 through 2024 |
+| `st_transform(2272)` | Project to PA South State Plane (feet) |
+
+### First look
+
+```r
+#| eval: false
+nrow(sales)
+summary(sales$sale_price)
+```
+
+```text
+[1] 37866
+
+   Min.  1st Qu.   Median     Mean  3rd Qu.      Max.
+      0    15502   190000   263697   325000  15428633
+```
+
+Two things stand out:
+
+- The **minimum is $0**
+- The **first quartile is only $15,502**
+
+So a large share of the "sales" are clearly not normal market sales.
+
+---
+
+## 6. Not Every Sale Is a Sale
+
+```r
+#| eval: false
+sales %>%
+  st_drop_geometry() %>%
+  count(price_band = cut(
+    sale_price,
+    c(-Inf, 1000, 10000, 50000, Inf),
+    labels = c("< $1k", "$1k–10k", "$10k–50k", "$50k+")
+  ))
+```
+
+| Price band | Number of sales |
+|---|---:|
+| < $1k | 9,171 |
+| $1k–10k | 199 |
+| $10k–50k | 1,295 |
+| $50k+ | 27,201 |
+
+Many recorded transfers are **not** arm's-length market sales:
+
+- **$1 transfers** between family members
+- **Sheriff sales**
+- **LLC shuffles** (property moved between related companies)
+
+> **Deciding what counts as a market sale is a modeling decision. Write it down.**
+
+---
+
+## 7. Cleaning Rules
+
+```r
+#| eval: false
+sales <- sales %>%
+  filter(
+    sale_price >= 10000,
+    total_livable_area > 0,
+    !st_is_empty(.)
+  ) %>%
+  mutate(
+    year_built = na_if(as.numeric(year_built), 0),  # "0" means unknown
+    age = 2024 - year_built
+  ) %>%
+  filter(!is.na(age), !is.na(number_of_bathrooms))
+
+nrow(sales)
+```
+
+```text
+[1] 27551
+```
+
+| Rule | Reason |
+|---|---|
+| `sale_price >= 10000` | Drop nominal and non-market transfers |
+| `total_livable_area > 0` | A house must have floor area |
+| `!st_is_empty(.)` | Drop records with no location |
+| `na_if(year_built, 0)` | A year of `0` means **unknown**, not year zero |
+| `age = 2024 - year_built` | House age at the end of the sales window |
+| Drop missing `age` and bathrooms | Keep the same records for every model |
+
+The cleaning removes **10,315** of the 37,866 records, leaving **27,551** sales.
+
+In `filter()` and `st_is_empty(.)`, the `.` refers to the data coming through the pipe.
+
+---
+
+## 8. Spatial Features: Buffer Count and kNN Distance
+
+### Load violent crime
+
+```r
+#| eval: false
+violent <- carto_get(
+  "SELECT the_geom FROM incidents_part1_part2
+   WHERE dispatch_date >= '2023-01-01' AND dispatch_date < '2025-01-01'
+     AND text_general_code IN ('Aggravated Assault Firearm',
+                               'Aggravated Assault No Firearm',
+                               'Robbery Firearm', 'Robbery No Firearm')"
+) %>%
+  filter(!st_is_empty(.)) %>%
+  st_transform(2272)
+```
+
+Violent crime is defined here as aggravated assaults and robberies, with or without a firearm, in 2023 and 2024.
+
+### Build two features
+
+```r
+#| eval: false
+sales <- sales %>%
+  mutate(
+    violent_660ft = lengths(st_intersects(st_buffer(., 660), violent)),
+    violent_knn5  = sapply(
+      st_nn(., violent, k = 5, returnDist = TRUE, progress = FALSE)$dist,
+      mean
+    )
+  )
+```
+
+| Feature | How it is built | Meaning |
+|---|---|---|
+| `violent_660ft` | Draw a 660 ft buffer around each house, then count crimes that intersect it | **How many** violent crimes are within 1/8 mile |
+| `violent_knn5` | Find the 5 nearest crimes to each house, then average their distances | **How close** violent crime is |
+
+How the code works:
+
+- `st_intersects()` returns, for each buffer, the list of crimes inside it. `lengths()` counts them.
+- `st_nn()` (from **nngeo**) finds the *k* nearest crimes. With `returnDist = TRUE`, it also returns the distances. `sapply(..., mean)` averages them for each house.
+
+### Which is better?
+
+| | Buffer count | kNN distance |
+|---|---|---|
+| Can be zero? | Yes, for many houses | Never |
+| Direction | More crime = higher value | Smaller distance = more crime nearby |
+
+> **Try both, and let the cross-validated RMSE decide.**
+
+---
+
+## 9. A Model and Its Errors
+
+```r
+#| eval: false
+m1 <- lm(
+  sale_price ~ total_livable_area + number_of_bathrooms + age + violent_knn5,
+  data = sales
+)
+
+sales <- sales %>%
+  mutate(
+    pred  = predict(m1, sales),
+    resid = sale_price - pred   # + means the model guessed too LOW
+  )
+```
+
+### Sign convention (used all semester)
+
+$$
+\text{residual} = \text{actual} - \text{predicted}
+$$
+
+| Residual | Meaning | Map colour |
+|---|---|---|
+| Positive (+) | Actual price is **higher** than predicted, so we **under-predicted** | **Red** |
+| Negative (−) | Actual price is **lower** than predicted, so we **over-predicted** | **Blue** |
+
+---
+
+## 10. Mapping the Errors
+
+```r
+#| eval: false
+ggplot(sales) +
+  geom_sf(aes(color = resid), size = 0.4, alpha = 0.6) +
+  scale_color_gradient2(
+    low = "#2166ac", mid = "grey90", high = "#b2182b",
+    midpoint = 0,
+    limits = c(-300000, 300000),
+    oob = scales::squish
+  ) +
+  theme_void() +
+  labs(color = "Residual ($)", title = "Where the model is wrong")
+```
+
+Design choices:
+
+- **`scale_color_gradient2()`** is a diverging scale: blue for negative, grey near 0, red for positive.
+- **`alpha = 0.6`** makes points partly transparent, because thousands of houses overlap.
+- **`limits` and `oob = scales::squish`** cap colours at ±$300,000. A few huge misses are drawn at the end colour instead of washing out the rest of the map.
+
+---
+
+## 11. From "By Eye" to a Number
+
+In the **Week 5 lab** and the **gap assignment**, we compared residual maps **before and after** adding features, by eye.
+
+Today we put **a number** on the question:
+
+> **Do the errors cluster?**
+
+### Tobler's First Law of Geography
+
+> **"Near things are more related than distant things."**
+
+Applied to model errors:
+
+> **If near houses have related errors, the model is missing something about place.**
+
+When errors are random in space, the model has captured location well. When red errors sit together and blue errors sit together, something about those places is not in the model.
+
+---
+
+## 12. The Spatial Lag: My Neighbors' Average
+
+```r
+#| eval: false
+coords <- st_coordinates(sales)
+
+w_knn <- nb2listw(
+  knn2nb(knearneigh(coords, k = 5)),
+  style = "W"
+)
+
+sales$resid_lag <- lag.listw(w_knn, sales$resid)
+```
+
+Step by step (all functions from **spdep**):
+
+| Step | Function | What it does |
+|---|---|---|
+| 1 | `st_coordinates()` | Get the x, y coordinates of each house |
+| 2 | `knearneigh(coords, k = 5)` | Find each house's 5 nearest houses |
+| 3 | `knn2nb()` | Turn that into a **neighbor list** |
+| 4 | `nb2listw(..., style = "W")` | Turn neighbors into **weights**. `"W"` = row-standardized: each neighbor gets weight 1/5 |
+| 5 | `lag.listw()` | For each house, compute the weighted average of its neighbors' residuals |
+
+> **Each house gets the average residual of its 5 nearest neighbors. This is the "spatial lag".**
+
+---
+
+## 13. Me vs. My Neighbors (Moran Scatterplot)
+
+```r
+#| eval: false
+ggplot(sales, aes(resid, resid_lag)) +
+  geom_point(alpha = 0.15, size = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, color = "#b2182b") +
+  coord_cartesian(xlim = c(-3e5, 3e5), ylim = c(-2e5, 2e5)) +
+  labs(x = "My residual", y = "Average of my 5 neighbors' residuals")
+```
+
+- **x-axis:** my residual
+- **y-axis:** my neighbors' average residual
+
+If the line slopes upward, houses with high errors tend to have neighbors with high errors.
+
+> **The slope of this line is Moran's I (with row-standardized weights).**
+
+`coord_cartesian()` zooms in without dropping any points from the regression line.
+
+---
+
+## 14. Moran's I: The "Scary" Formula
+
+$$
+I = \frac{n}{\sum_i \sum_j w_{ij}} \cdot
+\frac{\sum_i \sum_j w_{ij}(x_i - \bar{x})(x_j - \bar{x})}
+     {\sum_i (x_i - \bar{x})^2}
+$$
+
+where:
+
+- $n$ = number of observations
+- $x_i$ = the value (here, the residual) at location $i$
+- $\bar{x}$ = the mean value
+- $w_{ij}$ = the weight between $i$ and $j$ (non-zero if they are neighbors)
+
+### What it is really asking
+
+> **When I'm above average, are my neighbors above average too?**
+
+Breaking down the parts:
+
+| Part | Meaning |
+|---|---|
+| $(x_i - \bar{x})(x_j - \bar{x})$ | Positive if neighbors are on the **same side** of the mean, negative if they differ |
+| $\sum \sum w_{ij}(\dots)$ | Add this up over all **neighbor pairs** |
+| $\sum (x_i - \bar{x})^2$ | Divide by the total variation, to scale it |
+| $n / \sum \sum w_{ij}$ | Adjust for the number of observations and links |
+
+---
+
+## 15. Worked Example: Five Houses on a Block
+
+Five houses sit in a row. Each house's neighbors are the houses **next door**.
+
+```text
+A — B — C — D — E
+```
+
+### Step 1: Deviations from the mean
+
+Mean residual:
+
+$$
+\bar{x} = \frac{100 + 80 + 20 - 50 - 70}{5} = \frac{80}{5} = +16\text{k}
+$$
+
+| House | Residual | − mean (16k) | Deviation |
+|---|---:|---:|---:|
+| A | +100k | − 16k | **+84** |
+| B | +80k | − 16k | **+64** |
+| C | +20k | − 16k | **+4** |
+| D | −50k | − 16k | **−66** |
+| E | −70k | − 16k | **−86** |
+
+A positive residual means we **under-predicted** that house.
+
+### Step 2: Multiply each neighbor pair
+
+| Pair | Product | Note |
+|---|---:|---|
+| A–B | (+84)(+64) = **+5,376** | Both under-predicted |
+| B–C | (+64)(+4) = **+256** | |
+| C–D | (+4)(−66) = **−264** | Different signs |
+| D–E | (−66)(−86) = **+5,676** | Both over-predicted |
+| **Sum** | **11,044** | |
+
+Each pair counts **twice** (A→B and B→A):
+
+$$
+2 \times 11{,}044 = 22{,}088
+$$
+
+### Step 3: Total variation
+
+$$
+\sum (x_i - \bar{x})^2 = 7{,}056 + 4{,}096 + 16 + 4{,}356 + 7{,}396 = 22{,}920
+$$
+
+### Step 4: Put it together
+
+- $n = 5$ houses
+- $\sum \sum w_{ij} = 8$ (4 pairs × 2 directions, each with weight 1)
+
+$$
+I = \frac{5}{8} \cdot \frac{22{,}088}{22{,}920} \approx \mathbf{0.60}
+$$
+
+> **Strong clustering: the under-predictions sit together, and so do the over-predictions.**
+
+---
+
+## 16. Reading Moran's I
+
+| Value of I | Pattern | For our errors |
+|---|---|---|
+| Near **+1** | Similar values cluster | The model is **missing something about place** |
+| Near **0** | No spatial pattern | The errors look like **noise in space** |
+| **Below 0** | Neighbors differ | Rare for errors. **Check your weights** |
+
+The goal is to push Moran's I of the residuals **toward 0** as you add features.
+
+---
+
+## 17. Is That Big? Shuffle and See
+
+```r
+#| eval: false
+mc <- moran.mc(sales$resid, w_knn, nsim = 499)
+
+mc$statistic
+mc$p.value
+```
+
+```text
+statistic
+0.2605251
+
+[1] 0.002
+```
+
+### How the permutation test works
+
+```text
+Compute the real Moran's I
+        ↓
+Shuffle the residuals randomly across houses (499 times)
+        ↓
+Compute Moran's I for every shuffle
+        ↓
+Does the real I beat almost all the shuffles?
+        ↓
+If yes → the clustering isn't luck
+```
+
+With 499 shuffles, the **smallest possible p-value** is:
+
+$$
+\frac{1}{499 + 1} = 0.002
+$$
+
+So $p = 0.002$ means the real I was larger than **every** shuffle.
+
+Here, **I ≈ 0.26**: moderate clustering of errors that is clearly not random.
+
+---
+
+## 18. p-Value Warning, Again
+
+With about 20,000 houses, **nearly everything is "significant"**.
+
+So the p-value tells us very little.
+
+> **Watch the size of I fall as you add features. That's the diagnostic.**
+
+---
+
+## 19. Clustered Errors Are a Feature You Haven't Built Yet
+
+If Moran's I is high, ask:
+
+> **What's true about those places that the model doesn't know?**
+
+| What's missing | Fix |
+|---|---|
+| An amenity or disamenity you haven't measured (parks, transit, crime, vacancy) | Build a **spatial feature** |
+| Something about the whole neighborhood | Add a **neighborhood fixed effect** |
+| A relationship that differs by place | Add an **interaction** |
+
+Then:
+
+```text
+Refit the model
+        ↓
+Recompute CV RMSE and Moran's I
+        ↓
+Log both numbers
+```
+
+---
+
+## 20. "My Spatial Stats Class Says Use a Spatial Lag Model"
+
+A **spatial lag model** puts neighbors' **outcomes** on the right-hand side:
+
+$$
+y = \rho W y + X\beta + \varepsilon
+$$
+
+where $Wy$ is the average price of neighboring houses and $\rho$ measures how strongly it matters.
+
+That is the right tool for **inference about spillovers** (for example, "does a house's price depend on its neighbors' prices?").
+
+For **prediction**, it fails in three ways:
+
+1. **It needs neighbors' prices.** To price a house, you would need the prices of nearby houses that have **not sold yet**.
+2. **It leaks.** In cross-validation, a test house's neighbors in the training set **carry its answer**.
+3. **It explains nothing.** "It's near expensive houses" is **not a reason** a policymaker can act on.
+
+### Our rule
+
+> **Spatial features of X, never Y.**
+
+| Allowed | Not allowed |
+|---|---|
+| Crime near the house | Prices near the house |
+| Distance to transit, parks, City Hall | Neighbors' sale prices |
+
+---
+
+## 21. Assignment 4: House Price Prediction, Chicago
+
+### Same workflow, new city
+
+Today we walked through the workflow on **Philadelphia**. Now each team does it on **Chicago**.
+
+### Why it matters
+
+The **Cook County Assessor** must value **every** home, including the vast majority that did not sell.
+
+The *Chicago Tribune*'s 2017 investigation **"The Tax Divide"** found those assessments were **regressive**: cheaper homes were over-valued relative to expensive ones. That means lower-value homeowners paid a larger share of property taxes.
+
+### The assignment
+
+| Item | Detail |
+|---|---|
+| Data | About **23,000 single-family sales**, 2023–2025 |
+| Features provided | **Features of the house only**. Every location feature is yours to build |
+| Teams | **4 people**, one submission |
+| Due | **Friday, October 30** |
+| Outcome | **Stays in dollars**: predictions and RMSE are in dollars |
+| CRS for Chicago | **EPSG 3435** (Illinois East State Plane, US feet) |
+
+If you log the price in a model, back-transform the predictions with `exp()` before computing RMSE or submitting.
+
+---
+
+## 22. This Time There's a Real Test
+
+| File | Contents |
+|---|---|
+| `chicago_train.csv` | About **80%** of houses, **with** prices |
+| `chicago_test.csv` | About **20%** of houses, **without** prices |
+
+You submit predictions for the test houses. **The instructors** compute the RMSE.
+
+- Your **CV RMSE** is your **estimate**.
+- The **test RMSE** is the **truth**.
+
+> **If they're far apart, something leaked.**
+
+Common sources of leakage:
+
+- Using neighbors' **prices** as a feature
+- Cleaning or building features using information from the test set
+- Fixed-effect groups too small to appear in every fold
+
+---
+
+## 23. What You Turn In
+
+1. A rendered **.qmd** published on **one teammate's portfolio**, linked on Canvas by **every** member
+2. **`team_XX_predictions.csv`** with predictions for the test houses
+3. A **model log**: every model, with **CV RMSE and Moran's I**
+4. **Where your model fails worst**, and **whose homes it over-values**
+
+The last point links back to "The Tax Divide": check whether your model is regressive.
+
+---
+
+## 24. Individual Accountability
+
+**Q7 (October 30)** asks about **your team's own model**:
+
+- Which features did you use, and why?
+- What are your CV RMSE and test RMSE, and why are they different?
+- Where did it fail worst?
+
+> **Everyone needs to be able to answer. Split the work, then teach each other.**
+
+---
+
+## 25. Goals for Before You Leave Today
+
+- [ ] Both files loaded, converted to points, and projected to **EPSG 3435**
+- [ ] Cleaning rules for the **training** sales, with **drop counts** for each rule
+- [ ] Baseline model in the model log, with **CV RMSE**
+- [ ] First **residual map** and first **Moran's I**
+
+```r
+#| eval: false
+train <- read_csv("chicago_train.csv") %>%
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
+  st_transform(3435)
+```
+
+Check the actual coordinate column names in the CSV files before running this.
+
+---
+
+## 26. Week 8 Quick Reference
+
+| Concept / Question | Tool / Answer |
+|---|---|
+| Philadelphia CRS (feet) | `EPSG:2272` |
+| Chicago CRS (feet) | `EPSG:3435` |
+| 660 feet | 1/8 mile |
+| Drop records with no location | `filter(!st_is_empty(.))` |
+| Treat `0` as missing | `na_if(x, 0)` |
+| Bin a variable and count | `count(cut(x, breaks, labels))` |
+| Count points within a distance | `lengths(st_intersects(st_buffer(x, d), points))` |
+| Mean distance to k nearest points | `st_nn(x, points, k = 5, returnDist = TRUE)` (nngeo) |
+| Residual | actual − predicted |
+| Positive residual / red | Under-predicted |
+| Negative residual / blue | Over-predicted |
+| Cap extreme colours | `limits = ...`, `oob = scales::squish` |
+| Find k nearest neighbors | `knearneigh(coords, k = 5)` |
+| Neighbor list | `knn2nb()` |
+| Row-standardized weights | `nb2listw(..., style = "W")` |
+| Neighbors' average (spatial lag) | `lag.listw(w, x)` |
+| Measure clustering of errors | Moran's I |
+| Permutation test of Moran's I | `moran.mc(x, w, nsim = 499)` |
+| Smallest p with 499 shuffles | 0.002 |
+| Moran's I near +1 | Errors cluster: missing place information |
+| Moran's I near 0 | Errors look like spatial noise |
+| Spatial lag model | $y = \rho W y + X\beta + \varepsilon$ (inference, not prediction) |
+| Our rule | Spatial features of X, never Y |
+
+---
+
+## 27. Key Concepts to Remember
+
+- With a logged predictor and Y in dollars, **β / 100** is the change in Y for a 1% change in X.
+- Small categories break cross-validation. **Merge small groups before CV.** The same problem returns with ~150 neighborhoods.
+- House price prediction uses the **same tools** as before, but the unit is a **point (sale)** rather than a polygon (tract).
+- A buffer is **a polygon you draw yourself**.
+- **Not every sale is a market sale.** $1 transfers, sheriff sales and LLC shuffles are recorded too.
+- **Deciding what counts as a market sale is a modeling decision. Write it down.**
+- A buffer **count** can be zero for many houses. A **kNN distance** is never zero. Let **CV RMSE** decide between them.
+- **Residual = actual − predicted.** Positive (red) = under-predicted. Negative (blue) = over-predicted.
+- Use transparency and squished colour limits so a few huge misses do not wash out a residual map.
+- **Tobler:** near things are more related than distant things.
+- If nearby houses have related errors, **the model is missing something about place**.
+- The **spatial lag** is the average value among a location's neighbors.
+- The slope of the **Moran scatterplot** (my residual vs. neighbors' average) is **Moran's I** with row-standardized weights.
+- **Moran's I** asks: when I'm above average, are my neighbors above average too?
+- Moran's I near **+1** = clustering. Near **0** = no pattern. **Below 0** = neighbors differ (rare for errors; check weights).
+- `moran.mc()` tests significance by **shuffling** values across locations.
+- With ~20,000 houses, nearly everything is significant. **Watch the size of I fall, not the p-value.**
+- Clustered errors point to a **missing spatial feature**, a **neighborhood fixed effect**, or an **interaction**.
+- Spatial lag models are for **inference about spillovers**, not prediction. They need unsold neighbors' prices, they leak in CV, and they explain nothing.
+- **Spatial features of X, never Y.**
+- Assignment 4 (Chicago): teams of 4, due **Oct 30**, house features only, outcome in dollars, real hidden test set.
+- If **CV RMSE** and **test RMSE** are far apart, **something leaked**.
+- Log **CV RMSE and Moran's I** for every model, and report **whose homes your model over-values**.
