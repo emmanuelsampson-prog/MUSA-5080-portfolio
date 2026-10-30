@@ -46,7 +46,7 @@
     "href": "weekly-notes/index.html",
     "title": "Weekly Notes",
     "section": "",
-    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage\n\n\nFrom global to local Moran’s I, LISA quadrants read as model errors, a LISA-driven feature workflow, three ways to measure nearness, and the ethics of rent-pricing algorithms through the RealPage case and an RFP exercise.\n\n\n\n\n\nOct 23, 2026\n\n\n\n\n\n\n\nWeek 8: Where Is the Model Wrong? Spatial Autocorrelation and Spatial Modelling\n\n\nFrom tracts to house sales, cleaning sales data, buffer and kNN spatial features, residual maps, spatial lags, Moran’s I and permutation tests.\n\n\n\n\n\nOct 16, 2026\n\n\n\n\n\n\n\nWeek 7: Feature Engineering for Linear Regression\n\n\nChanging the shape of features: log transformations, polynomial terms, categorical variables, dummy coding, interaction terms, and fixed effects, all evaluated with consistent k-fold cross-validation in R.\n\n\n\n\n\nOct 9, 2026\n\n\n\n\n\n\n\nWeek 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations\n\n\nAttribute joins, sf objects, coordinate reference systems, datums, map projections, UTM, spatial relationships, buffers, and spatial analysis in R.\n\n\n\n\n\nSep 18, 2026\n\n\n\n\n\n\n\nWeek 3: Data Visualization and Uncertainty\n\n\nGrammar of Graphics, ggplot2, ACS reliability, derived uncertainty, and change over time.\n\n\n\n\n\nSep 11, 2026\n\n\n\n\n\n\n\nWeek 2: dplyr and census\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\nNo matching items"
+    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 8: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage\n\n\nFrom global to local Moran’s I, LISA quadrants read as model errors, a LISA-driven feature workflow, three ways to measure nearness, and the ethics of rent-pricing algorithms through the RealPage case and an RFP exercise.\n\n\n\n\n\nOct 23, 2026\n\n\n\n\n\n\n\nWeek 7: Where Is the Model Wrong? Spatial Autocorrelation and Spatial Modelling\n\n\nFrom tracts to house sales, cleaning sales data, buffer and kNN spatial features, residual maps, spatial lags, Moran’s I and permutation tests.\n\n\n\n\n\nOct 16, 2026\n\n\n\n\n\n\n\nWeek 6: Feature Engineering for Linear Regression\n\n\nChanging the shape of features: log transformations, polynomial terms, categorical variables, dummy coding, interaction terms, and fixed effects, all evaluated with consistent k-fold cross-validation in R.\n\n\n\n\n\nOct 9, 2026\n\n\n\n\n\n\n\nWeek 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations\n\n\nAttribute joins, sf objects, coordinate reference systems, datums, map projections, UTM, spatial relationships, buffers, and spatial analysis in R.\n\n\n\n\n\nSep 18, 2026\n\n\n\n\n\n\n\nWeek 3: Data Visualization and Uncertainty\n\n\nGrammar of Graphics, ggplot2, ACS reliability, derived uncertainty, and change over time.\n\n\n\n\n\nSep 11, 2026\n\n\n\n\n\n\n\nWeek 2: dplyr and census\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "data/readme.html",
@@ -1472,16 +1472,16 @@
   {
     "objectID": "weekly-notes/week-08.html",
     "href": "weekly-notes/week-08.html",
-    "title": "Week 8: Where Is the Model Wrong? Spatial Autocorrelation and Spatial Modelling",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
     "section": "",
-    "text": "This week has three parts:\n\nFrom tracts to houses. We apply the same tools to individual house sales instead of census tracts.\nWhere is the model wrong? We map the errors and measure whether they cluster in space, using Moran’s I.\nAssignment 4: House Price Prediction, Chicago. This is a team competition with a real, hidden test set.\n\nThe big idea:\n\nIf nearby houses have related errors, the model is missing something about place."
+    "text": "Lecturer: Dr. Elizabeth Delmelle\nLecture title: A few odds & ends: LISA, the case of RealPage, etc.\nThe slide deck labels this lecture “Week 8”. In this course-notes series it is Week 9, because it follows the October 16 lecture (Week 8).\nThis week has three parts:\n\nFrom global to local. Global Moran’s I gives one number for the whole map. Local Moran’s I (LISA) gives one number per house, showing where the errors cluster.\nOperationalizing “near” (the word of the week). We compare three ways to measure nearness: buffer count, nearest distance and kNN mean distance.\nShould we build this? The RealPage case, and a class exercise where each table bids on a rent-pricing RFP as a consulting firm.\n\nThe big idea:\n\nGlobal Moran’s I tells you whether errors cluster. Local Moran’s I tells you where. The places where it is large are your to-do list."
   },
   {
     "objectID": "weekly-notes/week-08.html#overview",
     "href": "weekly-notes/week-08.html#overview",
-    "title": "Week 8: Where Is the Model Wrong? Spatial Autocorrelation and Spatial Modelling",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
     "section": "",
-    "text": "This week has three parts:\n\nFrom tracts to houses. We apply the same tools to individual house sales instead of census tracts.\nWhere is the model wrong? We map the errors and measure whether they cluster in space, using Moran’s I.\nAssignment 4: House Price Prediction, Chicago. This is a team competition with a real, hidden test set.\n\nThe big idea:\n\nIf nearby houses have related errors, the model is missing something about place."
+    "text": "Lecturer: Dr. Elizabeth Delmelle\nLecture title: A few odds & ends: LISA, the case of RealPage, etc.\nThe slide deck labels this lecture “Week 8”. In this course-notes series it is Week 9, because it follows the October 16 lecture (Week 8).\nThis week has three parts:\n\nFrom global to local. Global Moran’s I gives one number for the whole map. Local Moran’s I (LISA) gives one number per house, showing where the errors cluster.\nOperationalizing “near” (the word of the week). We compare three ways to measure nearness: buffer count, nearest distance and kNN mean distance.\nShould we build this? The RealPage case, and a class exercise where each table bids on a rent-pricing RFP as a consulting firm.\n\nThe big idea:\n\nGlobal Moran’s I tells you whether errors cluster. Local Moran’s I tells you where. The places where it is large are your to-do list."
   },
   {
     "objectID": "weekly-notes/week-08.html#recap-reading-a-logged-predictor",
@@ -1661,9 +1661,9 @@
   {
     "objectID": "weekly-notes/week-08.html#key-concepts-to-remember",
     "href": "weekly-notes/week-08.html#key-concepts-to-remember",
-    "title": "Week 8: Where Is the Model Wrong? Spatial Autocorrelation and Spatial Modelling",
-    "section": "27. Key Concepts to Remember",
-    "text": "27. Key Concepts to Remember\n\nWith a logged predictor and Y in dollars, β / 100 is the change in Y for a 1% change in X.\nSmall categories break cross-validation. Merge small groups before CV. The same problem returns with ~150 neighborhoods.\nHouse price prediction uses the same tools as before, but the unit is a point (sale) rather than a polygon (tract).\nA buffer is a polygon you draw yourself.\nNot every sale is a market sale. $1 transfers, sheriff sales and LLC shuffles are recorded too.\nDeciding what counts as a market sale is a modeling decision. Write it down.\nA buffer count can be zero for many houses. A kNN distance is never zero. Let CV RMSE decide between them.\nResidual = actual − predicted. Positive (red) = under-predicted. Negative (blue) = over-predicted.\nUse transparency and squished colour limits so a few huge misses do not wash out a residual map.\nTobler: near things are more related than distant things.\nIf nearby houses have related errors, the model is missing something about place.\nThe spatial lag is the average value among a location’s neighbors.\nThe slope of the Moran scatterplot (my residual vs. neighbors’ average) is Moran’s I with row-standardized weights.\nMoran’s I asks: when I’m above average, are my neighbors above average too?\nMoran’s I near +1 = clustering. Near 0 = no pattern. Below 0 = neighbors differ (rare for errors; check weights).\nmoran.mc() tests significance by shuffling values across locations.\nWith ~20,000 houses, nearly everything is significant. Watch the size of I fall, not the p-value.\nClustered errors point to a missing spatial feature, a neighborhood fixed effect, or an interaction.\nSpatial lag models are for inference about spillovers, not prediction. They need unsold neighbors’ prices, they leak in CV, and they explain nothing.\nSpatial features of X, never Y.\nAssignment 4 (Chicago): teams of 4, due Oct 30, house features only, outcome in dollars, real hidden test set.\nIf CV RMSE and test RMSE are far apart, something leaked.\nLog CV RMSE and Moran’s I for every model, and report whose homes your model over-values."
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "29. Key Concepts to Remember",
+    "text": "29. Key Concepts to Remember\n\nGlobal Moran’s I answers whether errors cluster. Local Moran’s I (LISA) answers where.\nLocal Moran’s I is me × my neighbors’ average, scaled. The average of the local values is the global I.\nWith row-standardized weights the five-house example gives I ≈ 0.72. With binary 0/1 weights it gives 0.60. Same story, different weighting.\nHigh–High = pocket the model under-predicts (missing amenity). Low–Low = pocket it over-predicts (missing disamenity).\nHigh–Low and Low–High are outliers. They point to the house, not the place.\nClusters → build a spatial feature. Outliers → check the data.\nUse out-of-fold residuals: each house’s error comes from the fold where it was held out.\nLISA runs thousands of tests, so chance clusters appear. Use a strict threshold (here α = 0.01).\nPlot non-significant houses first so clusters sit on top.\nFor each cluster, ask: where is it, what’s there, can I measure it?\nOver-predicted = over-taxed. In Philadelphia, Low–Low clusters were about 10× more common in the poorest income quintile than the richest: a regressive pattern.\nOperationalize “near” in three ways: buffer count, nearest distance, kNN mean distance. All are features of X.\nLogging a distance captures that close changes matter more than far ones.\nDecide your short list of k and radius values before you look, then let CV RMSE choose.\nFilling missing values with replace_na() keeps every row, but it is a choice: log it.\nIf a new feature doesn’t shrink the cluster you aimed at, your guess was wrong. That’s information too.\nWorkflow: fit → out-of-fold residuals → global I → LISA map → measure what’s there → refit → log CV RMSE and Moran’s I → repeat.\nRealPage’s model is technically the same as ours. The controversy is about pooled nonpublic competitor data and how hard it is to override the recommendation.\nThe DOJ settlement bans nonpublic competitor data when setting prices, limits training to data 12+ months old, and bans geography finer than the state.\nPhiladelphia banned rent-coordination software in 2024. The first tenant suits under it came in July 2026; the allegations are unproven.\nThree questions for any predictive model: what’s in the data, who can say no, and who pays?\nAn accurate prediction can still be the problem."
   },
   {
     "objectID": "assignments/Group Jollof/assignment5.html",
@@ -1979,5 +1979,467 @@
     "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
     "section": "29. Key Concepts to Remember",
     "text": "29. Key Concepts to Remember\n\nGlobal Moran’s I answers whether errors cluster. Local Moran’s I (LISA) answers where.\nLocal Moran’s I is me × my neighbors’ average, scaled. The average of the local values is the global I.\nWith row-standardized weights the five-house example gives I ≈ 0.72. With binary 0/1 weights it gives 0.60. Same story, different weighting.\nHigh–High = pocket the model under-predicts (missing amenity). Low–Low = pocket it over-predicts (missing disamenity).\nHigh–Low and Low–High are outliers. They point to the house, not the place.\nClusters → build a spatial feature. Outliers → check the data.\nUse out-of-fold residuals: each house’s error comes from the fold where it was held out.\nLISA runs thousands of tests, so chance clusters appear. Use a strict threshold (here α = 0.01).\nPlot non-significant houses first so clusters sit on top.\nFor each cluster, ask: where is it, what’s there, can I measure it?\nOver-predicted = over-taxed. In Philadelphia, Low–Low clusters were about 10× more common in the poorest income quintile than the richest: a regressive pattern.\nOperationalize “near” in three ways: buffer count, nearest distance, kNN mean distance. All are features of X.\nLogging a distance captures that close changes matter more than far ones.\nDecide your short list of k and radius values before you look, then let CV RMSE choose.\nFilling missing values with replace_na() keeps every row, but it is a choice: log it.\nIf a new feature doesn’t shrink the cluster you aimed at, your guess was wrong. That’s information too.\nWorkflow: fit → out-of-fold residuals → global I → LISA map → measure what’s there → refit → log CV RMSE and Moran’s I → repeat.\nRealPage’s model is technically the same as ours. The controversy is about pooled nonpublic competitor data and how hard it is to override the recommendation.\nThe DOJ settlement bans nonpublic competitor data when setting prices, limits training to data 12+ months old, and bans geography finer than the state.\nPhiladelphia banned rent-coordination software in 2024. The first tenant suits under it came in July 2026; the allegations are unproven.\nThree questions for any predictive model: what’s in the data, who can say no, and who pays?\nAn accurate prediction can still be the problem."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#where-we-left-off",
+    "href": "weekly-notes/week-08.html#where-we-left-off",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "2. Where We Left Off",
+    "text": "2. Where We Left Off\nLast week we learned Moran’s I of the residuals:\n\nIt asks: do the errors cluster?\nIn the model log, it should fall as you add features.\n\nBut a single number has a limit:\n\nOne number can’t tell you where to look.\n\nToday we compute one number per house."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#back-to-the-five-house-block",
+    "href": "weekly-notes/week-08.html#back-to-the-five-house-block",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "3. Back to the Five-House Block",
+    "text": "3. Back to the Five-House Block\nWe reuse last week’s example: five houses in a row, where each house’s neighbors are the houses next door.\nA — B — C — D — E\nThe new column is my neighbors’ average deviation. Averaging the neighbors is exactly what row-standardized weights do.\n\n\n\nHouse\nResidual\nDeviation (z)\nNeighbors\nNeighbors’ average z\n\n\n\n\nA\n+100k\n+84\nB\n+64\n\n\nB\n+80k\n+64\nA, C\n+44\n\n\nC\n+20k\n+4\nB, D\n−1\n\n\nD\n−50k\n−66\nC, E\n−41\n\n\nE\n−70k\n−86\nD\n−66\n\n\n\nFor example, B’s neighbors are A (+84) and C (+4), so their average is (84 + 4) / 2 = +44."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#local-morans-i-one-house-at-a-time",
+    "href": "weekly-notes/week-08.html#local-morans-i-one-house-at-a-time",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "4. Local Moran’s I: One House at a Time",
+    "text": "4. Local Moran’s I: One House at a Time\n\\[\nI_i = \\frac{z_i}{m_2} \\sum_j w_{ij} z_j\n\\qquad\nm_2 = \\frac{\\sum_i z_i^2}{n} = \\frac{22{,}920}{5} = 4{,}584\n\\]\nwhere:\n\n\\(z_i\\) = my deviation from the mean\n\\(\\sum_j w_{ij} z_j\\) = my neighbors’ average deviation (with row-standardized weights)\n\\(m_2\\) = the average squared deviation, used to scale the result\n\nIn words:\n\nLocal Moran’s I = me × my neighbors’ average, scaled.\n\n\nWorked values\n\n\n\nHouse\nMe\nMy neighbors\n\\(I_i\\)\nQuadrant\n\n\n\n\nA\n+84\n+64\n1.17\nHigh–High\n\n\nB\n+64\n+44\n0.61\nHigh–High\n\n\nC\n+4\n−1\n0.00\n(nothing to see)\n\n\nD\n−66\n−41\n0.59\nLow–Low\n\n\nE\n−86\n−66\n1.24\nLow–Low\n\n\n\nFor example, for house A:\n\\[\nI_A = \\frac{84 \\times 64}{4{,}584} = \\frac{5{,}376}{4{,}584} \\approx 1.17\n\\]\n\n\nLink to the global value\nThe average of the five local values is:\n\\[\n\\frac{1.17 + 0.61 + 0.00 + 0.59 + 1.24}{5} \\approx 0.72\n\\]\nThis is the global Moran’s I with these weights.\n\nGlobal Moran’s I is the average of the local Moran’s I values.\n\n\n\nWhy 0.72 and not 0.60 like last week?\n\nLast week we used plain 0/1 (binary) neighbor weights → I ≈ 0.60\nspdep with style = \"W\" averages the neighbors (row-standardized) → I ≈ 0.72\n\nSame story, different weighting."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#the-four-quadrants-read-as-errors",
+    "href": "weekly-notes/week-08.html#the-four-quadrants-read-as-errors",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "5. The Four Quadrants, Read as Errors",
+    "text": "5. The Four Quadrants, Read as Errors\nRecall the sign convention:\n\\[\n\\text{residual} = \\text{actual} - \\text{predicted}\n\\]\n\nHigh = we guessed too low (under-predicted).\n\n\n\n\n\n\n\n\n\n\nNeighbors under-predicted\nNeighbors over-predicted\n\n\n\n\nI’m under-predicted\nHigh–High: a pocket the model undervalues. A missing amenity.\nHigh–Low: one house worth more than its block. Something about the house.\n\n\nI’m over-predicted\nLow–High: one house worth less than its block. Something about the house.\nLow–Low: a pocket the model overvalues. A missing disamenity.\n\n\n\n\nHow to act on each\n\n\n\n\n\n\n\n\n\nType\nQuadrants\nPoints to a…\nWhat to do\n\n\n\n\nClusters\nHigh–High, Low–Low\nPlace\nBuild a spatial feature\n\n\nOutliers\nHigh–Low, Low–High\nHouse\nCheck the data, or accept that OPA can’t see it either"
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#last-weeks-model-out-of-fold-residuals",
+    "href": "weekly-notes/week-08.html#last-weeks-model-out-of-fold-residuals",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "6. Last Week’s Model, Out-of-Fold Residuals",
+    "text": "6. Last Week’s Model, Out-of-Fold Residuals\nWe rebuild last week’s Philadelphia model: same sales, same cleaning rules, same violent-crime feature.\n#| eval: false\nsales &lt;- carto_get(\n  \"SELECT the_geom, parcel_number, sale_price, sale_date, total_livable_area,\n          number_of_bedrooms, number_of_bathrooms, year_built, interior_condition\n   FROM opa_properties_public\n   WHERE category_code = '1'\n     AND sale_date &gt;= '2023-01-01' AND sale_date &lt; '2025-01-01'\"\n) %&gt;%\n  st_transform(2272) %&gt;%\n  filter(sale_price &gt;= 10000, total_livable_area &gt; 0, !st_is_empty(.)) %&gt;%\n  mutate(year_built = na_if(as.numeric(year_built), 0),\n         age = 2024 - year_built) %&gt;%\n  filter(!is.na(age), !is.na(number_of_bathrooms))\n\nviolent &lt;- carto_get(\n  \"SELECT the_geom FROM incidents_part1_part2\n   WHERE dispatch_date &gt;= '2023-01-01' AND dispatch_date &lt; '2025-01-01'\n     AND text_general_code IN ('Aggravated Assault Firearm',\n                               'Aggravated Assault No Firearm',\n                               'Robbery Firearm', 'Robbery No Firearm')\"\n) %&gt;%\n  filter(!st_is_empty(.)) %&gt;%\n  st_transform(2272)\n\nsales$violent_knn5 &lt;- sapply(\n  st_nn(sales, violent, k = 5, returnDist = TRUE, progress = FALSE)$dist,\n  mean\n)\n\nf1 &lt;- sale_price ~ total_livable_area + number_of_bathrooms + age + violent_knn5\n\nsales$resid_1 &lt;- sales$sale_price - cv_pred(f1, sales)\ncv_pred() and cv_rmse() are course helper functions. cv_pred() returns each house’s cross-validated prediction.\n\nWhat’s new: out-of-fold residuals\nLast week, residuals came from a model fitted on all houses. Now:\n\nEach house’s error comes from the fold where it was held out.\n\nThis gives an honest picture of how the model performs on houses it has not seen, which is how it will be used."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#local-morans-i-in-r",
+    "href": "weekly-notes/week-08.html#local-morans-i-in-r",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "7. Local Moran’s I in R",
+    "text": "7. Local Moran’s I in R\n#| eval: false\nlibrary(spdep)\n\nw_knn &lt;- nb2listw(\n  knn2nb(knearneigh(st_coordinates(sales), k = 5)),\n  style = \"W\"\n)\n\nlisa_quads &lt;- function(resid, w, alpha = 0.01) {\n  lm_perm &lt;- localmoran_perm(resid, w, nsim = 499)\n  z   &lt;- resid - mean(resid)\n  lag &lt;- lag.listw(w, z)\n  p   &lt;- lm_perm[, \"Pr(z != E(Ii)) Sim\"]\n  case_when(\n    p &gt;= alpha      ~ \"Not significant\",\n    z &gt; 0 & lag &gt; 0 ~ \"High-High\",\n    z &lt; 0 & lag &lt; 0 ~ \"Low-Low\",\n    z &gt; 0 & lag &lt; 0 ~ \"High-Low\",\n    TRUE            ~ \"Low-High\"\n  )\n}\n\nsales$quad_1 &lt;- lisa_quads(sales$resid_1, w_knn)\ntable(sales$quad_1)\nThe weights are the same as last week: each house’s 5 nearest sales, row-standardized.\n\nWhat lisa_quads() does\n\n\n\n\n\n\n\n\nStep\nCode\nMeaning\n\n\n\n\n1\nlocalmoran_perm(resid, w, nsim = 499)\nLocal Moran’s I for every house, with a permutation (shuffle) test\n\n\n2\nz &lt;- resid - mean(resid)\nAm I above or below the average error?\n\n\n3\nlag &lt;- lag.listw(w, z)\nAre my neighbors above or below average?\n\n\n4\np &lt;- ...Sim\nThe simulated p-value for each house\n\n\n5\ncase_when(...)\nAssign each house to a quadrant, or “Not significant” if p ≥ 0.01\n\n\n\nThe significance threshold is α = 0.01, stricter than the usual 0.05, because we are running thousands of tests.\n\n\nResult\n      High-High        High-Low        Low-High         Low-Low  Not significant\n            169              22             121             536            26692\n\n\n\nQuadrant\nHouses\nMeaning\n\n\n\n\nHigh–High\n169\nUnder-predicted pockets\n\n\nLow–Low\n536\nOver-predicted pockets (the largest group)\n\n\nHigh–Low\n22\nSingle houses worth more than their block\n\n\nLow–High\n121\nSingle houses worth less than their block\n\n\nNot significant\n26,692\nNo local pattern\n\n\n\nMost houses are not significant. The model’s problems are concentrated in a few hundred locations, and over-prediction clusters (Low–Low) outnumber under-prediction clusters about 3 to 1."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#the-to-do-list-mapping-lisa-quadrants",
+    "href": "weekly-notes/week-08.html#the-to-do-list-mapping-lisa-quadrants",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "8. The To-Do List: Mapping LISA Quadrants",
+    "text": "8. The To-Do List: Mapping LISA Quadrants\n#| eval: false\nquad_cols &lt;- c(\"High-High\" = \"#b2182b\", \"Low-Low\" = \"#2166ac\",\n               \"High-Low\"  = \"#f4a582\", \"Low-High\" = \"#92c5de\",\n               \"Not significant\" = \"grey88\")\n\nggplot() +\n  geom_sf(data = filter(sales, quad_1 == \"Not significant\"),\n          color = \"grey88\", size = 0.3) +\n  geom_sf(data = filter(sales, quad_1 != \"Not significant\"),\n          aes(color = quad_1), size = 0.6) +\n  scale_color_manual(values = quad_cols) +\n  theme_void() +\n  labs(color = NULL,\n       title = \"Where the errors cluster\",\n       subtitle = \"Red: pockets we under-predict · Blue: pockets we over-predict\")\nDesign choices:\n\nDark red / dark blue = clusters (High–High / Low–Low)\nLight red / light blue = outliers (High–Low / Low–High)\nGrey = not significant\nPlot the grey houses first, so the clusters sit on top."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#reading-the-map",
+    "href": "weekly-notes/week-08.html#reading-the-map",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "9. Reading the Map",
+    "text": "9. Reading the Map\nFor each red or blue cluster, ask:\n\nWhere is it? Name the neighborhood.\nWhat’s there that the model doesn’t know about?\nCan you measure it with open data?\n\nCan you measure it?\n   ├── Yes → that's your next feature\n   └── No  → it goes in your \"where it fails worst\" section, with your explanation"
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#whos-in-the-blue",
+    "href": "weekly-notes/week-08.html#whos-in-the-blue",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "10. Who’s in the Blue?",
+    "text": "10. Who’s in the Blue?\nLow–Low means over-predicted.\n\nAs an assessment, an over-predicted house is an over-taxed house.\n\nSo we ask: are the over-predicted pockets in poorer or richer neighborhoods?\n#| eval: false\ntract_inc &lt;- get_acs(\n  geography = \"tract\", variables = \"B19013_001\",   # median household income\n  state = \"PA\", county = \"Philadelphia\", year = 2023,\n  geometry = TRUE, progress = FALSE\n) %&gt;%\n  st_transform(2272) %&gt;%\n  select(med_inc = estimate)\n\nsales %&gt;%\n  st_join(tract_inc, join = st_nearest_feature) %&gt;%\n  st_drop_geometry() %&gt;%\n  filter(!is.na(med_inc)) %&gt;%\n  mutate(inc_quintile = ntile(med_inc, 5)) %&gt;%\n  group_by(inc_quintile) %&gt;%\n  summarise(\n    n = n(),\n    pct_low_low   = mean(quad_1 == \"Low-Low\") * 100,\n    pct_high_high = mean(quad_1 == \"High-High\") * 100\n  )\n\n\n\n\n\n\n\n\n\nIncome quintile\nn\n% Low–Low (over-predicted)\n% High–High (under-predicted)\n\n\n\n\n1 (poorest)\n5,450\n4.48\n0.26\n\n\n2\n5,450\n2.04\n0.40\n\n\n3\n5,450\n1.45\n0.29\n\n\n4\n5,449\n1.12\n1.38\n\n\n5 (richest)\n5,449\n0.46\n0.75\n\n\n\n\nInterpretation\n\nHouses in the poorest fifth of tracts are about 10 times more likely to sit in an over-predicted (Low–Low) cluster than houses in the richest fifth (4.48% vs. 0.46%).\nUnder-predicted (High–High) clusters are more common in higher-income tracts.\n\n\nIf this model set assessed values, it would over-tax lower-income neighborhoods and under-tax wealthier ones. That is a regressive pattern, the same problem “The Tax Divide” found in Cook County.\n\nst_join(..., join = st_nearest_feature) gives each house the income of the nearest tract. This also covers houses that fall exactly on a tract boundary."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#global-vs.-local-morans-i",
+    "href": "weekly-notes/week-08.html#global-vs.-local-morans-i",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "11. Global vs. Local Moran’s I",
+    "text": "11. Global vs. Local Moran’s I\n\n\n\n\n\n\n\n\n\nGlobal Moran’s I\nLocal Moran’s I (LISA)\n\n\n\n\nOutput\nOne number\nOne number per house\n\n\nQuestion\nDo errors cluster?\nWhere do they cluster?\n\n\nUse\nModel log: did it fall?\nTo-do list: what’s missing there?\n\n\nDanger\np-value always tiny with a big n\nThousands of tests, so some clusters appear by chance\n\n\n\nThe LISA danger is a multiple-testing problem. At α = 0.05, about 1 in 20 tests would be “significant” even with no real pattern. That is one reason the function uses the stricter α = 0.01."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#operationalizing-near-word-of-the-week",
+    "href": "weekly-notes/week-08.html#operationalizing-near-word-of-the-week",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "12. Operationalizing “Near” (Word of the Week)",
+    "text": "12. Operationalizing “Near” (Word of the Week)\nTo operationalize a concept is to turn it into something we can measure.\n“Near violent crime” can be measured in three ways:\n\n\n\n\n\n\n\n\n\nMethod\nHow\nGood when\nWatch out\n\n\n\n\nBuffer count\nIncidents within 660 ft\nExposure: “how much is around me?”\nZeros everywhere. The radius is a choice\n\n\nNearest distance\nFeet to the single closest\nOne thing matters: a station, a park\nOne odd point decides everything\n\n\nkNN mean distance\nMean feet to the 5 closest\nSmooth intensity. Never zero\nk is a choice. Far-away points count\n\n\n\nAll three are features of X: none of them uses a price. That follows last week’s rule: spatial features of X, never Y.\nYou have already built the buffer count and kNN distance. Nearest distance is new.\n\nLogging a distance\nDistances often matter in relative terms (rates of change):\n100 ft → 500 ft     a big difference (next door vs. down the block)\n5,000 ft → 5,400 ft no real difference (both are far away)\nTaking the log of a distance captures this: the same raw change matters more when you are close."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#building-all-three-features",
+    "href": "weekly-notes/week-08.html#building-all-three-features",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "13. Building All Three Features",
+    "text": "13. Building All Three Features\n#| eval: false\nsales &lt;- sales %&gt;%\n  mutate(\n    violent_660ft = lengths(st_intersects(st_buffer(., 660), violent)),\n    violent_near  = as.numeric(st_distance(\n      ., violent[st_nearest_feature(., violent), ],\n      by_element = TRUE\n    )),\n    log_violent_knn5 = log(violent_knn5)\n  )\n\nHow the new feature works\n\n\n\n\n\n\n\nFunction\nWhat it does\n\n\n\n\nst_nearest_feature(., violent)\nFor each house, the index of the closest crime\n\n\nviolent[...]\nPulls out that closest crime for each house\n\n\nst_distance(..., by_element = TRUE)\nDistance from each house to its own nearest crime, one pair at a time (not a full matrix)\n\n\nas.numeric()\nDrops the units, leaving feet\n\n\n\n\n\nLet cross-validation choose\n#| eval: false\nstructure_f &lt;- \"sale_price ~ total_livable_area + number_of_bathrooms + age\"\n\ntibble(feature = c(\"violent_660ft\", \"violent_near\",\n                   \"violent_knn5\", \"log_violent_knn5\")) %&gt;%\n  mutate(cv_rmse = map_dbl(\n    feature,\n    ~ cv_rmse(as.formula(paste(structure_f, \"+\", .x)), sales)\n  )) %&gt;%\n  arrange(cv_rmse)\nThis loops over the four candidates. Each time it adds one crime feature to the same structural model and records the CV RMSE.\n  feature          cv_rmse\n1 violent_knn5     432287\n2 violent_near     432295\n3 log_violent_knn5 432300\n4 violent_660ft    432314\n\n\nInterpretation\n\nkNN mean distance wins, but the four are within about $27 of each other.\nThe way you operationalize “near” matters much less here than whether you include crime at all.\nThe RMSE is large (over $430,000), most likely because of very expensive sales in the data. RMSE squares the errors, so a few big misses dominate it."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#choosing-k-and-the-radius",
+    "href": "weekly-notes/week-08.html#choosing-k-and-the-radius",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "14. Choosing k and the Radius",
+    "text": "14. Choosing k and the Radius\n\nDecide your short list before you look.\n\nPick 2–3 values with a reason, then let CV RMSE choose among them:\n\nA city block is about 500 ft\n1/8 mile (660 ft) is a short walk\n\nWhy decide first? If you try dozens of values and keep the best, you are tuning to noise. The CV RMSE then looks better than the model really is."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#a-feature-aimed-at-a-cluster",
+    "href": "weekly-notes/week-08.html#a-feature-aimed-at-a-cluster",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "15. A Feature Aimed at a Cluster",
+    "text": "15. A Feature Aimed at a Cluster\nSuppose the blue (Low–Low) pockets look like blocks with a lot of vacancy. We can measure that with the ACS:\n#| eval: false\ntract_vac &lt;- get_acs(\n  geography = \"tract\",\n  variables = c(total = \"B25002_001\", vacant = \"B25002_003\"),\n  state = \"PA\", county = \"Philadelphia\", year = 2023,\n  geometry = TRUE, output = \"wide\", progress = FALSE\n) %&gt;%\n  st_transform(2272) %&gt;%\n  transmute(pct_vacant = if_else(totalE &gt; 0, vacantE / totalE * 100, NA_real_))\n\nsales &lt;- sales %&gt;%\n  st_join(tract_vac, join = st_nearest_feature) %&gt;%\n  mutate(pct_vacant = replace_na(pct_vacant, median(pct_vacant, na.rm = TRUE)))\n\nf2 &lt;- update(f1, . ~ . + pct_vacant)\n\nsales$resid_2 &lt;- sales$sale_price - cv_pred(f2, sales)\nsales$quad_2  &lt;- lisa_quads(sales$resid_2, w_knn)\n\n\n\n\n\n\n\nStep\nMeaning\n\n\n\n\nB25002_001, B25002_003\nTotal housing units and vacant units (ACS table B25002)\n\n\nif_else(totalE &gt; 0, ...)\nAvoid dividing by zero in tracts with no housing\n\n\nreplace_na(..., median(...))\nFill missing vacancy with the median, so every row is kept\n\n\nupdate(f1, . ~ . + pct_vacant)\nSame formula as f1, plus vacancy\n\n\n\nreplace_na() keeps every row (Rule 1: all models must use the same records).\n\nFilling in missing values is a choice. Log it."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#did-the-blue-shrink",
+    "href": "weekly-notes/week-08.html#did-the-blue-shrink",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "16. Did the Blue Shrink?",
+    "text": "16. Did the Blue Shrink?\n#| eval: false\nmoran_of &lt;- function(resid) {\n  as.numeric(moran.mc(resid, w_knn, nsim = 499)$statistic)\n}\n\ntibble(\n  model       = c(\"m1: + violent kNN5\", \"m2: + tract vacancy\"),\n  cv_rmse     = c(cv_rmse(f1, sales), cv_rmse(f2, sales)),\n  moran_i     = c(moran_of(sales$resid_1), moran_of(sales$resid_2)),\n  n_low_low   = c(sum(sales$quad_1 == \"Low-Low\"),   sum(sales$quad_2 == \"Low-Low\")),\n  n_high_high = c(sum(sales$quad_1 == \"High-High\"), sum(sales$quad_2 == \"High-High\"))\n)\n\n\n\nModel\nCV RMSE\nMoran’s I\nLow–Low houses\nHigh–High houses\n\n\n\n\nm1: + violent kNN5\n432,287\n0.260\n536\n169\n\n\nm2: + tract vacancy\n431,883\n0.258\n705\n169\n\n\n\n\nInterpretation\n\nCV RMSE improved by about $400.\nMoran’s I barely moved (0.260 → 0.258).\nThe number of Low–Low houses rose from 536 to 705. The blue did not shrink.\n\n\nIf the clusters didn’t shrink, your guess about what was missing was wrong. That’s information too.\n\nTract-level vacancy may also be too coarse to explain block-level pockets."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#how-to-use-these-statistics-the-workflow",
+    "href": "weekly-notes/week-08.html#how-to-use-these-statistics-the-workflow",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "17. How to Use These Statistics: The Workflow",
+    "text": "17. How to Use These Statistics: The Workflow\n1. Fit the model → get OUT-OF-FOLD residuals\n        ↓\n2. Global Moran's I → a quick overall check: do the errors cluster?\n        ↓\n3. LISA map → spots that could use patching up\n        ↓\n4. Ask what's there → measure it (buffer, nearest, or kNN)\n        ↓\n5. Refit → log CV RMSE and Moran's I. Did that cluster shrink?\n        ↓\n6. Repeat, until the clusters you can explain are gone\n   (or you've spent enough time on it)"
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#should-we-build-this",
+    "href": "weekly-notes/week-08.html#should-we-build-this",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "18. Should We Build This?",
+    "text": "18. Should We Build This?\nYou have spent two weeks building a model that predicts what a home is worth from what it is and where it is.\nNow imagine a company sells that model to landlords, with rent as the outcome.\nThree questions to keep in mind:\n\nWhat goes into the model, and who supplied it?\nWho acts on the prediction, and can they say no?\nWho pays when it’s wrong? Who pays when it’s right?\n\nFilm shown in class: How RealPage influences rent prices (CNBC, 2024, about 10 minutes)."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#what-the-realpage-software-does",
+    "href": "weekly-notes/week-08.html#what-the-realpage-software-does",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "19. What the RealPage Software Does",
+    "text": "19. What the RealPage Software Does\nINPUTS\n  • Public listings and market data\n  • The landlord's own leases\n  • Competing landlords' NONPUBLIC leases, rents, occupancy\n        ↓\nMODEL\n  Predict rent\n        ↓\nOUTPUT\n  A recommended rent for every unit, every day\n        ↓\nDECISION\n  Leasing manager accepts or overrides (auto-accept available)\n\nThe modeling is our house price assignment with rent instead of price.\n\nThe fight is not about the regression. It is about:\n\nThe third input: data competitors would never share with each other directly\nThe last arrow: how hard it is to say no to the recommendation"
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#the-debate",
+    "href": "weekly-notes/week-08.html#the-debate",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "20. The Debate",
+    "text": "20. The Debate\n\n\n\n\n\n\n\n\n\nCritics: DOJ, tenants, Philadelphia\nDefenders: RealPage, landlords\n\n\n\n\nData\nPooling rivals’ private rents lets competitors align prices without ever talking\nAbout two-thirds of inputs are public. Private data is aggregated and anonymized\n\n\nPrices\nRecommendations push rents up, and hold them up when demand falls\nRents rose because of the supply shortage, inflation and interest rates. The software cuts rents when demand drops\n\n\nHumans\nAlleged auto-accept and “pricing advisors” who pressed managers to comply. Ex-employees told ProPublica ~90% of recommendations were adopted\nManagers set a different price more than half the time\n\n\nReach\nA law professor estimates 30–60% of multifamily units in 40+ markets\nThe company says 7% of U.S. rentals\n\n\nEfficiency\n—\nOverpriced units sit empty. Better pricing fills them\n\n\n\nSources cited in the slides: DOJ complaint as reported by Axios and Groundwork Collaborative (2024); ProPublica (2022)."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#where-it-stands",
+    "href": "weekly-notes/week-08.html#where-it-stands",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "21. Where It Stands",
+    "text": "21. Where It Stands\n\nFederal\nThe U.S. Department of Justice sued RealPage in August 2024.\nThe November 2025 settlement (filed November 24, 2025; described in the lecture as now approved by the court) requires:\n\nNo competitors’ nonpublic data when setting prices\nTraining on nonpublic data only if it is at least 12 months old\nNo geographic effects finer than the state\nRemoval of features that limited price cuts or aligned competitors’ prices, plus a court-appointed monitor\n\nIt also:\n\nIncludes no admission of wrongdoing\nLets RealPage keep selling the product\n\n\n\nPhiladelphia\n\nCity Council unanimously banned rent-coordination software in October 2024, in effect from February 2025.\nThe first tenant lawsuits under the ordinance were filed in July 2026, against Greystar, Bozzuto, Willow Bridge, RealPage and Yardi.\nThe allegations are unproven."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#three-questions-for-the-rest-of-the-semester",
+    "href": "weekly-notes/week-08.html#three-questions-for-the-rest-of-the-semester",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "22. Three Questions for the Rest of the Semester",
+    "text": "22. Three Questions for the Rest of the Semester\n\n\n\n\n\n\n\n\n\nQuestion\nToday\nNext week\nNovember\n\n\n\n\nWhat’s in the data, and who put it there?\nRivals’ private leases\nPolice records\nCriminal histories\n\n\nWho acts on the prediction? Can they say no?\nLeasing managers, auto-accept\nPatrol commanders\nJudges, parole boards\n\n\nWho pays for the errors, and for the “right” answers?\nRenters\nResidents of patrolled blocks\nDefendants\n\n\n\n\nAn accurate prediction of what tenants will pay can still be the problem."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#class-exercise-youre-a-consulting-firm-now",
+    "href": "weekly-notes/week-08.html#class-exercise-youre-a-consulting-firm-now",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "23. Class Exercise: You’re a Consulting Firm Now",
+    "text": "23. Class Exercise: You’re a Consulting Firm Now\nEvery table is a consulting firm. You have shown you can predict prices from what a home is and where it is.\nA consortium of nine corporate landlords (about 28,000 Philadelphia apartments) has issued an RFP for a rent prediction and pricing model.\n\n\n\n\n\n\n\nItem\nDetail\n\n\n\n\nBudget\nUp to $1.8M to build, plus $40k/month\n\n\nTime to decide\n12 minutes\n\n\nScoring\nPrice 40%, revenue lift 40%, technical approach 20%\n\n\nCatch\nDeclining a requirement costs you points\n\n\n\nEach firm decides:\n\nAccept, modify, or decline each of the eight requirements\nIts price, including any premium for requirements it thinks are risky\nThe conditions it attaches\nIts line (what it won’t do for any price) and its premium (what it would do for more)"
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#the-rfp-at-a-glance",
+    "href": "weekly-notes/week-08.html#the-rfp-at-a-glance",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "24. The RFP at a Glance",
+    "text": "24. The RFP at a Glance\n\n\n\n\n\n\n\n#\nRequirement\n\n\n\n\nR1\nMarket rent for every unit, from public data\n\n\nR2\nTrain on members’ pooled, current, nonpublic rent rolls\n\n\nR3\nDaily recommended asking and renewal rents\n\n\nR4\nRecommendations accepted by default. Overriding needs a manager’s sign-off\n\n\nR5\nBlock-level geography\n\n\nR6\nOptimize revenue, not occupancy: vacancy at the right price beats leasing below market\n\n\nR7\nQuarterly report comparing each member’s rents to the consortium average by neighborhood\n\n\nR8\nConfidential: nothing disclosed to tenants, journalists or regulators beyond what the law requires\n\n\n\n\nRounds\n\nPitches: 60 seconds per firm (8 min)\nThe award: the consortium (the professor) picks the winner on its own scoring. Then the class votes on a second question: which bid would you defend on the front page of the Inquirer? (3 min)\nThe reveal: what Philadelphia’s ordinance and the federal settlement say about each requirement (5 min)"
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#the-reveal",
+    "href": "weekly-notes/week-08.html#the-reveal",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "25. The Reveal",
+    "text": "25. The Reveal\n\n\n\n\n\n\n\n\n\nReq.\nPhiladelphia ordinance\nDOJ settlement (RealPage)\nQuestion\n\n\n\n\nR1 public data\nLikely fine, but it is data from many landlords. Gray area\nNot restricted\n1\n\n\nR2 pooled nonpublic\nThe core of what’s banned\nBarred when setting prices. Training only on data 12+ months old\n1\n\n\nR3 daily recs\nFine on its own\nFine on its own\n2\n\n\nR4 accept by default\nTurns R2 into coordination\nFeatures that aligned prices or limited cuts removed\n2\n\n\nR5 block-level\n—\nNo geography finer than the state\n1, 3\n\n\nR6 revenue over occupancy\nLegal\nLegal\n3\n\n\nR7 benchmarking\nSharing rivals’ rents is coordination\nNo market surveys of sensitive data, no discussing nonpublic trends\n1\n\n\nR8 confidentiality\nLegal\nA court-appointed monitor\n2, 3\n\n\n\nQuestions: 1 = what’s in the data, 2 = who can say no, 3 = who pays.\nThis shows how the rules would likely read each requirement. It is not legal advice."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#debrief-the-winning-bid-and-the-front-page-bid",
+    "href": "weekly-notes/week-08.html#debrief-the-winning-bid-and-the-front-page-bid",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "26. Debrief: The Winning Bid and the Front-Page Bid",
+    "text": "26. Debrief: The Winning Bid and the Front-Page Bid\n\nWere the winning bid and the front-page bid the same firm? If not, how far apart were their prices?\nWho put something on the premium line? Then you decided it has a price.\nR6 is legal. Did anyone decline it? Why? An accurate model of what tenants will pay can still be the problem.\nSame model, different client: OPA asks you to set assessed values. Would you bid? Remember the blue clusters: the over-predicted, and so over-taxed, homes concentrated in lower-income tracts."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#r5-is-a-spatial-question",
+    "href": "weekly-notes/week-08.html#r5-is-a-spatial-question",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "27. R5 Is a Spatial Question",
+    "text": "27. R5 Is a Spatial Question\nThe settlement bans the model from learning anything finer than the state from rivals’ data.\nQuestions to think about:\n\nDraw the LISA map of a rent model with no geography below the state. What does it look like?\n\nLikely: large, strong clusters of errors, because the model cannot see neighborhood differences at all.\n\nIs that restriction protecting renters, or just making a worse model?\nYour house price model learns block-level geography from public data. Why is that different?\n\nThe data is public, not rivals’ private rents; the goal is valuation, not coordinated pricing; and no competitor’s behaviour is pooled."
+  },
+  {
+    "objectID": "weekly-notes/week-08.html#week-9-quick-reference",
+    "href": "weekly-notes/week-08.html#week-9-quick-reference",
+    "title": "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage",
+    "section": "28. Week 9 Quick Reference",
+    "text": "28. Week 9 Quick Reference\n\n\n\n\n\n\n\nConcept / Question\nTool / Answer\n\n\n\n\nLocal Moran’s I\n\\(I_i = \\frac{z_i}{m_2}\\sum_j w_{ij} z_j\\)\n\n\nLocal Moran’s I in words\nMe × my neighbors’ average, scaled\n\n\nGlobal I from local values\nThe average of the local \\(I_i\\)\n\n\nRow-standardized weights\nnb2listw(..., style = \"W\")\n\n\nLocal Moran’s I with permutation test\nlocalmoran_perm(x, w, nsim = 499)\n\n\nSimulated local p-value column\n\"Pr(z != E(Ii)) Sim\"\n\n\nNeighbors’ average\nlag.listw(w, z)\n\n\nHigh–High (errors)\nPocket the model under-predicts: missing amenity\n\n\nLow–Low (errors)\nPocket the model over-predicts: missing disamenity\n\n\nHigh–Low / Low–High\nOne house differs from its block: check the data\n\n\nOut-of-fold residual\nactual − cv_pred()\n\n\nJoin to the nearest polygon\nst_join(x, y, join = st_nearest_feature)\n\n\nIncome quintiles\nntile(med_inc, 5)\n\n\nBuffer count\nlengths(st_intersects(st_buffer(x, d), pts))\n\n\nNearest distance\nst_distance(x, pts[st_nearest_feature(x, pts), ], by_element = TRUE)\n\n\nkNN mean distance\nst_nn(x, pts, k = 5, returnDist = TRUE)\n\n\nAdd a term to a formula\nupdate(f1, . ~ . + new_var)\n\n\nKeep every row when data are missing\nreplace_na(x, median(x, na.rm = TRUE)) (log it)\n\n\nTest many features at once\nmap_dbl(features, ~ cv_rmse(...))\n\n\nA city block\nAbout 500 ft\n\n\n1/8 mile\n660 ft\n\n\nACS median household income\nB19013_001\n\n\nACS total / vacant housing units\nB25002_001 / B25002_003\n\n\nDOJ v. RealPage\nSued Aug 2024. Settlement filed Nov 2025\n\n\nPhiladelphia ban\nPassed Oct 2024. In effect Feb 2025"
+  },
+  {
+    "objectID": "weekly-notes/week-06.html",
+    "href": "weekly-notes/week-06.html",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "",
+    "text": "Each week builds on the previous ones:\nCollect data\n     ↓\nSpatial operations\n     ↓\nRegression for prediction\n     ↓\nCross-validation (RMSE matters more than R²)\n     ↓\nFeature engineering: changing the \"shape\" of features   ← this week\n     ↓\nk-nearest-neighbour (KNN) spatial features              ← next week\nAssignment 4 is a training exercise. Next week, teams will be asked to build the best model they can to predict home values.\n\nStudy the code and the concepts now, so you can design your own model later.\n\nThis week’s lecture was recorded remotely (from Pittsburgh) and walks through the same steps as Assignment 4, Part 5."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#where-this-week-fits",
+    "href": "weekly-notes/week-06.html#where-this-week-fits",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "",
+    "text": "Each week builds on the previous ones:\nCollect data\n     ↓\nSpatial operations\n     ↓\nRegression for prediction\n     ↓\nCross-validation (RMSE matters more than R²)\n     ↓\nFeature engineering: changing the \"shape\" of features   ← this week\n     ↓\nk-nearest-neighbour (KNN) spatial features              ← next week\nAssignment 4 is a training exercise. Next week, teams will be asked to build the best model they can to predict home values.\n\nStudy the code and the concepts now, so you can design your own model later.\n\nThis week’s lecture was recorded remotely (from Pittsburgh) and walks through the same steps as Assignment 4, Part 5."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#why-feature-engineering",
+    "href": "weekly-notes/week-06.html#why-feature-engineering",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "2. Why Feature Engineering?",
+    "text": "2. Why Feature Engineering?\nThe machine learning method we are using is linear regression.\nA linear model can only fit a straight line through the data.\nMore flexible machine learning methods can fit more complicated shapes. We are not using those yet.\nInstead, we ask:\n\nHow much can we improve a linear regression by changing the shape of the features we give it?\n\nLinear regression has real advantages:\n\nIt is interpretable\nWe can explain how it works\nWe understand what is happening “under the hood”\n\nTherefore:\n\nMore complex methods are not automatically better. Linear regression is tried and tested, and it is a good model."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#when-a-straight-line-is-not-enough",
+    "href": "weekly-notes/week-06.html#when-a-straight-line-is-not-enough",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "3. When a Straight Line Is Not Enough",
+    "text": "3. When a Straight Line Is Not Enough\nSuppose we predict rent as a function of income.\nRegression finds the best-fitting line between the dependent variable and the independent variables.\nBut what if the true relationship is not a straight line?\nWe can transform the features so that a straight line fits them better.\nFor each transformation, we will check whether it improves the cross-validated RMSE.\n\n\n\n\n\n\n\nTechnique\nProblem it addresses\n\n\n\n\nLogs\nSkewed data, or percentage changes matter more than raw changes\n\n\nSquared (polynomial) terms\nCurved relationships\n\n\nCategorical variables\nGroups or thresholds\n\n\nInteraction terms\nSlopes that differ by group\n\n\nFixed effects\nUnmeasured characteristics of a place"
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#the-example-dataset",
+    "href": "weekly-notes/week-06.html#the-example-dataset",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "4. The Example Dataset",
+    "text": "4. The Example Dataset\nThe examples follow Assignment 4.\n\n\n\n\n\n\n\nItem\nValue\n\n\n\n\nUnit of analysis\nPhiladelphia census tracts\n\n\nSource\n2023 ACS 5-year estimates\n\n\nOutcome (dependent variable)\nMedian gross rent\n\n\nPredictors\nMedian household income, % renters, building age, distance to City Hall\n\n\nNew variable this week\nMedian year structure built\n\n\nCRS\nTransformed to PA South State Plane (feet), EPSG:2272\n\n\n\nData are transformed to State Plane feet straight away so that distance measurements are meaningful.\n#| eval: false\nlibrary(tidyverse)\nlibrary(tidycensus)\nlibrary(sf)\n\nraw_tracts &lt;- get_acs(\n  geography = \"tract\",\n  state = \"PA\",\n  county = \"Philadelphia\",\n  variables = c(\n    rent       = \"B25064_001\",  # median gross rent\n    income     = \"B19013_001\",  # median household income\n    year_built = \"B25035_001\",  # median year structure built\n    total_hh   = \"B25003_001\",  # occupied housing units\n    renters    = \"B25003_003\"   # renter-occupied units\n  ),\n  year = 2023,\n  output = \"wide\",\n  geometry = TRUE,\n  progress_bar = FALSE\n) %&gt;%\n  st_transform(2272)\nThe variable codes above are the standard ACS table codes. Check them against the course code."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#tip-removing-the-progress-bars",
+    "href": "weekly-notes/week-06.html#tip-removing-the-progress-bars",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "5. Tip: Removing the Progress Bars",
+    "text": "5. Tip: Removing the Progress Bars\nWhen geometry = TRUE, the download prints long progress bars into the rendered QMD.\nTo remove them, add a progress argument inside the call:\n#| eval: false\nprogress_bar = FALSE\nThe lecture wrote this as “progress = FALSE”. In tidycensus and tigris, the argument is progress_bar = FALSE.\n\nAsk in class to confirm."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#creating-a-point-feature-for-city-hall",
+    "href": "weekly-notes/week-06.html#creating-a-point-feature-for-city-hall",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "6. Creating a Point Feature for City Hall",
+    "text": "6. Creating a Point Feature for City Hall\n\nWhy?\nOne reason rents differ between neighbourhoods may be closeness to Center City.\nTo operationalize that idea, we create a point at City Hall and measure each tract’s distance to it.\nThis is the work of a feature engineer: turning an idea into a measurable variable.\n\n\nHow?\nIt is easiest to find coordinates as latitude and longitude. For example, click a location in Google Maps.\nThose coordinates are in WGS84 (EPSG:4326), so:\n\nCreate the point in EPSG:4326\nTransform it to State Plane feet (EPSG:2272) to match the tracts\n\n#| eval: false\ncity_hall &lt;- st_sfc(\n  st_point(c(-75.1635, 39.9526)),  # longitude, latitude\n  crs = 4326\n) %&gt;%\n  st_transform(2272)\n\nAlways know which CRS your input coordinates are in before creating a point.\n\nNote that st_point() takes longitude first, then latitude (x, y)."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#tidying-the-data-with-mutate",
+    "href": "weekly-notes/week-06.html#tidying-the-data-with-mutate",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "7. Tidying the Data with mutate()",
+    "text": "7. Tidying the Data with mutate()\n#| eval: false\ntracts &lt;- raw_tracts %&gt;%\n  mutate(\n    rent         = rentE,\n    rent_moe     = rentM,\n    income       = incomeE,\n    building_age = 2023 - year_builtE,\n    pct_renters  = renters / total_hh * 100,\n    dist_ch_mi   = as.numeric(st_distance(geometry, city_hall)) / 5280\n  ) %&gt;%\n  select(GEOID, rent, rent_moe, income, building_age,\n         pct_renters, dist_ch_mi) %&gt;%\n  filter(\n    !is.na(rent),\n    !is.na(income),\n    !is.na(building_age),\n    !is.na(pct_renters)\n  )\n\n\n\nNew variable\nCalculation\n\n\n\n\nbuilding_age\n2023 (ACS year) − median year built\n\n\npct_renters\nrenter households ÷ total households × 100\n\n\ndist_ch_mi\ndistance to City Hall in feet ÷ 5,280\n\n\n\nThere are 5,280 feet in a mile.\nas.numeric() drops the units attached by st_distance() and returns a plain number."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#why-drop-missing-values-first",
+    "href": "weekly-notes/week-06.html#why-drop-missing-values-first",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "8. Why Drop Missing Values First?",
+    "text": "8. Why Drop Missing Values First?\nIn R:\n!\nmeans NOT. So !is.na(rent) keeps records where rent is not missing.\nIf a row has a missing value, lm() will quietly drop it, without telling you.\nThat creates a problem:\n\nDifferent models could be estimated on different sets of tracts, so their RMSEs would not be directly comparable.\n\nFor fair comparisons, every model must use:\n\nExactly the same records\nExactly the same folds\n\nAfter filtering, the dataset has:\n\n377 census tracts"
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#a-consistent-cross-validation-helper-function",
+    "href": "weekly-notes/week-06.html#a-consistent-cross-validation-helper-function",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "9. A Consistent Cross-Validation Helper Function",
+    "text": "9. A Consistent Cross-Validation Helper Function\n\nGoal\nThis week we want to see how changing the features changes the same model.\nSo we remove randomness in the fold assignment:\n\nIf a tract is in fold 1 the first time, it stays in fold 1 every time.\n\nThe caret package can also do train/test splits. Here, however, fixing the folds ourselves guarantees identical comparisons.\n\n\nSetting the folds\n#| eval: false\nset.seed(5080)\n\nfolds &lt;- sample(rep(1:10, length.out = nrow(tracts)))\nset.seed() makes the random number generator reproducible. The course number, 5080, is used as the seed.\nThis randomly assigns each tract to one of 10 folds.\n\n\nThe function\n#| eval: false\ncv_rmse &lt;- function(f, data, log_y = FALSE) {\n\n  preds &lt;- rep(NA, nrow(data))\n\n  for (k in 1:10) {\n    # Train on every fold except k\n    m &lt;- lm(f, data = data[folds != k, ])\n\n    # Predict for the held-out fold k\n    preds[folds == k] &lt;- predict(m, newdata = data[folds == k, ])\n  }\n\n  # If the outcome was logged, convert predictions back to dollars\n  if (log_y) preds &lt;- exp(preds)\n\n  sqrt(mean((data$rent - preds)^2))\n}\n\n\nHow it works\nFor each fold k:\nFold k steps aside (test set)\n        ↓\nFit lm() on all other folds (training set) → model m\n        ↓\npredict() rents for fold k using m's coefficients\n        ↓\nCompare predictions with actual rents\nEvery tract gets a turn in the test set.\nA function is just a set of instructions that runs whenever it is called. Here we give it:\n\nf: the regression formula\ndata: the dataset\nlog_y: whether the outcome was logged (explained in Section 14)"
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#root-mean-square-error-rmse",
+    "href": "weekly-notes/week-06.html#root-mean-square-error-rmse",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "10. Root Mean Square Error (RMSE)",
+    "text": "10. Root Mean Square Error (RMSE)\n\\[\nRMSE = \\sqrt{\\frac{1}{n}\\sum_{i=1}^{n}(y_i - \\hat{y}_i)^2}\n\\]\nwhere:\n\n\\(y_i\\) = actual rent\n\\(\\hat{y}_i\\) = predicted rent\n\nRMSE is in the same units as the outcome: dollars of rent.\n\nLower RMSE = better out-of-sample prediction."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#the-baseline-model-and-the-model-log",
+    "href": "weekly-notes/week-06.html#the-baseline-model-and-the-model-log",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "11. The Baseline Model and the Model Log",
+    "text": "11. The Baseline Model and the Model Log\nA model log is simply a record of each model and its result.\n\n“Log” here means a record, not a logarithm.\n\nIt is stored as a tibble, and we add a row for every new model.\n#| eval: false\nf0 &lt;- rent ~ income + pct_renters + building_age + dist_ch_mi\n\nm0 &lt;- lm(f0, data = tracts)\n\nmodel_log &lt;- tibble(\n  model = \"M0: Baseline\",\n  rmse  = cv_rmse(f0, tracts)\n)\nThe baseline predicts rent as a function of:\n\nMedian household income\nPercent renters\nBuilding age\nDistance to City Hall\n\n\nResult\n\nBaseline RMSE ≈ $265\n\nOn average, the baseline prediction for a tract’s median rent is off by about $265.\nIs that good enough? The lecture’s answer: “I don’t know, I’m not your boss.”"
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#trick-1-log-transformations",
+    "href": "weekly-notes/week-06.html#trick-1-log-transformations",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "12. Trick 1: Log Transformations",
+    "text": "12. Trick 1: Log Transformations\n\nWhen to use a log\n1. Skewed distributions\nIf a variable has a long tail rather than a roughly normal distribution, taking the log can help. Linear regression works best with roughly normal data.\n2. Theoretical reasons: percentage change matters\nConsider income:\n\n\n\n\n\n\n\n\n\nChange\nRaw increase\nPercentage change\nMeaning\n\n\n\n\n$30,000 → $60,000\n+$30,000\n+100%\nIncome doubles. A neighbourhood may move out of poverty\n\n\n$170,000 → $200,000\n+$30,000\n≈ +18%\nA modest bonus\n\n\n\nThe raw increase is identical, but the consequences are very different.\n\nWhen percentage changes matter more than unit changes, consider a log.\n\n\n\nWorkflow\nLook at the distribution\n        ↓\nDoes it look skewed?\n        ↓\nTry a log and compare cross-validated RMSE"
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#logging-a-predictor",
+    "href": "weekly-notes/week-06.html#logging-a-predictor",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "13. Logging a Predictor",
+    "text": "13. Logging a Predictor\nThe outcome (rent) stays the same. Simply write log() in the formula:\n#| eval: false\nf1 &lt;- rent ~ log(income) + pct_renters + building_age + dist_ch_mi\n\nm1 &lt;- lm(f1, data = tracts)\ncoef(m1)\nNo separate transformation step is needed.\n\nInterpreting the coefficient\n\\[\n\\hat{\\beta}_{\\log(income)} = 502\n\\]\nFor a 1% increase in income:\n\\[\n\\frac{\\beta}{100} = \\frac{502}{100} \\approx \\$5\n\\]\n\nA 1% increase in median income is associated with about $5 more rent, holding the other variables constant.\n\nFor a 10% increase in income:\n\\[\n\\beta \\times \\log(1.10) = 502 \\times 0.0953 \\approx \\$48\n\\]\n\nA 10% increase in income is associated with roughly $50 more rent.\n\nInterpreting coefficients is not our main goal in prediction. But it is worth checking that they pass a sniff test.\n\n\nAdding it to the model log\n#| eval: false\nmodel_log &lt;- model_log %&gt;%\n  add_row(model = \"M1: log(income)\", rmse = cv_rmse(f1, tracts))\n\n\nResult\n\nThe RMSE did not really improve.\n\nA log transformation does not guarantee a better fit."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#warning-logs-and-zeros",
+    "href": "weekly-notes/week-06.html#warning-logs-and-zeros",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "14. Warning: Logs and Zeros",
+    "text": "14. Warning: Logs and Zeros\n\\[\n\\log(0) = -\\infty\n\\]\nIf a variable contains real zeros, lm() will fail.\nExample: counts of crimes or 311 calls per tract. A zero means “no crimes”. It is real information, not missing data.\n\nDo not drop zero observations just to take a log.\n\nInstead, use:\n#| eval: false\nlog1p(x)\nwhich computes:\n\\[\n\\log(1 + x)\n\\]\nso that:\n\\[\n\\log(1 + 0) = 0\n\\]\nThe transcript records this as “log1px”. The correct R function is log1p()."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#logging-the-outcome-variable",
+    "href": "weekly-notes/week-06.html#logging-the-outcome-variable",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "15. Logging the Outcome Variable",
+    "text": "15. Logging the Outcome Variable\nIf rent is skewed, we can log the outcome instead of, or as well as, the predictors.\n#| eval: false\nf2 &lt;- log(rent) ~ log(income) + pct_renters + building_age + dist_ch_mi\nThis is a log–log model for income.\nYou can go “log crazy”, but this is not recommended."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#interpreting-log-models",
+    "href": "weekly-notes/week-06.html#interpreting-log-models",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "16. Interpreting Log Models",
+    "text": "16. Interpreting Log Models\n\n\n\n\n\n\n\n\nModel\nForm\nInterpretation of β\n\n\n\n\nLevel–level\n\\(y \\sim x\\)\n1-unit ↑ in x → β units change in y (the slope)\n\n\nLevel–log\n\\(y \\sim \\log(x)\\)\n1% ↑ in x → β / 100 units change in y\n\n\nLog–level\n\\(\\log(y) \\sim x\\)\n1-unit ↑ in x → approx. 100 × β % change in y\n\n\nLog–log\n\\(\\log(y) \\sim \\log(x)\\)\n1% ↑ in x → approx. β % change in y\n\n\n\nThe log–log coefficient is an elasticity, a familiar idea from economics.\nIn the lecture, the level–level case was described as “a β percent increase in y”. The correct reading is β units of y.\n\nYou do not need to memorize these. Prediction is our main focus. But you should know where to look them up."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#critical-warning-log-dollars",
+    "href": "weekly-notes/week-06.html#critical-warning-log-dollars",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "17. Critical Warning: Log Dollars",
+    "text": "17. Critical Warning: Log Dollars\nWhen the outcome is logged, the RMSE suddenly looks amazing:\nBefore: RMSE ≈ 265\nAfter:  RMSE ≈ 0.18\nThis is not a breakthrough.\nThe second number is in log dollars.\n\nYour boss does not speak log dollars. They want to know how many dollars the model is off by.\n\nSo we must convert predictions back to dollars by taking the exponent:\n\\[\n\\hat{y} = e^{\\widehat{\\log(y)}}\n\\]\nThis is what the log_y = TRUE argument in cv_rmse() does:\n#| eval: false\nmodel_log &lt;- model_log %&gt;%\n  add_row(\n    model = \"M2: log(rent) + log(income)\",\n    rmse  = cv_rmse(f2, tracts, log_y = TRUE)\n  )\n\nResult\n\nThe RMSE improved by about $2."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#trick-2-squared-polynomial-terms",
+    "href": "weekly-notes/week-06.html#trick-2-squared-polynomial-terms",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "18. Trick 2: Squared (Polynomial) Terms",
+    "text": "18. Trick 2: Squared (Polynomial) Terms\n\nNon-linear relationships\nIf a scatter plot shows a curve, we can still use a linear model. We just “trick” it by adding a squared term.\n\n\nClassic example: building age\nNew buildings      → higher rent (new and shiny; built in desirable areas)\nMiddle-aged        → lower rent (dated, not updated)\nVery old buildings → higher rent again (\"vintage\")\nSo the relationship between age and rent is often U-shaped:\nRent\n │ ●                       ●\n │   ●                   ●\n │     ●             ●\n │        ●  ●  ●\n └──────────────────────────── Building age\n   new     middle-aged     old\n\n\nA data artifact to watch for\nThe Census records every building built before 1940 as “1939 or earlier”.\nAll of those tracts get the same value, which creates a pile-up at the oldest ages.\n\nDiscover artifacts like this through exploratory data analysis. Always plot your data (scatter plots!) after collecting it."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#adding-a-squared-term-with-i",
+    "href": "weekly-notes/week-06.html#adding-a-squared-term-with-i",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "19. Adding a Squared Term with I()",
+    "text": "19. Adding a Squared Term with I()\n#| eval: false\nf3 &lt;- rent ~ log(income) + pct_renters + building_age +\n  I(building_age^2) + dist_ch_mi\n\nm3 &lt;- lm(f3, data = tracts)\nI() means “do the math”: compute building_age^2 as a new variable.\n\nWithout I(), R quietly ignores the squared term or gives a syntax error.\n\nKeep both the linear term and the squared term in the model."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#reading-the-two-coefficients-together",
+    "href": "weekly-notes/week-06.html#reading-the-two-coefficients-together",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "20. Reading the Two Coefficients Together",
+    "text": "20. Reading the Two Coefficients Together\nThe model now estimates:\n\\[\ny = \\beta_0 + \\beta_1 x + \\beta_2 x^2 + \\dots\n\\]\nThe signs of \\(\\beta_1\\) and \\(\\beta_2\\) together describe the shape:\n\n\n\nLinear term \\(\\beta_1\\)\nSquared term \\(\\beta_2\\)\nShape\n\n\n\n\n+\n−\nRises, then levels off or falls (∩)\n\n\n−\n+\nFalls, then rises (∪)\n\n\n\nIn our model:\n\n\\(\\beta_1\\) (building age) is negative → rent falls as buildings age\n\\(\\beta_2\\) (building age²) is positive → eventually rent rises again\n\n\nThis picks up the non-linear “vintage” pattern we expected."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#the-turning-point",
+    "href": "weekly-notes/week-06.html#the-turning-point",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "21. The Turning Point",
+    "text": "21. The Turning Point\nWhere does the effect switch from negative to positive?\n\\[\nx^* = -\\frac{\\beta_1}{2\\beta_2}\n\\]\nwhere:\n\n\\(\\beta_1\\) = coefficient on the linear term\n\\(\\beta_2\\) = coefficient on the squared term\n\n#| eval: false\nb1 &lt;- coef(m3)[\"building_age\"]\nb2 &lt;- coef(m3)[\"I(building_age^2)\"]\n\nturning_point &lt;- -b1 / (2 * b2)\nturning_point\n\nResult\n\\[\nx^* \\approx 76.8 \\text{ years}\n\\]\n\nAround 77 years old, buildings become “vintage enough” that age starts to add to rent.\n\n\n\nCheck: is the turning point inside your data?\n#| eval: false\nmax(tracts$building_age)\nIn our data, the maximum building age is about 85 years, so the turning point is within the observed range.\nIf the turning point were far outside your data (for example, 200 years), the parabola would only bend. It would not actually turn within the data.\n\nDon’t tell a story about a turn you never observed.\n\n\n\nResult\n#| eval: false\nmodel_log &lt;- model_log %&gt;%\n  add_row(model = \"M3: + building age²\", rmse = cv_rmse(f3, tracts))\n\nRMSE fell by about another $2, to roughly $261."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#trick-3-categorical-variables",
+    "href": "weekly-notes/week-06.html#trick-3-categorical-variables",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "22. Trick 3: Categorical Variables",
+    "text": "22. Trick 3: Categorical Variables\n\nTwo reasons to use categories\n1. The data already come in categories\n\nZoning class\nHousing type\nInside a TOD area or not\nPlanning district\n\nCategories may be binary (yes/no) or have several groups.\n2. We create our own categories\nWhen a continuous variable seems to behave like groups rather than a straight line.\n\n\nExample: distance rings\nInstead of assuming rent declines steadily with distance from City Hall, we might assume:\n\n\n\nRing\nDistance from City Hall\n\n\n\n\nCore\nUnder 2 miles\n\n\nInner\n2 to under 5 miles\n\n\nOuter\n5 miles or more\n\n\n\nThe idea: being 0.2 miles or 2 miles from City Hall has roughly the same effect. Both are “core”."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#creating-categories-with-case_when",
+    "href": "weekly-notes/week-06.html#creating-categories-with-case_when",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "23. Creating Categories with case_when()",
+    "text": "23. Creating Categories with case_when()\n#| eval: false\ntracts &lt;- tracts %&gt;%\n  mutate(\n    ring = case_when(\n      dist_ch_mi &lt; 2 ~ \"Core\",\n      dist_ch_mi &lt; 5 ~ \"Inner\",\n      TRUE           ~ \"Outer\"\n    ),\n    ring = factor(ring)\n  )\n\nConditions are checked in order\nTRUE catches everyone else who did not meet the earlier conditions\n\n\nWhy factor()?\nA factor tells R that the values are groups, not numbers.\nThis matters most when categories are labelled with numbers:\n1, 2, 3\nWithout factor(), R treats them as ordinal or continuous numbers, as if 1 &lt; 2 &lt; 3.\n\nUse factor() so categories are treated as labels, not quantities."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#always-count-your-categories",
+    "href": "weekly-notes/week-06.html#always-count-your-categories",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "24. Always Count Your Categories",
+    "text": "24. Always Count Your Categories\n#| eval: false\ntracts %&gt;%\n  st_drop_geometry() %&gt;%\n  count(ring)\n\nThis is where 99% of your cross-validation problems will come from.\n\n\nWhy?\nSuppose only 3 tracts are in the core, and all three land in the same test fold:\nTraining data: no core tracts\n        ↓\nModel never estimates a coefficient for \"Core\"\n        ↓\nTest data: \"We're core!\"\n        ↓\nModel: \"I've never heard of core\" → error\n\nMake sure every category has enough observations for both the regression and cross-validation."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#evenly-spaced-bins-with-cut",
+    "href": "weekly-notes/week-06.html#evenly-spaced-bins-with-cut",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "25. Evenly Spaced Bins with cut()",
+    "text": "25. Evenly Spaced Bins with cut()\nInstead of choosing thresholds from theory, cut() divides a variable into evenly spaced bins.\n#| eval: false\ntracts &lt;- tracts %&gt;%\n  mutate(\n    renter_group = cut(\n      pct_renters,\n      breaks = 3,\n      labels = c(\"Mostly Owners\", \"Mixed\", \"Mostly Renters\")\n    )\n  )\n\n\n\nCategory\nNumber of tracts\n\n\n\n\nMostly Owners\n88\n\n\nMixed\n210\n\n\nMostly Renters\n79\n\n\nTotal\n377"
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#dummy-coding-and-the-reference-category",
+    "href": "weekly-notes/week-06.html#dummy-coding-and-the-reference-category",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "26. Dummy Coding and the Reference Category",
+    "text": "26. Dummy Coding and the Reference Category\nBehind the scenes, R converts each category into binary (0/1) variables:\n\n\n\nTract\nring\nInner\nOuter\n\n\n\n\nA\nCore\n0\n0\n\n\nB\nInner\n1\n0\n\n\nC\nOuter\n0\n1\n\n\n\nA tract that is neither Inner nor Outer must be Core.\n\nWhy k − 1?\nBecause of the math, a model cannot include all category dummies and an intercept.\nWith \\(k\\) categories, R estimates:\n\\[\nk - 1\n\\]\ndummy variables.\nHere:\n\\[\nk = 3 \\quad (\\text{Core, Inner, Outer}) \\Rightarrow k - 1 = 2\n\\]\nThe left-out category is the reference category. Its effect is absorbed into the intercept.\n\nCategory coefficients are always interpreted relative to the reference category."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#interpreting-category-coefficients",
+    "href": "weekly-notes/week-06.html#interpreting-category-coefficients",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "27. Interpreting Category Coefficients",
+    "text": "27. Interpreting Category Coefficients\n#| eval: false\nf4 &lt;- rent ~ log(income) + pct_renters + building_age +\n  I(building_age^2) + ring\n\nm4 &lt;- lm(f4, data = tracts)\ncoef(m4)\n\n\n\n\n\n\n\n\nRing\nCoefficient\nInterpretation\n\n\n\n\nCore\nReference\n(absorbed in intercept)\n\n\nInner\n−122\nInner-ring tracts rent for $122 less than core tracts, all else equal\n\n\nOuter\n−164\nOuter-ring tracts rent for $164 less than core tracts, all else equal\n\n\n\n\nChanging the reference category\nBy default, R chooses the reference alphabetically (“Core” comes first).\n#| eval: false\ntracts &lt;- tracts %&gt;%\n  mutate(ring = relevel(ring, ref = \"Outer\"))\nNow the interpretation becomes:\n\nCompared with the outer ring, core tracts rent for about $160 more.\n\n\nChanging the reference category changes the interpretation, not the predictions."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#trade-off-categories-throw-away-information",
+    "href": "weekly-notes/week-06.html#trade-off-categories-throw-away-information",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "28. Trade-off: Categories Throw Away Information",
+    "text": "28. Trade-off: Categories Throw Away Information\nReplacing continuous distance with three rings means:\n2.1 miles → Inner\n4.9 miles → Inner\nBoth are treated identically, even though they are almost 3 miles apart.\nYou can include both the continuous variable and the categories, but check that this does not destabilize the model.\n\nResult\n#| eval: false\nmodel_log &lt;- model_log %&gt;%\n  add_row(model = \"M4: rings instead of distance\", rmse = cv_rmse(f4, tracts))\n\nThe RMSE got worse.\n\nIt was not a great example, but it does not hurt to try. Consider categories when:\n\nThe data look jumpy or grouped\nYou have a strong theoretical reason"
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#trick-4-interaction-terms",
+    "href": "weekly-notes/week-06.html#trick-4-interaction-terms",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "29. Trick 4: Interaction Terms",
+    "text": "29. Trick 4: Interaction Terms\n\nCategories vs. interactions\n\n\n\n\n\n\n\nTechnique\nWhat changes by group?\n\n\n\n\nCategorical variable\nThe intercept (the level shifts up or down)\n\n\nInteraction term\nThe slope (the relationship itself differs)\n\n\n\n\n\nHypothesis\nThe relationship between income and rent may differ by ring:\n\nSteeper in Center City\nFlatter further out, where income matters less\n\n\n\nCode\nMultiply the terms inside the formula:\n#| eval: false\nf5 &lt;- rent ~ log(income) * ring + pct_renters +\n  building_age + I(building_age^2)\n\nm5 &lt;- lm(f5, data = tracts)\ncoef(m5)\nlog(income) * ring includes:\n\nlog(income) main effect\nring main effects\nlog(income):ring interaction terms"
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#interpreting-interaction-coefficients",
+    "href": "weekly-notes/week-06.html#interpreting-interaction-coefficients",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "30. Interpreting Interaction Coefficients",
+    "text": "30. Interpreting Interaction Coefficients\n\n\n\n\n\n\n\n\nTerm\nCoefficient\nMeaning\n\n\n\n\nlog(income)\n653\nSlope in the Core (reference)\n\n\nlog(income):ringInner\n−219\nInner-ring slope is 219 less → ≈ 434\n\n\nlog(income):ringOuter\n−244\nOuter-ring slope is 244 less → ≈ 409\n\n\n\nSo the income–rent relationship is indeed strongest in the core.\n\nResult\n#| eval: false\nmodel_log &lt;- model_log %&gt;%\n  add_row(model = \"M5: log(income) × ring\", rmse = cv_rmse(f5, tracts))\n\nRMSE ≈ $264: better than M4, but worse than the best model so far.\n\n\nUse interactions when you have a reason, not “willy-nilly”. Models quickly become untenable."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#trick-5-fixed-effects",
+    "href": "weekly-notes/week-06.html#trick-5-fixed-effects",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "31. Trick 5: Fixed Effects",
+    "text": "31. Trick 5: Fixed Effects\n\nThe idea\nSuppose you have included everything you can measure:\n\nDistance to the core\nIncome\nShare of people with a bachelor’s degree\nBike share stations\n…\n\nThere may still be unmeasurable factors that explain why rent is higher in some places:\n\nSense of place\nPerception\nReputation\n\nA fixed effect is a catch-all:\n\nA dummy variable for an area that absorbs the remaining variation explained simply by being located there.\n\n\n\nChoosing the area\nOur outcome is already measured at the tract level, so the fixed effect must be a larger area.\nWe use Philadelphia’s:\n\n18 planning districts"
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#assigning-tracts-to-planning-districts",
+    "href": "weekly-notes/week-06.html#assigning-tracts-to-planning-districts",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "32. Assigning Tracts to Planning Districts",
+    "text": "32. Assigning Tracts to Planning Districts\n#| eval: false\ndistricts &lt;- st_read(\"planning_districts.geojson\") %&gt;%\n  st_transform(2272)\n\ntracts &lt;- tracts %&gt;%\n  st_join(\n    districts %&gt;% select(district = DIST_NAME),\n    largest = TRUE\n  ) %&gt;%\n  mutate(district = factor(district))\nThe file name and the DIST_NAME field are illustrative. Use the names in the course code.\n\nSpatial join with largest = TRUE\nWhat if a tract is split by two districts?\n┌───────────────┐\n│ District 1    │ District 2\n│   ███████████ │ ████\n│   ███ tract ██│ ████\n└───────────────┘\nlargest = TRUE assigns the whole tract to the district containing the largest share of its area.\n\nUnlike st_intersection(), the tract is not cut. It receives one district value.\n\n\n\nWhy factor() again?\nDistrict numbers are labels, not rankings. District 1 is not “less than” District 2."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#small-categories-break-cross-validation",
+    "href": "weekly-notes/week-06.html#small-categories-break-cross-validation",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "33. Small Categories Break Cross-Validation",
+    "text": "33. Small Categories Break Cross-Validation\n#| eval: false\ntracts %&gt;%\n  st_drop_geometry() %&gt;%\n  count(district, sort = TRUE)\nIn the lecture, one district (Lower South) contained very few tracts.\nThis caused two problems:\n\nWhen those tracts were in the test fold, the training model had never learned their coefficient → error\nEstimating a coefficient from one observation is highly unstable\n\n\nFix\n\nMake sure every category has at least about 10 observations.\n\nOptions:\n\nCombine small categories into an “Other” group (works, but not ideal)\nMerge a small district with a neighbouring district (better)\n\n#| eval: false\nsmall &lt;- tracts %&gt;%\n  st_drop_geometry() %&gt;%\n  count(district) %&gt;%\n  filter(n &lt; 10) %&gt;%\n  pull(district)\n\ntracts &lt;- tracts %&gt;%\n  mutate(\n    district = as.character(district),\n    district = if_else(district %in% small, \"Other\", district),\n    district = factor(district)\n  )"
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#estimating-the-fixed-effects-model",
+    "href": "weekly-notes/week-06.html#estimating-the-fixed-effects-model",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "34. Estimating the Fixed Effects Model",
+    "text": "34. Estimating the Fixed Effects Model\n#| eval: false\nf6 &lt;- log(rent) ~ log(income) + pct_renters + building_age +\n  I(building_age^2) + dist_ch_mi + district\n\nm6 &lt;- lm(f6, data = tracts)\nHere the fixed effects are added to the best model so far. Check the course code for the exact formula.\n\nWhat do we get?\nEach district gets its own intercept.\nMapping these intercepts shows the “value” of being in each district, which is useful information in itself.\n\n\nDid the fixed effects absorb spatial clustering?\nComparing maps of residuals before and after adding district fixed effects shows only minor differences.\n\n\nResult\n#| eval: false\nmodel_log &lt;- model_log %&gt;%\n  add_row(model = \"M6: + district fixed effects\",\n          rmse  = cv_rmse(f6, tracts, log_y = TRUE))\n\nRMSE ≈ $256: the best model.\n\n\nAdding fixed effects is a reliable way to lower RMSE in geographic price prediction.\n\nThe lecturer also mentioned her research modelling neighbourhood fixed effects for Chicago. Ask about it in class."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#comparing-all-models",
+    "href": "weekly-notes/week-06.html#comparing-all-models",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "35. Comparing All Models",
+    "text": "35. Comparing All Models\n\n\n\n\n\n\n\n\n\nModel\nChange\nCV RMSE ($)\nEffect\n\n\n\n\nM0\nBaseline: income + % renters + building age + distance\n≈ 265\n—\n\n\nM1\nlog(income)\n≈ 265\nLittle or no improvement\n\n\nM2\nlog(rent) + log(income), back-transformed\n≈ 263\nImproved ≈ $2\n\n\nM3\n+ I(building_age^2)\n≈ 261\nImproved ≈ $2 more\n\n\nM4\nDistance rings instead of distance\nHigher\nWorse\n\n\nM5\nlog(income) × ring\n≈ 264\nWorse than best\n\n\nM6\n+ planning district fixed effects\n≈ 256\nBest\n\n\n\nValues are approximate. The lecture did not give exact RMSEs for M1 and M4.\n#| eval: false\nmodel_log %&gt;%\n  ggplot(aes(x = reorder(model, rmse), y = rmse)) +\n  geom_col() +\n  coord_flip() +\n  labs(x = NULL, y = \"Cross-validated RMSE ($)\")\n\nSome changes helped modestly, some hurt. That is the finding."
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#reminders-and-to-do",
+    "href": "weekly-notes/week-06.html#reminders-and-to-do",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "36. Reminders and To Do",
+    "text": "36. Reminders and To Do\n\nAssignment 4, Part 5: collect your own data and test these techniques. It is exploratory. You are not trying to build the winning model yet.\nNext week: KNN spatial features, plus the team assignment to predict home values.\nBring questions to the start of class (next Friday).\nAsk the professor about:\n\nThe progress-bar argument (progress = FALSE vs. progress_bar = FALSE)\nHer research on neighbourhood fixed effects in Chicago\n\nRead more on:\n\nInterpreting log models and elasticity\nDummy coding and reference categories"
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#week-7-quick-reference",
+    "href": "weekly-notes/week-06.html#week-7-quick-reference",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "37. Week 7 Quick Reference",
+    "text": "37. Week 7 Quick Reference\n\n\n\n\n\n\n\nConcept / Question\nTool / Answer\n\n\n\n\nRemove progress bars in a rendered QMD\nprogress_bar = FALSE\n\n\nMake a point from lat/long\nst_sfc(st_point(c(lon, lat)), crs = 4326)\n\n\nDistance in miles from State Plane feet\nas.numeric(st_distance(...)) / 5280\n\n\nKeep rows that are not missing\nfilter(!is.na(x))\n\n\nReproducible randomness\nset.seed(5080)\n\n\nFixed fold assignment\nsample(rep(1:10, length.out = n))\n\n\nPrediction error in dollars\nRMSE\n\n\nModel log\nA tibble record of models and RMSEs\n\n\nSkewed variable / % change matters\nlog(x)\n\n\nLog with zeros\nlog1p(x) = log(1 + x)\n\n\nLevel–log interpretation\n1% ↑ x → β/100 units y\n\n\nLog–level interpretation\n1 unit ↑ x → ≈ 100β % y\n\n\nLog–log interpretation\n1% ↑ x → ≈ β % y (elasticity)\n\n\nBack-transform logged predictions\nexp()\n\n\nSquared term\nI(x^2)\n\n\nTurning point\n−β₁ / (2β₂)\n\n\nCreate categories from rules\ncase_when()\n\n\nEvenly spaced bins\ncut()\n\n\nTreat values as groups\nfactor()\n\n\nChange reference category\nrelevel(x, ref = \"...\")\n\n\nNumber of dummies for k categories\nk − 1\n\n\nSlope varies by group\nx * group\n\n\nAssign polygon to the district with the most overlap\nst_join(..., largest = TRUE)\n\n\nUnmeasured place effects\nFixed effects (+ district)\n\n\nMinimum observations per category\nAbout 10"
+  },
+  {
+    "objectID": "weekly-notes/week-06.html#key-concepts-to-remember",
+    "href": "weekly-notes/week-06.html#key-concepts-to-remember",
+    "title": "Week 6: Feature Engineering for Linear Regression",
+    "section": "38. Key Concepts to Remember",
+    "text": "38. Key Concepts to Remember\n\nLinear regression fits a straight line, but feature engineering lets it capture more complex relationships.\nLinear regression is interpretable. More complex methods are not automatically better.\nFeature engineering means operationalizing ideas (such as “closeness to Center City”) as measurable variables.\nCreate points from latitude/longitude in EPSG:4326, then transform to the project CRS.\nlm() quietly drops rows with missing values, so filter NAs before comparing models.\nCompare models using the same records and the same folds.\nA model log is a record of models and RMSEs, not a logarithm.\nLog transformations help with skewed data and when percentage changes matter.\nlog(0) is −∞. Use log1p() for variables with real zeros.\nWith a logged outcome, back-transform predictions with exp() before computing RMSE. Otherwise the error is in log dollars.\nLog–log coefficients are elasticities.\nSquared terms, written with I(x^2), capture curved relationships.\nRead the linear and squared coefficients together to understand the shape.\nThe turning point is −β₁ / (2β₂). Check that it falls inside the data range.\nAlways do exploratory analysis. The Census groups all pre-1940 buildings as “1939 or earlier”.\nUse factor() so categories are treated as groups, not numbers.\nCategorical variables are dummy coded into k − 1 variables. The omitted group is the reference category.\nCategory coefficients are interpreted relative to the reference. Changing the reference changes interpretation, not predictions.\nTurning a continuous variable into categories throws away information.\nCategorical variables shift the intercept. Interaction terms let the slope vary by group.\nUse interactions only when you have a reason.\nFixed effects absorb unmeasured characteristics of place, such as reputation and sense of place.\nst_join(..., largest = TRUE) assigns each polygon to the area containing most of it.\nAlways count observations per category. Small categories break cross-validation. Aim for at least ~10.\nFixed effects gave the best model (≈ $256 RMSE).\nAssignment 4, Part 5 is exploratory: try these techniques on your own data.\nNext week: KNN spatial features, then a team challenge to predict home values."
   }
 ]
