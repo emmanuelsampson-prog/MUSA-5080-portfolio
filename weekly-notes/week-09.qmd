@@ -1,0 +1,789 @@
+---
+title: "Week 9: Local Spatial Autocorrelation (LISA), Operationalizing \"Near\", and the Case of RealPage"
+description: "From global to local Moran's I, LISA quadrants read as model errors, a LISA-driven feature workflow, three ways to measure nearness, and the ethics of rent-pricing algorithms through the RealPage case and an RFP exercise."
+date: 2026-10-23
+---
+
+## 1. Overview
+
+**Lecturer:** Dr. Elizabeth Delmelle
+
+**Lecture title:** *A few odds & ends: LISA, the case of RealPage, etc.*
+
+The slide deck labels this lecture "Week 8". In this course-notes series it is **Week 9**, because it follows the October 16 lecture (Week 8).
+
+This week has three parts:
+
+1. **From global to local.** Global Moran's I gives one number for the whole map. **Local Moran's I (LISA)** gives **one number per house**, showing *where* the errors cluster.
+2. **Operationalizing "near"** (the word of the week). We compare three ways to measure nearness: buffer count, nearest distance and kNN mean distance.
+3. **Should we build this?** The RealPage case, and a class exercise where each table bids on a rent-pricing RFP as a consulting firm.
+
+The big idea:
+
+> **Global Moran's I tells you whether errors cluster. Local Moran's I tells you where. The places where it is large are your to-do list.**
+
+---
+
+## 2. Where We Left Off
+
+Last week we learned **Moran's I of the residuals**:
+
+- It asks: **do the errors cluster?**
+- In the model log, it should **fall** as you add features.
+
+But a single number has a limit:
+
+> **One number can't tell you where to look.**
+
+Today we compute **one number per house**.
+
+---
+
+## 3. Back to the Five-House Block
+
+We reuse last week's example: five houses in a row, where each house's neighbors are the houses next door.
+
+```text
+A — B — C — D — E
+```
+
+The new column is **my neighbors' average** deviation. Averaging the neighbors is exactly what **row-standardized weights** do.
+
+| House | Residual | Deviation (z) | Neighbors | Neighbors' average z |
+|---|---:|---:|---|---:|
+| A | +100k | +84 | B | +64 |
+| B | +80k | +64 | A, C | +44 |
+| C | +20k | +4 | B, D | −1 |
+| D | −50k | −66 | C, E | −41 |
+| E | −70k | −86 | D | −66 |
+
+For example, B's neighbors are A (+84) and C (+4), so their average is (84 + 4) / 2 = **+44**.
+
+---
+
+## 4. Local Moran's I: One House at a Time
+
+$$
+I_i = \frac{z_i}{m_2} \sum_j w_{ij} z_j
+\qquad
+m_2 = \frac{\sum_i z_i^2}{n} = \frac{22{,}920}{5} = 4{,}584
+$$
+
+where:
+
+- $z_i$ = my deviation from the mean
+- $\sum_j w_{ij} z_j$ = my neighbors' average deviation (with row-standardized weights)
+- $m_2$ = the average squared deviation, used to scale the result
+
+In words:
+
+> **Local Moran's I = me × my neighbors' average, scaled.**
+
+### Worked values
+
+| House | Me | My neighbors | $I_i$ | Quadrant |
+|---|---:|---:|---:|---|
+| A | +84 | +64 | **1.17** | High–High |
+| B | +64 | +44 | **0.61** | High–High |
+| C | +4 | −1 | **0.00** | (nothing to see) |
+| D | −66 | −41 | **0.59** | Low–Low |
+| E | −86 | −66 | **1.24** | Low–Low |
+
+For example, for house A:
+
+$$
+I_A = \frac{84 \times 64}{4{,}584} = \frac{5{,}376}{4{,}584} \approx 1.17
+$$
+
+### Link to the global value
+
+The **average** of the five local values is:
+
+$$
+\frac{1.17 + 0.61 + 0.00 + 0.59 + 1.24}{5} \approx 0.72
+$$
+
+This is the **global Moran's I** with these weights.
+
+> **Global Moran's I is the average of the local Moran's I values.**
+
+### Why 0.72 and not 0.60 like last week?
+
+- Last week we used plain **0/1 (binary) neighbor weights** → I ≈ 0.60
+- `spdep` with `style = "W"` **averages** the neighbors (row-standardized) → I ≈ 0.72
+
+Same story, different weighting.
+
+---
+
+## 5. The Four Quadrants, Read as Errors
+
+Recall the sign convention:
+
+$$
+\text{residual} = \text{actual} - \text{predicted}
+$$
+
+> **High = we guessed too low (under-predicted).**
+
+| | Neighbors under-predicted | Neighbors over-predicted |
+|---|---|---|
+| **I'm under-predicted** | **High–High**: a pocket the model **undervalues**. *A missing amenity.* | **High–Low**: one house worth more than its block. *Something about the house.* |
+| **I'm over-predicted** | **Low–High**: one house worth less than its block. *Something about the house.* | **Low–Low**: a pocket the model **overvalues**. *A missing disamenity.* |
+
+### How to act on each
+
+| Type | Quadrants | Points to a… | What to do |
+|---|---|---|---|
+| **Clusters** | High–High, Low–Low | **Place** | Build a **spatial feature** |
+| **Outliers** | High–Low, Low–High | **House** | Check the data, or accept that OPA can't see it either |
+
+---
+
+## 6. Last Week's Model, Out-of-Fold Residuals
+
+We rebuild last week's Philadelphia model: same sales, same cleaning rules, same violent-crime feature.
+
+```r
+#| eval: false
+sales <- carto_get(
+  "SELECT the_geom, parcel_number, sale_price, sale_date, total_livable_area,
+          number_of_bedrooms, number_of_bathrooms, year_built, interior_condition
+   FROM opa_properties_public
+   WHERE category_code = '1'
+     AND sale_date >= '2023-01-01' AND sale_date < '2025-01-01'"
+) %>%
+  st_transform(2272) %>%
+  filter(sale_price >= 10000, total_livable_area > 0, !st_is_empty(.)) %>%
+  mutate(year_built = na_if(as.numeric(year_built), 0),
+         age = 2024 - year_built) %>%
+  filter(!is.na(age), !is.na(number_of_bathrooms))
+
+violent <- carto_get(
+  "SELECT the_geom FROM incidents_part1_part2
+   WHERE dispatch_date >= '2023-01-01' AND dispatch_date < '2025-01-01'
+     AND text_general_code IN ('Aggravated Assault Firearm',
+                               'Aggravated Assault No Firearm',
+                               'Robbery Firearm', 'Robbery No Firearm')"
+) %>%
+  filter(!st_is_empty(.)) %>%
+  st_transform(2272)
+
+sales$violent_knn5 <- sapply(
+  st_nn(sales, violent, k = 5, returnDist = TRUE, progress = FALSE)$dist,
+  mean
+)
+
+f1 <- sale_price ~ total_livable_area + number_of_bathrooms + age + violent_knn5
+
+sales$resid_1 <- sales$sale_price - cv_pred(f1, sales)
+```
+
+`cv_pred()` and `cv_rmse()` are **course helper functions**. `cv_pred()` returns each house's cross-validated prediction.
+
+### What's new: out-of-fold residuals
+
+Last week, residuals came from a model fitted on **all** houses. Now:
+
+> **Each house's error comes from the fold where it was held out.**
+
+This gives an honest picture of how the model performs on houses it has **not seen**, which is how it will be used.
+
+---
+
+## 7. Local Moran's I in R
+
+```r
+#| eval: false
+library(spdep)
+
+w_knn <- nb2listw(
+  knn2nb(knearneigh(st_coordinates(sales), k = 5)),
+  style = "W"
+)
+
+lisa_quads <- function(resid, w, alpha = 0.01) {
+  lm_perm <- localmoran_perm(resid, w, nsim = 499)
+  z   <- resid - mean(resid)
+  lag <- lag.listw(w, z)
+  p   <- lm_perm[, "Pr(z != E(Ii)) Sim"]
+  case_when(
+    p >= alpha      ~ "Not significant",
+    z > 0 & lag > 0 ~ "High-High",
+    z < 0 & lag < 0 ~ "Low-Low",
+    z > 0 & lag < 0 ~ "High-Low",
+    TRUE            ~ "Low-High"
+  )
+}
+
+sales$quad_1 <- lisa_quads(sales$resid_1, w_knn)
+table(sales$quad_1)
+```
+
+The weights are the same as last week: each house's **5 nearest sales**, row-standardized.
+
+### What `lisa_quads()` does
+
+| Step | Code | Meaning |
+|---|---|---|
+| 1 | `localmoran_perm(resid, w, nsim = 499)` | Local Moran's I for every house, with a **permutation (shuffle) test** |
+| 2 | `z <- resid - mean(resid)` | Am I above or below the average error? |
+| 3 | `lag <- lag.listw(w, z)` | Are my neighbors above or below average? |
+| 4 | `p <- ...Sim` | The simulated p-value for each house |
+| 5 | `case_when(...)` | Assign each house to a quadrant, or "Not significant" if p ≥ 0.01 |
+
+The significance threshold is **α = 0.01**, stricter than the usual 0.05, because we are running thousands of tests.
+
+### Result
+
+```text
+      High-High        High-Low        Low-High         Low-Low  Not significant
+            169              22             121             536            26692
+```
+
+| Quadrant | Houses | Meaning |
+|---|---:|---|
+| High–High | 169 | Under-predicted pockets |
+| Low–Low | **536** | Over-predicted pockets (the largest group) |
+| High–Low | 22 | Single houses worth more than their block |
+| Low–High | 121 | Single houses worth less than their block |
+| Not significant | 26,692 | No local pattern |
+
+Most houses are **not significant**. The model's problems are concentrated in a few hundred locations, and **over-prediction clusters (Low–Low) outnumber under-prediction clusters about 3 to 1**.
+
+---
+
+## 8. The To-Do List: Mapping LISA Quadrants
+
+```r
+#| eval: false
+quad_cols <- c("High-High" = "#b2182b", "Low-Low" = "#2166ac",
+               "High-Low"  = "#f4a582", "Low-High" = "#92c5de",
+               "Not significant" = "grey88")
+
+ggplot() +
+  geom_sf(data = filter(sales, quad_1 == "Not significant"),
+          color = "grey88", size = 0.3) +
+  geom_sf(data = filter(sales, quad_1 != "Not significant"),
+          aes(color = quad_1), size = 0.6) +
+  scale_color_manual(values = quad_cols) +
+  theme_void() +
+  labs(color = NULL,
+       title = "Where the errors cluster",
+       subtitle = "Red: pockets we under-predict · Blue: pockets we over-predict")
+```
+
+Design choices:
+
+- **Dark red / dark blue** = clusters (High–High / Low–Low)
+- **Light red / light blue** = outliers (High–Low / Low–High)
+- **Grey** = not significant
+- Plot the **grey houses first**, so the clusters sit on top.
+
+---
+
+## 9. Reading the Map
+
+For each red or blue cluster, ask:
+
+1. **Where is it?** Name the neighborhood.
+2. **What's there** that the model doesn't know about?
+3. **Can you measure it** with open data?
+
+```text
+Can you measure it?
+   ├── Yes → that's your next feature
+   └── No  → it goes in your "where it fails worst" section, with your explanation
+```
+
+---
+
+## 10. Who's in the Blue?
+
+**Low–Low** means **over-predicted**.
+
+> **As an assessment, an over-predicted house is an over-taxed house.**
+
+So we ask: are the over-predicted pockets in **poorer** or **richer** neighborhoods?
+
+```r
+#| eval: false
+tract_inc <- get_acs(
+  geography = "tract", variables = "B19013_001",   # median household income
+  state = "PA", county = "Philadelphia", year = 2023,
+  geometry = TRUE, progress = FALSE
+) %>%
+  st_transform(2272) %>%
+  select(med_inc = estimate)
+
+sales %>%
+  st_join(tract_inc, join = st_nearest_feature) %>%
+  st_drop_geometry() %>%
+  filter(!is.na(med_inc)) %>%
+  mutate(inc_quintile = ntile(med_inc, 5)) %>%
+  group_by(inc_quintile) %>%
+  summarise(
+    n = n(),
+    pct_low_low   = mean(quad_1 == "Low-Low") * 100,
+    pct_high_high = mean(quad_1 == "High-High") * 100
+  )
+```
+
+| Income quintile | n | % Low–Low (over-predicted) | % High–High (under-predicted) |
+|---|---:|---:|---:|
+| 1 (poorest) | 5,450 | **4.48** | 0.26 |
+| 2 | 5,450 | 2.04 | 0.40 |
+| 3 | 5,450 | 1.45 | 0.29 |
+| 4 | 5,449 | 1.12 | **1.38** |
+| 5 (richest) | 5,449 | 0.46 | 0.75 |
+
+### Interpretation
+
+- Houses in the **poorest fifth** of tracts are about **10 times more likely** to sit in an over-predicted (Low–Low) cluster than houses in the richest fifth (4.48% vs. 0.46%).
+- Under-predicted (High–High) clusters are more common in **higher-income** tracts.
+
+> **If this model set assessed values, it would over-tax lower-income neighborhoods and under-tax wealthier ones. That is a regressive pattern, the same problem "The Tax Divide" found in Cook County.**
+
+`st_join(..., join = st_nearest_feature)` gives each house the income of the **nearest tract**. This also covers houses that fall exactly on a tract boundary.
+
+---
+
+## 11. Global vs. Local Moran's I
+
+| | Global Moran's I | Local Moran's I (LISA) |
+|---|---|---|
+| **Output** | One number | One number **per house** |
+| **Question** | Do errors cluster? | **Where** do they cluster? |
+| **Use** | Model log: did it fall? | To-do list: what's missing there? |
+| **Danger** | p-value always tiny with a big n | Thousands of tests, so some clusters appear by chance |
+
+The LISA danger is a **multiple-testing** problem. At α = 0.05, about 1 in 20 tests would be "significant" even with no real pattern. That is one reason the function uses the stricter **α = 0.01**.
+
+---
+
+## 12. Operationalizing "Near" (Word of the Week)
+
+To **operationalize** a concept is to turn it into something we can **measure**.
+
+"Near violent crime" can be measured in three ways:
+
+| Method | How | Good when | Watch out |
+|---|---|---|---|
+| **Buffer count** | Incidents within 660 ft | Exposure: "how much is around me?" | Zeros everywhere. The radius is a choice |
+| **Nearest distance** | Feet to the **single** closest | One thing matters: a station, a park | One odd point decides everything |
+| **kNN mean distance** | Mean feet to the **5** closest | Smooth intensity. Never zero | *k* is a choice. Far-away points count |
+
+All three are **features of X**: none of them uses a price. That follows last week's rule: **spatial features of X, never Y.**
+
+You have already built the buffer count and kNN distance. **Nearest distance is new.**
+
+### Logging a distance
+
+Distances often matter in **relative** terms (rates of change):
+
+```text
+100 ft → 500 ft     a big difference (next door vs. down the block)
+5,000 ft → 5,400 ft no real difference (both are far away)
+```
+
+Taking the **log** of a distance captures this: the same raw change matters more when you are close.
+
+---
+
+## 13. Building All Three Features
+
+```r
+#| eval: false
+sales <- sales %>%
+  mutate(
+    violent_660ft = lengths(st_intersects(st_buffer(., 660), violent)),
+    violent_near  = as.numeric(st_distance(
+      ., violent[st_nearest_feature(., violent), ],
+      by_element = TRUE
+    )),
+    log_violent_knn5 = log(violent_knn5)
+  )
+```
+
+### How the new feature works
+
+| Function | What it does |
+|---|---|
+| `st_nearest_feature(., violent)` | For each house, the **index** of the closest crime |
+| `violent[...]` | Pulls out that closest crime for each house |
+| `st_distance(..., by_element = TRUE)` | Distance from each house to **its own** nearest crime, one pair at a time (not a full matrix) |
+| `as.numeric()` | Drops the units, leaving feet |
+
+### Let cross-validation choose
+
+```r
+#| eval: false
+structure_f <- "sale_price ~ total_livable_area + number_of_bathrooms + age"
+
+tibble(feature = c("violent_660ft", "violent_near",
+                   "violent_knn5", "log_violent_knn5")) %>%
+  mutate(cv_rmse = map_dbl(
+    feature,
+    ~ cv_rmse(as.formula(paste(structure_f, "+", .x)), sales)
+  )) %>%
+  arrange(cv_rmse)
+```
+
+This loops over the four candidates. Each time it adds one crime feature to the same structural model and records the CV RMSE.
+
+```text
+  feature          cv_rmse
+1 violent_knn5     432287
+2 violent_near     432295
+3 log_violent_knn5 432300
+4 violent_660ft    432314
+```
+
+### Interpretation
+
+- **kNN mean distance** wins, but the four are within about **$27** of each other.
+- The way you operationalize "near" matters much less here than whether you include crime at all.
+- The RMSE is large (over $430,000), most likely because of very expensive sales in the data. RMSE squares the errors, so a few big misses dominate it.
+
+---
+
+## 14. Choosing *k* and the Radius
+
+> **Decide your short list before you look.**
+
+Pick **2–3 values with a reason**, then let CV RMSE choose among them:
+
+- A city **block** is about **500 ft**
+- **1/8 mile (660 ft)** is a short walk
+
+Why decide first? If you try dozens of values and keep the best, you are **tuning to noise**. The CV RMSE then looks better than the model really is.
+
+---
+
+## 15. A Feature Aimed at a Cluster
+
+Suppose the blue (Low–Low) pockets look like blocks with a lot of **vacancy**. We can measure that with the ACS:
+
+```r
+#| eval: false
+tract_vac <- get_acs(
+  geography = "tract",
+  variables = c(total = "B25002_001", vacant = "B25002_003"),
+  state = "PA", county = "Philadelphia", year = 2023,
+  geometry = TRUE, output = "wide", progress = FALSE
+) %>%
+  st_transform(2272) %>%
+  transmute(pct_vacant = if_else(totalE > 0, vacantE / totalE * 100, NA_real_))
+
+sales <- sales %>%
+  st_join(tract_vac, join = st_nearest_feature) %>%
+  mutate(pct_vacant = replace_na(pct_vacant, median(pct_vacant, na.rm = TRUE)))
+
+f2 <- update(f1, . ~ . + pct_vacant)
+
+sales$resid_2 <- sales$sale_price - cv_pred(f2, sales)
+sales$quad_2  <- lisa_quads(sales$resid_2, w_knn)
+```
+
+| Step | Meaning |
+|---|---|
+| `B25002_001`, `B25002_003` | Total housing units and vacant units (ACS table B25002) |
+| `if_else(totalE > 0, ...)` | Avoid dividing by zero in tracts with no housing |
+| `replace_na(..., median(...))` | Fill missing vacancy with the median, so **every row is kept** |
+| `update(f1, . ~ . + pct_vacant)` | Same formula as `f1`, plus vacancy |
+
+`replace_na()` keeps every row (**Rule 1**: all models must use the same records).
+
+> **Filling in missing values is a choice. Log it.**
+
+---
+
+## 16. Did the Blue Shrink?
+
+```r
+#| eval: false
+moran_of <- function(resid) {
+  as.numeric(moran.mc(resid, w_knn, nsim = 499)$statistic)
+}
+
+tibble(
+  model       = c("m1: + violent kNN5", "m2: + tract vacancy"),
+  cv_rmse     = c(cv_rmse(f1, sales), cv_rmse(f2, sales)),
+  moran_i     = c(moran_of(sales$resid_1), moran_of(sales$resid_2)),
+  n_low_low   = c(sum(sales$quad_1 == "Low-Low"),   sum(sales$quad_2 == "Low-Low")),
+  n_high_high = c(sum(sales$quad_1 == "High-High"), sum(sales$quad_2 == "High-High"))
+)
+```
+
+| Model | CV RMSE | Moran's I | Low–Low houses | High–High houses |
+|---|---:|---:|---:|---:|
+| m1: + violent kNN5 | 432,287 | 0.260 | 536 | 169 |
+| m2: + tract vacancy | 431,883 | 0.258 | **705** | 169 |
+
+### Interpretation
+
+- CV RMSE improved by about **$400**.
+- Moran's I barely moved (0.260 → 0.258).
+- The number of Low–Low houses **rose** from 536 to 705. The blue did **not** shrink.
+
+> **If the clusters didn't shrink, your guess about what was missing was wrong. That's information too.**
+
+Tract-level vacancy may also be too coarse to explain block-level pockets.
+
+---
+
+## 17. How to Use These Statistics: The Workflow
+
+```text
+1. Fit the model → get OUT-OF-FOLD residuals
+        ↓
+2. Global Moran's I → a quick overall check: do the errors cluster?
+        ↓
+3. LISA map → spots that could use patching up
+        ↓
+4. Ask what's there → measure it (buffer, nearest, or kNN)
+        ↓
+5. Refit → log CV RMSE and Moran's I. Did that cluster shrink?
+        ↓
+6. Repeat, until the clusters you can explain are gone
+   (or you've spent enough time on it)
+```
+
+---
+
+## 18. Should We Build This?
+
+You have spent two weeks building a model that predicts what a home is worth from **what it is and where it is**.
+
+Now imagine a company sells that model to **landlords**, with **rent** as the outcome.
+
+Three questions to keep in mind:
+
+1. What goes **into** the model, and who supplied it?
+2. Who **acts** on the prediction, and can they say no?
+3. Who **pays** when it's wrong? Who pays when it's **right**?
+
+**Film shown in class:** *How RealPage influences rent prices* (CNBC, 2024, about 10 minutes).
+
+---
+
+## 19. What the RealPage Software Does
+
+```text
+INPUTS
+  • Public listings and market data
+  • The landlord's own leases
+  • Competing landlords' NONPUBLIC leases, rents, occupancy
+        ↓
+MODEL
+  Predict rent
+        ↓
+OUTPUT
+  A recommended rent for every unit, every day
+        ↓
+DECISION
+  Leasing manager accepts or overrides (auto-accept available)
+```
+
+> **The modeling is our house price assignment with rent instead of price.**
+
+The fight is **not** about the regression. It is about:
+
+- **The third input:** data competitors would never share with each other directly
+- **The last arrow:** how hard it is to say no to the recommendation
+
+---
+
+## 20. The Debate
+
+| | Critics: DOJ, tenants, Philadelphia | Defenders: RealPage, landlords |
+|---|---|---|
+| **Data** | Pooling rivals' private rents lets competitors align prices without ever talking | About two-thirds of inputs are public. Private data is aggregated and anonymized |
+| **Prices** | Recommendations push rents up, and hold them up when demand falls | Rents rose because of the supply shortage, inflation and interest rates. The software cuts rents when demand drops |
+| **Humans** | Alleged auto-accept and "pricing advisors" who pressed managers to comply. Ex-employees told ProPublica ~90% of recommendations were adopted | Managers set a different price more than half the time |
+| **Reach** | A law professor estimates 30–60% of multifamily units in 40+ markets | The company says 7% of U.S. rentals |
+| **Efficiency** | — | Overpriced units sit empty. Better pricing fills them |
+
+*Sources cited in the slides:* DOJ complaint as reported by Axios and Groundwork Collaborative (2024); ProPublica (2022).
+
+---
+
+## 21. Where It Stands
+
+### Federal
+
+The **U.S. Department of Justice** sued RealPage in **August 2024**.
+
+The **November 2025 settlement** (filed November 24, 2025; described in the lecture as now approved by the court) requires:
+
+- **No competitors' nonpublic data** when setting prices
+- Training on nonpublic data only if it is **at least 12 months old**
+- **No geographic effects finer than the state**
+- Removal of features that **limited price cuts** or **aligned competitors' prices**, plus a **court-appointed monitor**
+
+It also:
+
+- Includes **no admission of wrongdoing**
+- Lets RealPage **keep selling** the product
+
+### Philadelphia
+
+- **City Council** unanimously banned rent-coordination software in **October 2024**, in effect from **February 2025**.
+- The first tenant lawsuits under the ordinance were filed in **July 2026**, against Greystar, Bozzuto, Willow Bridge, RealPage and Yardi.
+- The allegations are **unproven**.
+
+---
+
+## 22. Three Questions for the Rest of the Semester
+
+| Question | Today | Next week | November |
+|---|---|---|---|
+| **What's in the data, and who put it there?** | Rivals' private leases | Police records | Criminal histories |
+| **Who acts on the prediction? Can they say no?** | Leasing managers, auto-accept | Patrol commanders | Judges, parole boards |
+| **Who pays for the errors, and for the "right" answers?** | Renters | Residents of patrolled blocks | Defendants |
+
+> **An accurate prediction of what tenants will pay can still be the problem.**
+
+---
+
+## 23. Class Exercise: You're a Consulting Firm Now
+
+Every table is a consulting firm. You have shown you can predict prices from **what a home is and where it is**.
+
+A consortium of **nine corporate landlords** (about **28,000 Philadelphia apartments**) has issued an **RFP for a rent prediction and pricing model**.
+
+| Item | Detail |
+|---|---|
+| Budget | Up to **$1.8M** to build, plus **$40k/month** |
+| Time to decide | **12 minutes** |
+| Scoring | Price **40%**, revenue lift **40%**, technical approach **20%** |
+| Catch | **Declining a requirement costs you points** |
+
+Each firm decides:
+
+- **Accept, modify, or decline** each of the eight requirements
+- Its **price**, including any premium for requirements it thinks are risky
+- The **conditions** it attaches
+- **Its line** (what it won't do for any price) and **its premium** (what it would do for more)
+
+---
+
+## 24. The RFP at a Glance
+
+| # | Requirement |
+|---|---|
+| **R1** | Market rent for every unit, from **public** data |
+| **R2** | Train on members' **pooled, current, nonpublic** rent rolls |
+| **R3** | **Daily** recommended asking and renewal rents |
+| **R4** | Recommendations **accepted by default**. Overriding needs a manager's sign-off |
+| **R5** | **Block-level** geography |
+| **R6** | Optimize **revenue**, not occupancy: vacancy at the right price beats leasing below market |
+| **R7** | Quarterly report comparing each member's rents to the **consortium average** by neighborhood |
+| **R8** | **Confidential**: nothing disclosed to tenants, journalists or regulators beyond what the law requires |
+
+### Rounds
+
+1. **Pitches:** 60 seconds per firm (8 min)
+2. **The award:** the consortium (the professor) picks the winner on its own scoring. Then **the class** votes on a second question: *which bid would you defend on the front page of the Inquirer?* (3 min)
+3. **The reveal:** what Philadelphia's ordinance and the federal settlement say about each requirement (5 min)
+
+---
+
+## 25. The Reveal
+
+| Req. | Philadelphia ordinance | DOJ settlement (RealPage) | Question |
+|---|---|---|---|
+| R1 public data | Likely fine, but it is data from *many landlords*. Gray area | Not restricted | 1 |
+| R2 pooled nonpublic | **The core of what's banned** | Barred when setting prices. Training only on data 12+ months old | 1 |
+| R3 daily recs | Fine on its own | Fine on its own | 2 |
+| R4 accept by default | Turns R2 into coordination | Features that aligned prices or limited cuts removed | 2 |
+| R5 block-level | — | **No geography finer than the state** | 1, 3 |
+| R6 revenue over occupancy | Legal | Legal | 3 |
+| R7 benchmarking | Sharing rivals' rents is coordination | No market surveys of sensitive data, no discussing nonpublic trends | 1 |
+| R8 confidentiality | Legal | A court-appointed monitor | 2, 3 |
+
+*Questions: 1 = what's in the data, 2 = who can say no, 3 = who pays.*
+
+*This shows how the rules would likely read each requirement. It is not legal advice.*
+
+---
+
+## 26. Debrief: The Winning Bid and the Front-Page Bid
+
+- Were the winning bid and the front-page bid the **same firm**? If not, how far apart were their prices?
+- Who put something on the **premium line**? Then you decided it has a price.
+- **R6 is legal.** Did anyone decline it? Why? An accurate model of what tenants *will* pay can still be the problem.
+- Same model, different client: **OPA asks you to set assessed values.** Would you bid? Remember the **blue clusters**: the over-predicted, and so over-taxed, homes concentrated in lower-income tracts.
+
+---
+
+## 27. R5 Is a Spatial Question
+
+The settlement bans the model from learning **anything finer than the state** from rivals' data.
+
+Questions to think about:
+
+- Draw the **LISA map** of a rent model with **no geography below the state**. What does it look like?
+  - Likely: large, strong clusters of errors, because the model cannot see neighborhood differences at all.
+- Is that restriction **protecting renters**, or just making a **worse model**?
+- Your house price model learns **block-level geography from public data**. Why is that different?
+  - The data is public, not rivals' private rents; the goal is valuation, not coordinated pricing; and no competitor's behaviour is pooled.
+
+---
+
+## 28. Week 9 Quick Reference
+
+| Concept / Question | Tool / Answer |
+|---|---|
+| Local Moran's I | $I_i = \frac{z_i}{m_2}\sum_j w_{ij} z_j$ |
+| Local Moran's I in words | Me × my neighbors' average, scaled |
+| Global I from local values | The average of the local $I_i$ |
+| Row-standardized weights | `nb2listw(..., style = "W")` |
+| Local Moran's I with permutation test | `localmoran_perm(x, w, nsim = 499)` |
+| Simulated local p-value column | `"Pr(z != E(Ii)) Sim"` |
+| Neighbors' average | `lag.listw(w, z)` |
+| High–High (errors) | Pocket the model under-predicts: missing amenity |
+| Low–Low (errors) | Pocket the model over-predicts: missing disamenity |
+| High–Low / Low–High | One house differs from its block: check the data |
+| Out-of-fold residual | actual − `cv_pred()` |
+| Join to the nearest polygon | `st_join(x, y, join = st_nearest_feature)` |
+| Income quintiles | `ntile(med_inc, 5)` |
+| Buffer count | `lengths(st_intersects(st_buffer(x, d), pts))` |
+| Nearest distance | `st_distance(x, pts[st_nearest_feature(x, pts), ], by_element = TRUE)` |
+| kNN mean distance | `st_nn(x, pts, k = 5, returnDist = TRUE)` |
+| Add a term to a formula | `update(f1, . ~ . + new_var)` |
+| Keep every row when data are missing | `replace_na(x, median(x, na.rm = TRUE))` (log it) |
+| Test many features at once | `map_dbl(features, ~ cv_rmse(...))` |
+| A city block | About 500 ft |
+| 1/8 mile | 660 ft |
+| ACS median household income | `B19013_001` |
+| ACS total / vacant housing units | `B25002_001` / `B25002_003` |
+| DOJ v. RealPage | Sued Aug 2024. Settlement filed Nov 2025 |
+| Philadelphia ban | Passed Oct 2024. In effect Feb 2025 |
+
+---
+
+## 29. Key Concepts to Remember
+
+- **Global Moran's I** answers *whether* errors cluster. **Local Moran's I (LISA)** answers *where*.
+- Local Moran's I is **me × my neighbors' average, scaled**. The average of the local values is the global I.
+- With row-standardized weights the five-house example gives **I ≈ 0.72**. With binary 0/1 weights it gives **0.60**. Same story, different weighting.
+- **High–High** = pocket the model **under-predicts** (missing amenity). **Low–Low** = pocket it **over-predicts** (missing disamenity).
+- **High–Low** and **Low–High** are outliers. They point to the **house**, not the place.
+- **Clusters → build a spatial feature. Outliers → check the data.**
+- Use **out-of-fold residuals**: each house's error comes from the fold where it was held out.
+- LISA runs thousands of tests, so chance clusters appear. Use a strict threshold (here **α = 0.01**).
+- Plot non-significant houses **first** so clusters sit on top.
+- For each cluster, ask: **where is it, what's there, can I measure it?**
+- **Over-predicted = over-taxed.** In Philadelphia, Low–Low clusters were about **10× more common** in the poorest income quintile than the richest: a **regressive** pattern.
+- **Operationalize** "near" in three ways: **buffer count**, **nearest distance**, **kNN mean distance**. All are features of X.
+- Logging a distance captures that **close changes matter more** than far ones.
+- **Decide your short list of k and radius values before you look**, then let CV RMSE choose.
+- Filling missing values with `replace_na()` keeps every row, but **it is a choice: log it**.
+- If a new feature doesn't shrink the cluster you aimed at, **your guess was wrong. That's information too.**
+- Workflow: **fit → out-of-fold residuals → global I → LISA map → measure what's there → refit → log CV RMSE and Moran's I → repeat.**
+- RealPage's model is technically the same as ours. The controversy is about **pooled nonpublic competitor data** and **how hard it is to override** the recommendation.
+- The DOJ settlement bans nonpublic competitor data when setting prices, limits training to data **12+ months old**, and bans **geography finer than the state**.
+- Philadelphia banned rent-coordination software in **2024**. The first tenant suits under it came in **July 2026**; the allegations are unproven.
+- Three questions for any predictive model: **what's in the data, who can say no, and who pays?**
+- **An accurate prediction can still be the problem.**
