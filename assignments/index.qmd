@@ -10,6 +10,12 @@ format:
 Completed assignments for MUSA 5080, with findings, visualizations, and
 expandable code.
 
+## [Assignment 5: House Price Prediction in Chicago](<Group Jollof/assignment5.html>)
+
+Use property characteristics and spatial features to predict Chicago house
+sale prices, compare models with cross-validation, and examine residual
+patterns and valuation errors.
+
 ## [Assignment 4: Predicting Car-Free Households in Philadelphia](Assignment4.qmd)
 
 Build spatial features and test how each one changes the cross-validated
