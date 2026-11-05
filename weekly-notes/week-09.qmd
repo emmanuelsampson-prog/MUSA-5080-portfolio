@@ -1,0 +1,901 @@
+---
+title: "Week 9: Predictive Policing: Counts, Fishnets, and Dirty Data"
+description: "Should we build predictive policing? "
+date: 2026-10-30
+format:
+  html:
+    code-fold: true
+    code-summary: "Show code"
+---
+
+## 1. Overview
+
+**Lecturer:** Dr. Elizabeth Delmelle
+
+**Lecture title:** *Predictive Policing. Week 9: Counts, Fishnets, and Dirty Data (not dirty dancing)*
+
+This week has two threads, and the lecture insists we need both:
+
+| Technical questions | Critical questions |
+|---|---|
+| How do we model crime **counts**? | **Whose** data? Whose crimes? |
+| What spatial features predict crime? | What if the data is **"dirty"**? |
+| How do we validate predictions? | Who **benefits**? Who is **harmed**? |
+| Can we outperform baseline methods? | What **feedback loops** are created? |
+| | Can technical solutions fix social problems? |
+
+> **We learn the technical methods AND critically interrogate their use. Both skills are essential for ethical data science.**
+
+The opening video ([watch here](https://youtu.be/ZU_o87c08l4)) asks one question to keep in mind all session:
+
+> **If a model learns from police records, what is it actually learning?**
+
+---
+
+## 2. Opening Thought: Should We?
+
+Before discussing **how** to build predictive policing systems, we need to ask whether we **should**.
+
+> **"A statistically 'good' model can still be socially harmful."**
+
+This continues the thread from last week's RealPage case:
+
+- What's in the data, and who put it there?
+- Who acts on the prediction, and can they say no?
+- Who pays for the errors, and for the "right" answers?
+
+This week the data are **police records**, the people acting on predictions are **patrol commanders**, and those who pay are **residents of patrolled blocks**.
+
+---
+
+## 3. The Sales Pitch
+
+### What vendors and police departments claim
+
+| Claim | Promise |
+|---|---|
+| **Efficiency** | "Deploy limited resources where they're needed most" |
+| **Objectivity** | "Remove human bias from decision-making" |
+| **Proactivity** | "Prevent crime before it happens" |
+| **Data-driven** | "Let the data tell us where crime will occur" |
+
+Sounds great. But these claims rest on four critical assumptions:
+
+1. That crime data accurately reflects crime (**it doesn't**)
+2. That past patterns predict future crime (**they might just predict policing**)
+3. That we can separate "good" from "bad" data (**we often can't**)
+4. That technical solutions can fix social problems (**they can't**)
+
+---
+
+## 4. The Technical Evolution
+
+| Generation | Method | Data used | Example |
+|---|---|---|---|
+| **1st: Hotspots** | Kernel density | Past crime locations | KDE maps |
+| **2nd: Risk terrain** | Logistic regression | Crime + features | RTM software |
+| **3rd: Machine learning** | Random forest, neural nets | Everything | PredPol, Palantir |
+| **4th: Person-based** | Network analysis | Social connections | Chicago's Strategic Subject List |
+
+Each generation claims to be more "objective" and "accurate".
+
+> **But what if they're all built on the same flawed foundation?**
+
+---
+
+## 5. What Is "Dirty Data"?
+
+### Traditional definition (data mining)
+
+- Missing data
+- Incorrect data
+- Non-standardized formats
+
+### Extended definition (Richardson, Schultz & Crawford, 2019)
+
+> **"Data derived from or influenced by corrupt, biased, and unlawful practices, including data that has been intentionally manipulated or 'juked,' as well as data that is distorted by individual and societal biases."**
+
+The authors studied **13 jurisdictions** that used or built predictive policing **while** under federal investigation or court-monitored reform (consent decrees). Their case studies were **Chicago**, **New Orleans** and **Maricopa County, Arizona**.
+
+---
+
+## 6. The Many Forms of Dirty Data
+
+| Form | Examples |
+|---|---|
+| **1. Fabricated / manipulated** | False arrests (planted evidence). Crimes downgraded to "juke the stats". Victims pressured not to file reports |
+| **2. Systematically biased** | Over-policing of certain communities → more recorded "crime". Under-policing of white-collar crime → it appears less common. Racial profiling → disproportionate stops and arrests |
+| **3. Missing / incomplete** | Unreported crimes (especially in over-policed areas with low trust in police). Ignored complaints. Incomplete records |
+| **4. Proxy problems** | Arrests ≠ crimes committed. Calls for service ≠ actual need. Gang database ≠ actual gang membership |
+
+> **To the model, it's all just Y. It can't tell a real burglary from a record produced by a bad practice.**
+
+---
+
+## 7. The Feedback Loop
+
+The **confirmation bias loop** (played as a game in class):
+
+```text
+Algorithm learns: "Crime happens in neighborhood X"
+        ↓
+Police are sent to neighborhood X
+        ↓
+More arrests in neighborhood X (regardless of actual crime)
+        ↓
+Algorithm "confirmed": "We were right about neighborhood X!"
+        ↓
+Cycle intensifies → back to the top
+```
+
+The model's predictions change **where records get created**, and those records become the next round of training data.
+
+---
+
+## 8. The Modeling Workflow
+
+| Step | What we do |
+|---|---|
+| **1. Setup & data** | Load **2024** burglaries (points) and **2024** 311 calls. Create a **fishnet** (500 ft × 500 ft grid). Aggregate burglaries to cells |
+| **2. Baseline** | **Kernel density estimation (KDE)**: simple spatial smoothing. This is what we need to beat |
+| **3. Feature engineering** | Disorder indicators from 311: **count** in cell, **nearest** and **kNN** distances, **LISA** hotspots, **distance to hotspots** |
+| **4. Count regression** | Fit **Poisson** regression. Test for **overdispersion**. Fit **negative binomial** if needed. Interpret coefficients |
+| **5. Spatial CV** | **Leave-one-group-out (LOGO)**: train on n − 1 police districts, test on the held-out one. Calculate MAE/RMSE (**next week**) |
+| **6. Comparison** | Compare with the KDE baseline on **2025** burglaries. Map predictions vs. actual. Analyze errors spatially |
+
+Steps 4 (negative binomial) and 5 (geographic CV) start properly **next week**.
+
+---
+
+## 9. The Data: Residential Burglaries in Philadelphia
+
+```r
+#| eval: false
+library(tidyverse)
+library(sf)
+library(tigris)     # counties()
+library(spdep)      # LISA
+library(FNN)        # get.knnx() for nearest-neighbor distances
+library(spatstat)   # ppp(), owin(), density(), safelookup() for KDE
+library(patchwork)  # p1 + p2 side-by-side maps
+
+burg_sql <- function(year) {
+  paste0("SELECT the_geom, dispatch_date, text_general_code
+          FROM incidents_part1_part2
+          WHERE text_general_code = 'Burglary Residential'
+          AND dispatch_date >= '", year, "-01-01'
+          AND dispatch_date <  '", year + 1, "-01-01'
+          AND the_geom IS NOT NULL")
+}
+
+burg_2024 <- carto_get(burg_sql(2024)) %>% st_transform(2272)  # features
+burg_2025 <- carto_get(burg_sql(2025)) %>% st_transform(2272)  # outcome
+
+philly <- counties("PA", cb = TRUE, progress_bar = FALSE) %>%
+  filter(NAME == "Philadelphia") %>%
+  st_transform(2272)
+
+c(burg_2024 = nrow(burg_2024), burg_2025 = nrow(burg_2025))
+```
+
+```text
+burg_2024 burg_2025
+     3289      2999
+```
+
+`burg_sql()` is a small function that builds the same SQL query for any year. `carto_get()` is the course helper for the city's Carto API.
+
+### Two years, on purpose
+
+| Year | Role |
+|---|---|
+| **2024** | Builds the **features** |
+| **2025** | What we **predict** (the outcome) |
+
+The reason becomes clear with the hotspot feature (Section 19): train on earlier data, predict later.
+
+---
+
+## 10. What's a Row?
+
+In the house price assignment, **every row was a house**.
+
+A burglary is a **point**. So what is a row here?
+
+We need a **unit of analysis** to count burglaries in.
+
+### Why not census tracts?
+
+- Tracts vary hugely in **size**, so their counts aren't comparable
+- Tract boundaries were drawn for **population**, not crime
+- **MAUP** (the Modifiable Areal Unit Problem): move the boundaries and the pattern moves. Remember the Week 4 boundary-change join?
+
+---
+
+## 11. The Fishnet: Lay a Grid Over the City
+
+A **fishnet** is a regular grid of equal-sized cells. Every cell is the same size, so counts are comparable.
+
+```r
+#| eval: false
+fishnet <- st_make_grid(philly, cellsize = 500, square = TRUE) %>%
+  st_sf() %>%
+  st_filter(philly) %>%                 # keep cells that touch the city
+  mutate(cell_id = row_number())
+
+fishnet <- fishnet %>%
+  mutate(burglaries = lengths(st_intersects(., burg_2025)))
+
+nrow(fishnet)
+```
+
+```text
+[1] 16414
+```
+
+| Code | Meaning |
+|---|---|
+| `st_make_grid(philly, cellsize = 500)` | A grid of 500 × 500 squares over Philadelphia's bounding box |
+| `st_sf()` | Turn the grid into an `sf` data frame |
+| `st_filter(philly)` | Keep only cells that touch the city |
+| `lengths(st_intersects(., burg_2025))` | Count 2025 burglaries in each cell |
+
+- `cellsize = 500` means **500 feet**, because we are in **EPSG 2272**.
+- *What would 500 mean in EPSG 4326?* 500 **degrees**: one cell bigger than the whole Earth.
+- `lengths(st_intersects())` is a **point-in-polygon count**, the same as your buffer counts.
+
+Result: **16,414 cells**. Each cell is now a row.
+
+---
+
+## 12. Look at the Outcome First
+
+```r
+#| eval: false
+ggplot(fishnet) +
+  geom_sf(aes(fill = burglaries), color = NA) +
+  scale_fill_viridis_c(option = "magma", direction = -1, trans = "sqrt") +
+  labs(title = "Residential burglaries per 500-ft cell, 2025", fill = "count") +
+  theme_void()
+
+ggplot(fishnet, aes(burglaries)) +
+  geom_histogram(binwidth = 1, fill = "darkred") +
+  labs(x = "Burglaries in cell", y = "Number of cells") +
+  theme_minimal()
+
+mean(fishnet$burglaries == 0)   # share of cells with zero
+```
+
+```text
+[1] 0.8740709
+```
+
+> **The most common value is zero: about 87% of cells recorded no residential burglary in 2025.**
+
+`trans = "sqrt"` stretches the colour scale so the many low counts are still visible next to the few high ones.
+
+---
+
+## 13. Three Reasons OLS Breaks
+
+These are **ŷ problems** (problems with predictions):
+
+1. **It predicts negative burglaries.** A straight line through a pile of zeros dips below zero.
+2. **The spread grows with the mean.** Busy cells vary a lot and quiet cells barely vary, so the busy cells dominate RMSE.
+3. **Counts are whole numbers ≥ 0.** OLS doesn't know that.
+
+### Can we just log Y?
+
+Previously we logged skewed **predictors** and kept Y in dollars. Here:
+
+$$
+\log(0) \text{ is undefined}
+$$
+
+and most cells are zero.
+
+`log(y + 1)` is a trick, but the **+1 is arbitrary, and it changes the answer**.
+
+---
+
+## 14. Poisson Regression: Log the Mean, Not the Data
+
+$$
+Y \sim \text{Poisson}(\lambda)
+$$
+
+$$
+\log(\lambda) = \beta_0 + \beta_1 x_1 + \dots
+$$
+
+$$
+\lambda = e^{\beta_0 + \beta_1 x_1 + \dots} \quad \text{always} > 0
+$$
+
+where $\lambda$ is the **expected count** in a cell.
+
+- The **linear part** is the one you already know
+- The **exp()** keeps predictions positive
+- We log the **expected value**, not the data, so zeros are no problem
+
+### Reading a coefficient
+
+> **exp(β) is the multiplicative change in the expected count for a one-unit change in x.**
+
+For example:
+
+$$
+e^{0.20} \approx 1.22
+$$
+
+Each one-unit increase in x means **22% more** expected burglaries.
+
+| exp(β) | Meaning |
+|---|---|
+| > 1 | More expected burglaries: (exp(β) − 1) × 100% more |
+| = 1 | No effect |
+| < 1 | Fewer expected burglaries: (1 − exp(β)) × 100% fewer |
+
+---
+
+## 15. One Property to Check: Mean = Variance
+
+A Poisson model assumes the **variance equals the mean**.
+
+```r
+#| eval: false
+c(mean = mean(fishnet$burglaries), variance = var(fishnet$burglaries))
+```
+
+```text
+     mean  variance
+0.1827099 0.3379670
+```
+
+The variance (0.34) is almost **twice** the mean (0.18).
+
+- A variance much bigger than the mean is called **overdispersion**
+- The fix is **negative binomial regression** (`MASS::glm.nb()`): the same idea, plus one extra parameter for the spread
+- We use it **next week**. Today, just know what the check looks like.
+
+---
+
+## 16. Features: Four Types
+
+What predicts where burglaries happen? Sort ideas into the four feature types:
+
+| Count in cell | Nearest distance | kNN distance | Distance to fixed point |
+|---|---|---|---|
+| How many X are **in** the cell? | How far to the **single closest** X? | Mean distance to the **k closest** X | How far to one **landmark**? |
+
+### Pull a few from 311 (2024)
+
+```r
+#| eval: false
+# First, see what 311 calls look like:
+# carto_get("SELECT service_name, count(*) FROM public_cases_fc
+#            GROUP BY 1 ORDER BY 2 DESC LIMIT 30")
+# (non-spatial query: use format=CSV or drop the_geom if you run this)
+
+get_311 <- function(service) {
+  carto_get(paste0("SELECT the_geom FROM public_cases_fc
+                    WHERE service_name = '", service, "'
+                    AND requested_datetime >= '2024-01-01'
+                    AND requested_datetime <  '2025-01-01'
+                    AND the_geom IS NOT NULL")) %>%
+    st_transform(2272)
+}
+
+abandoned_cars <- get_311("Abandoned Vehicle")
+light_outages  <- get_311("Street Light Outage")
+graffiti       <- get_311("Graffiti Removal")
+```
+
+`public_cases_fc` is Philadelphia's **311 service request** table. The commented-out query lists the 30 most common request types, which is useful for brainstorming features.
+
+---
+
+## 17. Building the Features
+
+```r
+#| eval: false
+centroids <- st_centroid(fishnet)
+
+knn_dist <- function(from, to, k) {
+  nn <- get.knnx(st_coordinates(to), st_coordinates(from), k = k)
+  rowMeans(nn$nn.dist)
+}
+
+city_hall <- st_sfc(st_point(c(-75.1635, 39.9526)), crs = 4326) %>%
+  st_transform(2272)
+
+fishnet <- fishnet %>%
+  mutate(
+    cars_cnt         = lengths(st_intersects(., abandoned_cars)),  # count in cell
+    light_nn1        = knn_dist(centroids, light_outages, k = 1),  # nearest distance
+    graffiti_nn3     = knn_dist(centroids, graffiti, k = 3),       # kNN distance
+    cityhall_mi      = as.numeric(st_distance(centroids, city_hall)) / 5280,
+    log_light_nn1    = log(light_nn1),                             # log the distances
+    log_graffiti_nn3 = log(graffiti_nn3)
+  )
+```
+
+| Feature | Type | Meaning |
+|---|---|---|
+| `cars_cnt` | Count in cell | Abandoned-vehicle calls in the cell |
+| `light_nn1` | Nearest distance | Feet from the cell centre to the nearest streetlight outage |
+| `graffiti_nn3` | kNN distance | Mean feet to the 3 nearest graffiti reports |
+| `cityhall_mi` | Distance to fixed point | Miles to City Hall |
+| `log_...` | Logged distance | Close changes matter more than far ones |
+
+### How `knn_dist()` works
+
+- `get.knnx()` (from **FNN**) finds, for each cell centroid, the *k* nearest points and their distances
+- `rowMeans(nn$nn.dist)` averages those *k* distances
+- With `k = 1`, it is simply the **nearest distance**
+
+Distances are measured from each cell's **centroid** (its centre point).
+
+> **All four feature types come from 2024. The outcome is 2025.**
+
+---
+
+## 18. New Feature: The Hotspot
+
+Last week's **LISA**, now run on **burglaries** instead of residuals:
+
+```r
+#| eval: false
+fishnet <- fishnet %>%
+  mutate(burg_2024 = lengths(st_intersects(., burg_2024)))
+
+nb <- knn2nb(knearneigh(st_coordinates(centroids), k = 8))  # 8 neighbors ≈ queen on a grid
+lw <- nb2listw(nb, style = "W")
+
+set.seed(5080)
+lisa <- localmoran_perm(fishnet$burg_2024, lw, nsim = 999)
+
+fishnet <- fishnet %>%
+  mutate(
+    quadrant = attr(lisa, "quadr")$mean,
+    p_value  = lisa[, "Pr(folded) Sim"],
+    hotspot  = quadrant == "High-High" & p_value < 0.05
+  )
+
+table(fishnet$hotspot)
+```
+
+```text
+FALSE  TRUE
+15639   775
+```
+
+| Step | Meaning |
+|---|---|
+| `burg_2024` | Count of **2024** burglaries per cell |
+| `k = 8` | 8 nearest cells ≈ **queen contiguity** on a grid (the 8 surrounding squares) |
+| `localmoran_perm(..., nsim = 999)` | Local Moran's I with 999 permutations |
+| `attr(lisa, "quadr")$mean` | Each cell's quadrant (High–High, Low–Low…) |
+| `hotspot` | **High–High** and **p < 0.05** |
+
+Result: **775 hotspot cells**.
+
+### A warning
+
+> **With this many cells, some "hotspots" are there by chance alone.**
+
+At p < 0.05 across 16,414 tests, about 5% (roughly 820) could come up significant with no real pattern at all, in some quadrant. Last week's LISA used a stricter α = 0.01 for exactly this reason.
+
+---
+
+## 19. Turn the Hotspot Into a Feature, and Check for Leakage
+
+```r
+#| eval: false
+hot_pts <- centroids[fishnet$hotspot, ]
+
+fishnet <- fishnet %>%
+  mutate(hotspot_dist_mi = knn_dist(centroids, hot_pts, k = 1) / 5280)
+```
+
+`hotspot_dist_mi` = miles from each cell to the **nearest hotspot cell**.
+
+### The leakage check
+
+> **Would I have this number at the moment of prediction?**
+
+| Hotspots built from | Used to predict | Leakage? |
+|---|---|---|
+| **2025** burglaries | **2025** burglaries | **Yes. That's leakage**: the feature contains the answer |
+| **2024** burglaries | **2025** burglaries | **No.** Train on earlier, predict later |
+
+This is why we loaded **two years** of data.
+
+---
+
+## 20. OLS vs. Poisson, Same Features
+
+```r
+#| eval: false
+f <- burglaries ~ cars_cnt + log_light_nn1 + log_graffiti_nn3 +
+                  cityhall_mi + hotspot_dist_mi
+
+ols  <- lm(f, data = fishnet)
+pois <- glm(f, family = "poisson", data = fishnet)
+
+fishnet <- fishnet %>%
+  mutate(pred_ols  = predict(ols),
+         pred_pois = predict(pois, type = "response"))  # counts, not log-counts!
+
+c(negative_ols = sum(fishnet$pred_ols < 0),
+  negative_pois = sum(fishnet$pred_pois < 0))
+```
+
+```text
+ negative_ols negative_pois
+         3277             0
+```
+
+- **OLS** predicts **negative burglaries** in **3,277 cells** (about 20% of the city)
+- **Poisson** predicts **none**
+
+### Important: `type = "response"`
+
+> **Without it, `predict()` on a Poisson model returns log-counts, and your RMSE is nonsense.**
+
+| `predict()` call | Returns |
+|---|---|
+| `predict(pois)` | log(λ): log expected counts |
+| `predict(pois, type = "response")` | λ: expected **counts** |
+
+---
+
+## 21. Reading the Poisson Coefficients
+
+```r
+#| eval: false
+tibble(term = names(coef(pois)),
+       beta = coef(pois),
+       exp_beta = exp(coef(pois))) %>%
+  mutate(across(where(is.numeric), ~ round(.x, 3)))
+```
+
+| Term | β | exp(β) | In plain English |
+|---|---:|---:|---|
+| (Intercept) | 1.92 | 6.81 | Baseline when all x = 0 (not meaningful on its own) |
+| `cars_cnt` | 0.026 | 1.03 | Each additional abandoned-car call in the cell → about **3% more** expected burglaries |
+| `log_light_nn1` | −0.341 | 0.711 | **Doubling** the distance to the nearest light outage → about **21% fewer** (2^−0.341 ≈ 0.79) |
+| `log_graffiti_nn3` | −0.113 | 0.893 | **Doubling** the distance to graffiti → about **8% fewer** (2^−0.113 ≈ 0.92) |
+| `cityhall_mi` | −0.017 | 0.983 | Each extra mile from City Hall → about **2% fewer** |
+| `hotspot_dist_mi` | −1.45 | 0.234 | Each extra mile from a 2024 hotspot → about **77% fewer** expected burglaries |
+
+### Template from class
+
+> *"Each additional ___ means ___% more/fewer expected burglaries."*
+
+### A note on logged distances
+
+For a **logged** predictor, "one unit" means multiplying the distance by *e* (about 2.7). It is easier to talk about **doubling**: multiply the expected count by $2^{\beta}$.
+
+The strongest feature by far is **distance to last year's hotspots**: burglary is very **persistent** in space.
+
+---
+
+## 22. Predicted vs. Recorded
+
+```r
+#| eval: false
+p1 <- ggplot(fishnet) + geom_sf(aes(fill = burglaries), color = NA) +
+  scale_fill_viridis_c(option = "magma", direction = -1, trans = "sqrt") +
+  labs(title = "Recorded, 2025") + theme_void()
+
+p2 <- ggplot(fishnet) + geom_sf(aes(fill = pred_pois), color = NA) +
+  scale_fill_viridis_c(option = "magma", direction = -1, trans = "sqrt") +
+  labs(title = "Predicted (Poisson)") + theme_void()
+
+p1 + p2   # side by side, using patchwork
+```
+
+The maps look pretty similar.
+
+> **Looks pretty good. But is it better than what police already do?**
+
+---
+
+## 23. The Traditional Hotspot Map: Kernel Density
+
+Before any model, departments drew a **smoothed map of last year's crime** (kernel density) and patrolled the hot parts.
+
+> **That's the bar our model has to clear.**
+
+```r
+#| eval: false
+bb  <- st_bbox(fishnet)  # grid extent: every centroid falls inside the window
+win <- owin(xrange = c(bb["xmin"], bb["xmax"]),
+            yrange = c(bb["ymin"], bb["ymax"]))
+
+xy_2024  <- st_coordinates(st_filter(burg_2024, philly))       # drop bad geocodes
+kde_2024 <- density(ppp(xy_2024[, 1], xy_2024[, 2], window = win),
+                    sigma = 1000)                              # 1000 ft bandwidth
+
+xy_cent <- st_coordinates(centroids)
+fishnet$kde_2024 <- safelookup(kde_2024,
+                               ppp(xy_cent[, 1], xy_cent[, 2], window = win))
+```
+
+| Step (spatstat) | Meaning |
+|---|---|
+| `owin()` | The study window (the grid's rectangle) |
+| `ppp()` | A **point pattern** object from 2024 burglary coordinates |
+| `density(..., sigma = 1000)` | Kernel density surface with a **1,000 ft** bandwidth |
+| `safelookup()` | Read the density value at each cell centroid |
+
+`st_filter(burg_2024, philly)` drops burglaries geocoded **outside** the city (bad geocodes).
+
+---
+
+## 24. Who Finds More of 2025's Burglaries?
+
+Mark the **top 10% of cells** by each method, then count how many of **2025's** burglaries fall inside them:
+
+```r
+#| eval: false
+fishnet %>%
+  st_drop_geometry() %>%
+  mutate(model_top = pred_pois >= quantile(pred_pois, 0.9),
+         kde_top   = kde_2024  >= quantile(kde_2024, 0.9)) %>%
+  summarize(model = sum(burglaries[model_top]) / sum(burglaries),
+            kde   = sum(burglaries[kde_top])   / sum(burglaries))
+```
+
+```text
+      model       kde
+1 0.3967989 0.4598199
+```
+
+| Method | Share of 2025 burglaries in its top 10% of cells |
+|---|---:|
+| Poisson model | **39.7%** |
+| KDE of 2024 (last year's map) | **46.0%** |
+
+In this run, **last year's smoothed map captures more** of 2025's burglaries than the model.
+
+### This test is rigged in the model's favour
+
+- The model was **fit on 2025** (its outcome is 2025 burglaries)
+- The KDE has **never seen 2025**
+
+The lecture asks: *if the model only barely wins with that head start, what does that tell you?* Here it does not even win.
+
+A fair version **holds data out**. That is where we start next week.
+
+### The question the reading ends on: biased, but useful?
+
+> **If the model can't clearly beat last year's map, what are we getting in exchange for its complexity and its bias?**
+
+---
+
+## 25. Where Does a Burglary Record Come From?
+
+Add a box in front of "outcome":
+
+```text
+something happens → someone reports it → police record it → "outcome" → … → patrol decision
+                                                                                │
+                         ◄─────────────── more police here ─────────────────────┘
+```
+
+$$
+\text{recorded} = \text{actual} \times P(\text{reported}) \times P(\text{recorded} \mid \text{reported})
+$$
+
+| Term | Who decides? |
+|---|---|
+| actual | What really happened |
+| P(reported) | A **human decision**: does the victim or a witness call? |
+| P(recorded \| reported) | A **human decision**: does the officer write it up, and as what? |
+
+- **In the house price assignment:** a sale price is recorded when the house sells. **Nearly every sale is in the data.**
+- **Here:** **two of the three terms are human decisions**, and both **vary by place**.
+
+---
+
+## 26. Table Activity: Trace the Record (12 min)
+
+For each crime type:
+
+1. **Residential burglary**
+2. **Drug possession**
+3. **Theft** (a package stolen from a porch)
+
+Answer:
+
+- **Who creates the record?** The victim calling it in, or an officer observing it?
+- **What would make it show up more in one neighborhood than another, even if it happens equally often?**
+- **Would you build a patrol model on it?** Yes / no / only if…
+
+### Possible answers
+
+| Crime | Who creates the record? | Why it might show up more in some places | Patrol model? |
+|---|---|---|---|
+| Residential burglary | Mostly the **victim** | Trust in police, insurance claims (people report to claim) | More defensible, but still under-reported |
+| Drug possession | Almost entirely the **officer** | Where officers patrol and stop people | **No**: it measures policing, not drug use |
+| Porch theft | The **victim**, if they bother | Whether people think reporting is worth it | Weak: most theft is never reported |
+
+---
+
+## 27. How Much Actually Gets Reported?
+
+Share of victimizations reported to police (**National Crime Victimization Survey**, 2024):
+
+| Crime | Reported to police |
+|---|---:|
+| Motor vehicle theft | ~75% |
+| Burglary / trespassing | ~41% |
+| Other theft | ~25% |
+
+- **Drug possession** is almost entirely **officer-generated**. More patrol means more records, and the loop closes on itself.
+- That's why demos like ours use **burglary**: it is **victim-reported**, so it is less patrol-driven.
+- But even burglary is reported **less than half the time**.
+- According to the lecture, urban residents report a smaller share of property crime than suburban or rural residents. **Trust in police is part of P(reported).**
+
+---
+
+## 28. Dirty Data, Bad Predictions
+
+Richardson, Schultz & Crawford (2019):
+
+- Predictive systems were trained on data produced during periods of **documented** flawed, racially biased and sometimes **unlawful** policing
+- They examined jurisdictions that used or built predictive policing **while** under federal investigation or consent decrees. Case studies: **Chicago, New Orleans, Maricopa County**
+- "Dirty" means more than biased patrol. It includes **manipulated records**: downgraded crimes, planted evidence, stops that should never have happened
+
+> **The model can't tell a real burglary from a record produced by a bad practice. To the model, it's all just Y.**
+
+---
+
+## 29. Why Cross-Validation Can't Save You
+
+> **Cross-validation can't catch bias that's in the test set too.**
+
+| | House price assignment | Predictive policing |
+|---|---|---|
+| Held-out fold contains… | The **true sale price** | The **same recorded data** |
+| When the model is wrong… | The test fold tells you, and you find residual clusters | The test fold may **agree** with the bias |
+
+If the records over-count Neighborhood A:
+
+```text
+Model predicts high in A → test fold (also over-counted) agrees → RMSE looks great
+```
+
+> **A low RMSE means you predicted the records well, not the crime.**
+
+### The bias goes in twice
+
+The **hotspot feature is built from the outcome** (2024 burglary records). So biased records enter:
+
+1. Once as **Y**
+2. Once as a **feature**
+
+---
+
+## 30. The Features Are a Theory, Too
+
+Look at what we chose to predict burglary with:
+
+| Feature | What it measures |
+|---|---|
+| Abandoned cars | Disorder |
+| Streetlights out | Disorder |
+| Graffiti | Disorder |
+
+- This is **broken windows theory**: visible disorder signals that no one is watching, which invites crime
+- In practice it became **broken windows policing**: aggressive enforcement of minor offences in disordered places
+- A model built on disorder features sends patrols to disordered places, **whether or not the theory is right**
+
+And those features are **311 calls**: someone decided to report the graffiti.
+
+> **Who calls 311?**
+
+> **The bias isn't only in the data. It's in which features we chose.**
+
+---
+
+## 31. Table Question (5 min)
+
+> In the house price assignment, errors that cluster in places land on people: over-predicted means **over-taxed**.
+>
+> Here, **who lands in an over-predicted cell**, and what happens to them that wouldn't happen in the house price assignment?
+
+Points to consider:
+
+- An over-predicted cell gets **more patrols**
+- More patrols mean more **stops, searches and arrests** for residents, including for minor offences
+- Those encounters create **new records**, which feed the next model (the feedback loop)
+- An over-taxed homeowner loses **money**. An over-patrolled resident can lose **liberty**, gain a **criminal record**, or face a **dangerous encounter**
+
+---
+
+## 32. Wrap-Up
+
+### Add a row to the ŷ vs. β̂ table
+
+| Problem | Hurts β̂? | Hurts ŷ? |
+|---|---|---|
+| Biased outcome measurement | **Yes** | **Yes, and CV won't show it** |
+
+- **β̂** (coefficients): the relationships we estimate are relationships with **records**, not crime
+- **ŷ** (predictions): we predict where crime will be **recorded**, and cross-validation cannot detect it, because the test data share the bias
+
+### Next week: logistic regression + geographic CV
+
+- **Geographic cross-validation:** rerun today's burglary model with **whole police districts held out**. Does the KDE comparison still go the model's way?
+- **Logistic regression:** from "how many?" to "yes or no?"
+
+### To do
+
+- **Lab (ungraded):** rebuild today's model for **Chicago**, the same city as the house price assignment
+- **Before next week:** finish **Richardson et al. (2019)**
+
+---
+
+## 33. Week 9 Quick Reference
+
+| Concept / Question | Tool / Answer |
+|---|---|
+| Regular grid of equal cells | Fishnet: `st_make_grid(x, cellsize = 500, square = TRUE)` |
+| Keep cells that touch the city | `st_filter(philly)` |
+| Count points per cell | `lengths(st_intersects(fishnet, points))` |
+| `cellsize = 500` in EPSG 2272 | 500 feet |
+| `cellsize = 500` in EPSG 4326 | 500 degrees (meaningless) |
+| Why not tracts? | Unequal sizes, drawn for population, MAUP |
+| Share of zero cells | `mean(y == 0)` (≈ 87% here) |
+| Count model | Poisson: `glm(f, family = "poisson")` |
+| Poisson link | log(λ) = β₀ + β₁x₁ + … |
+| Read a Poisson coefficient | exp(β) = multiplicative change in expected count |
+| Doubling a logged predictor | Expected count × 2^β |
+| Predictions as counts | `predict(model, type = "response")` |
+| Poisson assumption | Mean = variance |
+| Variance > mean | Overdispersion → negative binomial: `MASS::glm.nb()` |
+| Nearest / kNN distance | `get.knnx(to, from, k)` (FNN), then `rowMeans()` |
+| Cell centre points | `st_centroid(fishnet)` |
+| Queen-like neighbors on a grid | `knearneigh(coords, k = 8)` |
+| LISA quadrant | `attr(lisa, "quadr")$mean` |
+| LISA p-value (folded) | `lisa[, "Pr(folded) Sim"]` |
+| Hotspot | High–High and p < 0.05 |
+| Leakage check | Would I have this number at the moment of prediction? |
+| Kernel density (spatstat) | `density(ppp(x, y, window = owin(...)), sigma = 1000)` |
+| Value at a point | `safelookup(kde, ppp(...))` |
+| Side-by-side maps | `p1 + p2` (patchwork) |
+| Recorded crime | actual × P(reported) × P(recorded \| reported) |
+| Burglary reported to police (NCVS 2024) | ~41% |
+| Next week's CV | Leave-one-group-out by police district |
+
+---
+
+## 34. Key Concepts to Remember
+
+- **A statistically "good" model can still be socially harmful.** Ask *should we* before *how*.
+- Predictive policing rests on four shaky assumptions: that crime data reflect crime, that past patterns predict crime rather than policing, that good and bad data can be separated, and that technical fixes solve social problems.
+- **Dirty data** (Richardson, Schultz & Crawford, 2019) includes data shaped by corrupt, biased or unlawful practices: fabricated, biased, missing and proxy data.
+- **Arrests ≠ crimes. Calls for service ≠ need. Gang database ≠ gang membership.**
+- The **feedback loop**: predictions send police, police create records, records "confirm" the predictions.
+- A **fishnet** gives equal-sized cells, so counts are comparable and the MAUP problem of tracts is reduced.
+- Check your CRS: `cellsize = 500` is feet in EPSG 2272 but degrees in EPSG 4326.
+- Crime counts are mostly **zeros** (about 87% of cells here).
+- **OLS breaks for counts:** negative predictions, spread that grows with the mean, and no respect for whole numbers.
+- `log(y + 1)` is an arbitrary trick. **Poisson regression logs the mean, not the data.**
+- In Poisson, **exp(β)** is the multiplicative change in the expected count.
+- Use `predict(..., type = "response")` to get counts, not log-counts.
+- Poisson assumes **mean = variance**. A larger variance is **overdispersion**; use negative binomial (next week).
+- Four feature types: **count in cell, nearest distance, kNN distance, distance to a fixed point**.
+- A **LISA hotspot** feature uses last year's High–High clusters. With thousands of cells, some hotspots appear by chance.
+- **Leakage check:** would I have this number at the moment of prediction? Build features from **2024**, predict **2025**.
+- The bar to beat is the **kernel density map of last year's crime**. In this run it caught 46% of 2025 burglaries in its top 10% of cells, against the model's 40%, even though the test favoured the model.
+- **Recorded = actual × P(reported) × P(recorded | reported).** Two of the three terms are human decisions that vary by place.
+- **Burglary** is victim-reported (but only ~41% of the time). **Drug possession** is officer-generated, so it measures policing.
+- **Cross-validation can't catch bias that's in the test set too.** A low RMSE means you predicted the records well, not the crime.
+- The bias can enter **twice**: as Y and as a feature built from Y.
+- Disorder features encode **broken windows theory**, and 311 calls depend on **who calls**.
+- Over-predicted cells mean **more patrols** for the people who live there, not just higher tax bills.
+- **Biased outcome measurement hurts both β̂ and ŷ, and CV won't show it.**
