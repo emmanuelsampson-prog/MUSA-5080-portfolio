@@ -46,7 +46,7 @@
     "href": "weekly-notes/index.html",
     "title": "Weekly Notes",
     "section": "",
-    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 9: Predictive Policing: Counts, Fishnets, and Dirty Data\n\n\nShould we build predictive policing?\n\n\n\n\n\nOct 30, 2026\n\n\n\n\n\n\n\nWeek 8: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage\n\n\nFrom global to local Moran’s I, LISA quadrants read as model errors, a LISA-driven feature workflow, three ways to measure nearness, and the ethics of rent-pricing algorithms through the RealPage case and an RFP exercise.\n\n\n\n\n\nOct 23, 2026\n\n\n\n\n\n\n\nWeek 7: Where Is the Model Wrong? Spatial Autocorrelation and Spatial Modelling\n\n\nFrom tracts to house sales, cleaning sales data, buffer and kNN spatial features, residual maps, spatial lags, Moran’s I and permutation tests.\n\n\n\n\n\nOct 16, 2026\n\n\n\n\n\n\n\nWeek 6: Feature Engineering for Linear Regression\n\n\nChanging the shape of features: log transformations, polynomial terms, categorical variables, dummy coding, interaction terms, and fixed effects, all evaluated with consistent k-fold cross-validation in R.\n\n\n\n\n\nOct 9, 2026\n\n\n\n\n\n\n\nWeek 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations\n\n\nAttribute joins, sf objects, coordinate reference systems, datums, map projections, UTM, spatial relationships, buffers, and spatial analysis in R.\n\n\n\n\n\nSep 18, 2026\n\n\n\n\n\n\n\nWeek 3: Data Visualization and Uncertainty\n\n\nGrammar of Graphics, ggplot2, ACS reliability, derived uncertainty, and change over time.\n\n\n\n\n\nSep 11, 2026\n\n\n\n\n\n\n\nWeek 2: dplyr and census\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\nNo matching items"
+    "text": "Notes from each week of MUSA 5080. New entries appear here automatically — add a .qmd file to this folder and render.\n\n\n\n\n\n\n\n\n\n\n\nWeek 10: Geographic Cross-Validation and Logistic Regression?\n\n\nWhy random folds flatter a spatial model, leave-one-district-out validation, the link function, odds and log-odds, logistic regression on the COMPAS data, reading odds ratios, choosing a threshold, the confusion matrix, and why the threshold is a policy choice rather than a statistical one.\n\n\n\n\n\nNov 6, 2026\n\n\n\n\n\n\n\nWeek 9: Predictive Policing: Counts, Fishnets, and Dirty Data\n\n\nShould we build predictive policing?\n\n\n\n\n\nOct 30, 2026\n\n\n\n\n\n\n\nWeek 8: Local Spatial Autocorrelation (LISA), Operationalizing “Near”, and the Case of RealPage\n\n\nFrom global to local Moran’s I, LISA quadrants read as model errors, a LISA-driven feature workflow, three ways to measure nearness, and the ethics of rent-pricing algorithms through the RealPage case and an RFP exercise.\n\n\n\n\n\nOct 23, 2026\n\n\n\n\n\n\n\nWeek 7: Where Is the Model Wrong? Spatial Autocorrelation and Spatial Modelling\n\n\nFrom tracts to house sales, cleaning sales data, buffer and kNN spatial features, residual maps, spatial lags, Moran’s I and permutation tests.\n\n\n\n\n\nOct 16, 2026\n\n\n\n\n\n\n\nWeek 6: Feature Engineering for Linear Regression\n\n\nChanging the shape of features: log transformations, polynomial terms, categorical variables, dummy coding, interaction terms, and fixed effects, all evaluated with consistent k-fold cross-validation in R.\n\n\n\n\n\nOct 9, 2026\n\n\n\n\n\n\n\nWeek 4: Spatial Data, Coordinate Reference Systems, and Spatial Operations\n\n\nAttribute joins, sf objects, coordinate reference systems, datums, map projections, UTM, spatial relationships, buffers, and spatial analysis in R.\n\n\n\n\n\nSep 18, 2026\n\n\n\n\n\n\n\nWeek 3: Data Visualization and Uncertainty\n\n\nGrammar of Graphics, ggplot2, ACS reliability, derived uncertainty, and change over time.\n\n\n\n\n\nSep 11, 2026\n\n\n\n\n\n\n\nWeek 2: dplyr and census\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nSep 4, 2026\n\n\n\n\n\n\n\nWeek 1: Getting Set Up\n\n\nFirst impressions, and getting the workflow running.\n\n\n\n\n\nAug 28, 2026\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "data/readme.html",
@@ -2658,5 +2658,145 @@
     "title": "Week 9: Predictive Policing: Counts, Fishnets, and Dirty Data",
     "section": "32. Wrap-Up",
     "text": "32. Wrap-Up\n\nAdd a row to the ŷ vs. β̂ table\n\n\n\nProblem\nHurts β̂?\nHurts ŷ?\n\n\n\n\nBiased outcome measurement\nYes\nYes, and CV won’t show it\n\n\n\n\nβ̂ (coefficients): the relationships we estimate are relationships with records, not crime\nŷ (predictions): we predict where crime will be recorded, and cross-validation cannot detect it, because the test data share the bias\n\n\n\nNext week: logistic regression + geographic CV\n\nGeographic cross-validation: rerun today’s burglary model with whole police districts held out. Does the KDE comparison still go the model’s way?\nLogistic regression: from “how many?” to “yes or no?”\n\n\n\nTo do\n\nLab (ungraded): rebuild today’s model for Chicago, the same city as the house price assignment\nBefore next week: finish Richardson et al. (2019)"
+  },
+  {
+    "objectID": "weekly-notes/week-10.html",
+    "href": "weekly-notes/week-10.html",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "",
+    "text": "This week has three threads, and they run in sequence:\n\n\n\n\n\n\n\nThread\nQuestion\n\n\n\n\nValidation\nIs last week’s model being tested fairly?\n\n\nModelling\nHow do we predict a 0/1 outcome, such as rearrest?\n\n\nDecision\nOnce we have a probability, who decides what to do with it, and at what cutoff?\n\n\n\nThe session follows the pipeline we have used all term:\n\noutcome → unit of analysis → features → model → CV → prediction → decision\n\nToday touches CV, then the model, and ends at the decision."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#overview",
+    "href": "weekly-notes/week-10.html#overview",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "",
+    "text": "This week has three threads, and they run in sequence:\n\n\n\n\n\n\n\nThread\nQuestion\n\n\n\n\nValidation\nIs last week’s model being tested fairly?\n\n\nModelling\nHow do we predict a 0/1 outcome, such as rearrest?\n\n\nDecision\nOnce we have a probability, who decides what to do with it, and at what cutoff?\n\n\n\nThe session follows the pipeline we have used all term:\n\noutcome → unit of analysis → features → model → CV → prediction → decision\n\nToday touches CV, then the model, and ends at the decision."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#why-we-built-it-preamble",
+    "href": "weekly-notes/week-10.html#why-we-built-it-preamble",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "2. Why We Built It: Preamble",
+    "text": "2. Why We Built It: Preamble\nLast week the Poisson model predicted burglary counts across the fishnet. Its cross-validation used random folds, and that choice flatters a spatial model. This week the lecture fixes that test first, then moves to a different kind of outcome: a person, a 0 or a 1, and a decision with consequences for that person.\n\nA fair test comes before a clever model."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#geographic-cross-validation",
+    "href": "weekly-notes/week-10.html#geographic-cross-validation",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "3. Geographic Cross-Validation",
+    "text": "3. Geographic Cross-Validation\n\nWhich kind of fold?\nTwo ways to split the data:\n\nRandom folds: each cell is assigned to a fold at random.\nDistrict folds: each fold is a whole police district, and the model is tested on a district it never saw.\n\n\n\nWhy random folds flatter a spatial model\nEvery random test cell is surrounded by training cells. Neighbouring cells have nearly the same features and nearly the same outcome, so the model has effectively seen the answer next door. This is proximity leakage.\nDistance-to-hotspot makes it worse: neighbouring cells share almost the same distance, so the model can recover the answer from a feature it was given honestly.\n\nGeographic CV is the fix for proximity leakage. Hold out whole places, not random cells.\n\n\n\nStep 1: give every cell a police district\nUse the centroid, so a cell on a boundary is assigned to exactly one district.\n\ncell_district &lt;- st_centroid(fishnet) %&gt;%\n  st_join(police_districts %&gt;% select(district = dist_num)) %&gt;%\n  st_drop_geometry() %&gt;%\n  select(cell_id, district)\n\nfishnet &lt;- fishnet %&gt;%\n  left_join(cell_district, by = \"cell_id\") %&gt;%\n  filter(!is.na(district))\n\n\n\nStep 2: hide one district at a time\nFor each district: hide it, fit on the rest, predict it, score it.\n\ndistricts &lt;- unique(fishnet$district)\n\ncv_results &lt;- map_dfr(districts, function(d) {\n  train &lt;- fishnet %&gt;% filter(district != d) %&gt;% st_drop_geometry()\n  test  &lt;- fishnet %&gt;% filter(district == d) %&gt;% st_drop_geometry()\n\n  fit &lt;- glm(burglaries ~ cars_cnt + log_light_nn1 + log_graffiti_nn3 +\n               loop_mi + dist_hotspot,\n             family = poisson, data = train)\n\n  test %&gt;%\n    mutate(pred = predict(fit, newdata = test, type = \"response\")) %&gt;%\n    summarize(district = d, n_cells = n(),\n              mae = mean(abs(burglaries - pred)))\n})\n\n\n\nStep 3: map where the model fails\n\npolice_districts %&gt;%\n  left_join(cv_results, by = c(\"dist_num\" = \"district\")) %&gt;%\n  ggplot() +\n  geom_sf(aes(fill = mae), color = \"white\") +\n  scale_fill_viridis_c(name = \"MAE\") +\n  theme_void()\n\n\nThe error is not the same everywhere. A single average hides the districts where the model does badly.\n\nWatch the fold sizes. Check n_cells. A tiny district gives a noisy error, and one unusual district can dominate the picture."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#a-decision-about-a-person",
+    "href": "weekly-notes/week-10.html#a-decision-about-a-person",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "4. A Decision About a Person",
+    "text": "4. A Decision About a Person\nA corrections department wants to predict whether a person released from jail will be rearrested within two years. The lecture opened with a video to motivate the example (the link is not in the slides).\nThe data are ProPublica’s Broward County, Florida file: everyone screened with the COMPAS risk tool in 2013–14, followed for two years. ProPublica’s analysis of this file is the basis for their 2016 reporting on the tool, “Machine Bias.”\n\ncompas &lt;- read_csv(\"https://raw.githubusercontent.com/propublica/compas-analysis/master/compas-scores-two-years.csv\") %&gt;%\n  filter(days_b_screening_arrest &gt;= -30,\n         days_b_screening_arrest &lt;=  30,\n         is_recid != -1,\n         c_charge_degree != \"O\",\n         score_text != \"N/A\") %&gt;%\n  mutate(male      = as.integer(sex == \"Male\"),\n         felony    = as.integer(c_charge_degree == \"F\"),\n         juv_total = juv_fel_count + juv_misd_count + juv_other_count)\n\nAfter filtering, the lecture’s sample has 6,172 people, of whom 45.5% were rearrested within two years.\n\nThe outcome is a record\nBefore any maths, look at what the outcome is:\n\ntwo_year_recid records a new arrest, not a new crime. An arrest is a record created by a process, and last week’s dirty-data discussion applies here too.\npriors_count is past arrests and convictions. It is also a record.\n\n\nEvery variable in this model is a record of an earlier decision."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#why-not-ols-on-a-01-outcome",
+    "href": "weekly-notes/week-10.html#why-not-ols-on-a-01-outcome",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "5. Why Not OLS on a 0/1 Outcome?",
+    "text": "5. Why Not OLS on a 0/1 Outcome?\nOLS on a 0/1 outcome has the same problem we met last week. It predicts values above 1 at high prior counts, which are impossible probabilities.\n\n\n\n\n\n\n\nLast week (counts)\nThis week (probabilities)\n\n\n\n\nOLS predicted negative burglaries\nOLS predicts probabilities outside 0–1\n\n\nFix: model log(expected count)\nFix: model a transformed probability\n\n\n\nWe need a transformation that maps the probability scale onto a scale where a straight line can go anywhere. We build it in two steps."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#from-probability-to-odds-to-log-odds",
+    "href": "weekly-notes/week-10.html#from-probability-to-odds-to-log-odds",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "6. From Probability to Odds to Log-Odds",
+    "text": "6. From Probability to Odds to Log-Odds\n\nStep 1: odds\n\\[\\text{odds} = \\frac{p}{1 - p}\\]\nOdds say how many times more likely an event is to happen than not.\n\n\\(p = 0.8\\) gives \\(0.8 / 0.2 = 4\\), which reads “4 to 1”\n\\(p = 0.5\\) gives \\(0.5 / 0.5 = 1\\), which reads “even odds”\nBroward: \\(p = 0.455\\) gives odds of \\(0.835\\). For every 100 people not rearrested, about 84 were.\n\n\n\nStep 2: log-odds\n\\[\\text{log-odds} = \\log\\left(\\frac{p}{1 - p}\\right)\\]\nThis is the natural log.\n\n\nThe ladder\n\n\n\nProbability\nOdds\nLog-odds\n\n\n\n\n0.01\n0.01\n−4.6\n\n\n0.10\n0.11\n−2.2\n\n\n0.50\n1\n0\n\n\n0.80\n4\n1.4\n\n\n0.90\n9\n2.2\n\n\n0.99\n99\n4.6\n\n\n\nEach step stretches the scale:\n\n\n\nScale\nRange\n\n\n\n\nProbability\n0 to 1\n\n\nOdds\n0 to ∞\n\n\nLog-odds\n−∞ to +∞\n\n\n\nA straight line can produce any number, so we fit the straight line on the log-odds scale.\n\n\nNotice the symmetry\n\n\\(p = 0.5\\) gives log-odds of 0.\n\\(p = 0.1\\) and \\(p = 0.9\\) give −2.2 and +2.2.\n\nPositive log-odds mean more likely than not. Negative log-odds mean less likely than not."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#the-link-function",
+    "href": "weekly-notes/week-10.html#the-link-function",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "7. The Link Function",
+    "text": "7. The Link Function\nThe link function is the transformation that lets a straight line make predictions with limits. Each GLM has a random component (how the outcome scatters), a link (how the mean is transformed), and an inverse link (how we map back to real predictions).\n\n\n\n\n\n\n\n\n\n\nModel\nRandom component\nBounded expected values\nLink function\nInverse link\n\n\n\n\nLogistic\nBinomial (0, 1)\nProbability p ∈ (0, 1)\nLogit: log(p / (1 − p))\nInverse logit, the S-curve\n\n\nPoisson\nPoisson\nCounts (0, ∞)\nLog: log(λ)\nexp()\n\n\n\n\n\n\n\nPoisson (last week)\nLogistic (today)\n\n\n\n\nWhat we model\nlog(expected count)\nlog(odds)\n\n\nLink\nlog\nlogit\n\n\nR\nfamily = poisson\nfamily = binomial\n\n\n\n\nTransform so a line can’t produce nonsense. Fit the line on that scale. Transform back."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#the-logistic-model-and-the-s-curve",
+    "href": "weekly-notes/week-10.html#the-logistic-model-and-the-s-curve",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "8. The Logistic Model and the S-Curve",
+    "text": "8. The Logistic Model and the S-Curve\nThe model on the log-odds scale is a straight line:\n\\[\\log\\left(\\frac{p}{1 - p}\\right) = \\beta_0 + \\beta_1 x_1 + \\beta_2 x_2 + \\dots\\]\nSolved for \\(p\\):\n\\[p = \\frac{1}{1 + e^{-(\\beta_0 + \\beta_1 x_1 + \\dots)}}\\]\nDo not memorise the formula. Know what it does: any number goes in, and a number between 0 and 1 comes out.\nThe curve is steepest in the middle and flat at the edges. This matters when we read coefficients: the same change in a predictor moves the probability more near the middle than near the ends.\n\nFit a line, read a curve\n\nInside the model, it is always a straight line, the same as OLS.\nThe link translates the line into probability units.\nThe S-curve is the line, seen in probability units.\nThe binomial distribution describes the noise. At 11 priors, 78% of people like this are rearrested and 22% are not. Each person is still a 0 or a 1.\n\n\n\nThree layers\n\n\n\n\nThe line lives in\nAfter translating\nReal outcomes scatter by\n\n\n\n\nOLS\nprice\nstill a line\nnormal\n\n\nPoisson\nlog(expected count)\nexponential curve\nPoisson\n\n\nLogistic\nlog-odds\nS-curve\nbinomial\n\n\n\n\nThe link lets a straight line predict something that has limits."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#fitting-the-model-in-r",
+    "href": "weekly-notes/week-10.html#fitting-the-model-in-r",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "9. Fitting the Model in R",
+    "text": "9. Fitting the Model in R\n\nrecid_fit &lt;- glm(two_year_recid ~ age + priors_count + male + felony + juv_total,\n                 family = binomial,\n                 data = compas)\n\nsummary(recid_fit)\n\nOnly family changed from the Poisson code.\nThere is no R² and no RMSE for this model. It is fitted by maximum likelihood: the β’s that make the observed 0s and 1s most likely.\nThe lecture left race out of the model. Whether the model is race-blind is a question for next week.\n\nRemember type = \"response\"\n\npredict(recid_fit, type = \"link\")      # log-odds   &lt;- the DEFAULT\npredict(recid_fit, type = \"response\")  # probability\n\nIf predictions come out negative, you forgot type = \"response\", and you are looking at log-odds."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#reading-the-coefficients-three-readings",
+    "href": "weekly-notes/week-10.html#reading-the-coefficients-three-readings",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "10. Reading the Coefficients: Three Readings",
+    "text": "10. Reading the Coefficients: Three Readings\nThe output for this model:\n\n\n\nTerm\nLog-odds coefficient\nOdds ratio\n\n\n\n\nage (per year)\n−0.044\n0.96\n\n\npriors_count (per prior)\n0.160\n1.17\n\n\nmale\n0.328\n1.39\n\n\nfelony charge\n0.229\n1.26\n\n\njuv_total (per juvenile record)\n0.135\n1.14\n\n\n\nTake one row, priors_count, and read it three ways.\n\nReading 1: log-odds\nEach additional prior raises the log-odds of rearrest by 0.16.\nThis is true, but nobody thinks in log-odds.\n\n\nReading 2: the odds ratio\n\nexp(coef(recid_fit))\n\n\\(e^{0.16} = 1.17\\). Each additional prior multiplies the odds of rearrest by 1.17, which is about 17% higher odds.\n\n\nReading odds ratios\n\n\n\nOdds ratio\nMeaning\n\n\n\n\n= 1\nno association\n\n\n&gt; 1\nhigher odds\n\n\n&lt; 1\nlower odds\n\n\n\n\\((\\text{OR} - 1) \\times 100\\) gives the percent change in the odds.\nLast week, exp(coef()) on a Poisson model gave a rate ratio. It is the same move on a different scale.\n\n\nReading 3: probability\nTwo people from the model, both male, with a felony charge and no juvenile record. We add one prior to each.\n\n\n\nPerson\nPriors\nPredicted p\n+ 1 prior\nChange\n\n\n\n\nAge 22\n0\n0.488\n0.528\n+4.0 points\n\n\nAge 50\n0\n0.218\n0.246\n+2.8 points\n\n\n\nBoth people’s odds went up by 17%, yet their probabilities did not move by the same amount. The 22-year-old sits near the steep middle of the S-curve, so the same change in odds moves the probability more.\n\nOdds ratios explain the model. Probabilities make the decision."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#from-probability-to-decision",
+    "href": "weekly-notes/week-10.html#from-probability-to-decision",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "11. From Probability to Decision",
+    "text": "11. From Probability to Decision\nThe model gives a probability. A parole board decides yes or no. To turn one into the other, we pick a cutoff:\n\\[\\text{label \"high risk\" if } p \\geq \\text{threshold}\\]\n\nWhat threshold?\nHere the base rate is 45.5%, so 0.5 is not unreasonable. Last week, on the fishnet, almost no cell would have crossed 0.5.\n\n0.5 is a default, not a rule. Our job is to determine what works best for the specific case, and that depends on what each kind of error costs."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#the-confusion-matrix",
+    "href": "weekly-notes/week-10.html#the-confusion-matrix",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "12. The Confusion Matrix",
+    "text": "12. The Confusion Matrix\n\n\n\n\nRearrested\nNot rearrested\n\n\n\n\nLabelled high risk\ntrue positive (TP)\nfalse positive (FP)\n\n\nLabelled low risk\nfalse negative (FN)\ntrue negative (TN)\n\n\n\n\n\n\n\n\n\n\n\nMeasure\nFormula\nQuestion it answers\n\n\n\n\nSensitivity\nTP / (TP + FN)\nOf the people rearrested, how many did we flag?\n\n\nSpecificity\nTN / (TN + FP)\nOf the people not rearrested, how many did we leave alone?\n\n\nPrecision\nTP / (TP + FP)\nOf the people we flagged, how many were rearrested?\n\n\nAccuracy\n(TP + TN) / total\nOf everyone, how many did we label correctly?\n\n\n\nA false positive here is a person labelled high risk who was not rearrested."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#the-quarantine-exercise",
+    "href": "weekly-notes/week-10.html#the-quarantine-exercise",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "13. The Quarantine Exercise",
+    "text": "13. The Quarantine Exercise\nIn class, every student was a patient. Each card showed:\n\nProbability: the model’s prediction that the patient has the disease\nRed dot: the patient actually has it\nStar: the patient has the deadly variant\n\nThe rule was simple: anyone at or above the threshold goes to the quarantine table.\n\n\n\nRound\nThreshold\nRule\n\n\n\n\n1\n0.50\nprobability ≥ 0.50 goes to quarantine\n\n\n2\n0.30\neveryone between 0.30 and 0.49 walks to quarantine\n\n\n3\n0.70\neveryone below 0.70 walks back\n\n\n\n\nWhat happened\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThreshold\nTP\nFP\nFN\nTN\nSensitivity\nSpecificity\nPrecision\nAccuracy\nStars caught\n\n\n\n\n0.30\n14\n13\n2\n11\n0.88\n0.46\n0.52\n0.63\n3 of 4\n\n\n0.50\n10\n6\n6\n18\n0.63\n0.75\n0.63\n0.70\n2 of 4\n\n\n0.70\n7\n2\n9\n22\n0.44\n0.92\n0.78\n0.73\n1 of 4\n\n\n\nThree things to take from the table:\n\nSensitivity and specificity move in opposite directions. Lowering the threshold catches more sick people and quarantines more healthy ones.\nAccuracy is highest at 0.70, and that threshold misses the most sick people. A single number can point you to the wrong threshold.\nOne star is missed at every threshold. No threshold fixes a bad prediction.\n\nStudents were also asked whether anything about them changed when they moved. The question is the same one a model faces: did the label change, and did the person?"
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#back-to-people",
+    "href": "weekly-notes/week-10.html#back-to-people",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "14. Back to People",
+    "text": "14. Back to People\nIn the recidivism model, a false positive is not a quarantine. It is a person labelled high risk who was not rearrested, and that label has consequences.\nHere is the same trade-off on the full 6,172 people:\n\n\n\nThreshold\nFlagged\nTP\nFP\nFN\nTN\nSensitivity\nSpecificity\n\n\n\n\n0.3\n4,843\n2,527\n2,316\n282\n1,047\n0.90\n0.31\n\n\n0.5\n2,264\n1,551\n713\n1,258\n2,650\n0.55\n0.79\n\n\n0.7\n710\n563\n147\n2,246\n3,216\n0.20\n0.96\n\n\n\nAt 0.3, 2,316 people who were not rearrested are labelled high risk. At 0.7, 2,246 people who were rearrested are labelled low risk.\n\nSomebody has to choose which number to live with."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#attach-a-decision-to-the-model",
+    "href": "weekly-notes/week-10.html#attach-a-decision-to-the-model",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "15. Attach a Decision to the Model",
+    "text": "15. Attach a Decision to the Model\nSame model, same probabilities, two programmes:\n\n\n\n\n\n\n\n\n\nProgram A\nProgram B\n\n\n\n\n“High risk” means\nparole denied or detention before trial\noffered reentry services: housing help, a job programme, a case worker\n\n\nA false positive is\na person held who would not have been rearrested\na person offered help they did not strictly need\n\n\nCost of a false positive\nhigh\nlow\n\n\nSensible threshold\nhigher, or question the programme\nlower\n\n\n\nWhich threshold for each programme, and why? The answer depends on what the label does to the person, not on the statistics.\nThis morning’s example, patrol versus greening, has the same structure. Where a false positive costs a person their liberty, the threshold should be high. Where it costs a person a free service, the threshold can be low.\n\nThe threshold is a policy choice. That decision belongs to people, not to the glm."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#in-r",
+    "href": "weekly-notes/week-10.html#in-r",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "16. In R",
+    "text": "16. In R\n\ncompas &lt;- compas %&gt;%\n  mutate(p_hat   = predict(recid_fit, type = \"response\"),\n         pred_50 = as.integer(p_hat &gt;= 0.5),\n         pred_30 = as.integer(p_hat &gt;= 0.3))\n\ntable(predicted = compas$pred_30, actual = compas$two_year_recid)\n\nEvery threshold at once is the ROC curve, which the lecture left for next week."
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#wrap-up",
+    "href": "weekly-notes/week-10.html#wrap-up",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "17. Wrap-Up",
+    "text": "17. Wrap-Up\n\nNext week\n\nRace-blindness: is the model fair if race is left out, given that other features may carry it?\nThe ROC curve: evaluating every threshold at once.\n\n\n\nDiscussion question\nFor each programme, which threshold would you choose, and who should be consulted before that choice is made?"
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#week-10-quick-reference",
+    "href": "weekly-notes/week-10.html#week-10-quick-reference",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "18. Week 10 Quick Reference",
+    "text": "18. Week 10 Quick Reference\n\n\n\n\n\n\n\nConcept / Question\nTool / Answer\n\n\n\n\nRandom folds vs. district folds\nRandom folds leak neighbours; district folds hold out places\n\n\nAssign each cell a district\nst_centroid(fishnet) %&gt;% st_join(...)\n\n\nHold out one district\nfilter(district != d) for training, filter(district == d) for testing\n\n\nLogistic regression\nglm(y ~ x, family = binomial)\n\n\nPoisson link\nlog(λ)\n\n\nLogistic link\nlogit: log(p / (1 − p))\n\n\nOdds\np / (1 − p)\n\n\nLog-odds of 0.5\n0\n\n\nRead a logistic coefficient\nexp(β) = multiplicative change in the odds\n\n\nOdds ratio = 1\nno association\n\n\nPredicted probability\npredict(model, type = \"response\")\n\n\nDefault prediction\nlog-odds, unless type = \"response\"\n\n\nThreshold\nPredict high risk if p ≥ threshold\n\n\nDefault threshold\n0.5, but a choice, not a rule\n\n\nSensitivity\nTP / (TP + FN)\n\n\nSpecificity\nTN / (TN + FP)\n\n\nPrecision\nTP / (TP + FP)\n\n\nWho sets the threshold?\nPeople, against the cost of each error"
+  },
+  {
+    "objectID": "weekly-notes/week-10.html#key-concepts-to-remember",
+    "href": "weekly-notes/week-10.html#key-concepts-to-remember",
+    "title": "Week 10: Geographic Cross-Validation and Logistic Regression?",
+    "section": "19. Key Concepts to Remember",
+    "text": "19. Key Concepts to Remember\n\nTest the model fairly before you improve it. Random folds flatter a spatial model through proximity leakage. Hold out whole districts.\nCheck the fold sizes. A small district gives a noisy error.\nPredict a 0/1 outcome with a link function. OLS predicts impossible probabilities.\nOdds are p / (1 − p). Log-odds are log(odds), and they run from −∞ to +∞.\nThe link function lets a straight line produce bounded predictions. Fit on the link scale, then transform back.\nThe S-curve is the straight line seen in probability units. It is steepest in the middle.\nUse type = \"response\" to get probabilities. The default gives log-odds.\nexp(β) is an odds ratio. A 1.17 odds ratio is about 17% higher odds, not 17% higher probability.\nThe same odds change moves probabilities by different amounts depending on where you are on the S-curve.\n0.5 is a default. The threshold depends on the cost of each kind of error.\nSensitivity and specificity trade off. Accuracy can point you to the threshold that misses the most people who need help.\nThe threshold is a policy choice. It belongs to the people who live with its consequences.\nThe outcome is a record. A new arrest is not a new crime, and last week’s dirty-data questions apply to it."
   }
 ]

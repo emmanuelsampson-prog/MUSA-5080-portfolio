@@ -1,0 +1,508 @@
+---
+title: "Week 10: Geographic Cross-Validation and Logistic Regression?"
+description: "Why random folds flatter a spatial model, leave-one-district-out validation, the link function, odds and log-odds, logistic regression on the COMPAS data, reading odds ratios, choosing a threshold, the confusion matrix, and why the threshold is a policy choice rather than a statistical one."
+date: 2026-11-06
+---
+
+## 1. Overview
+
+This week has three threads, and they run in sequence:
+
+| Thread | Question |
+|---|---|
+| **Validation** | Is last week's model being tested fairly? |
+| **Modelling** | How do we predict a 0/1 outcome, such as rearrest? |
+| **Decision** | Once we have a probability, who decides what to do with it, and at what cutoff? |
+
+The session follows the pipeline we have used all term:
+
+> **outcome → unit of analysis → features → model → CV → prediction → decision**
+
+Today touches CV, then the model, and ends at the decision.
+
+---
+
+## 2. Why We Built It: Preamble
+
+Last week the Poisson model predicted burglary counts across the fishnet. Its cross-validation used random folds, and that choice flatters a spatial model. This week the lecture fixes that test first, then moves to a different kind of outcome: a person, a 0 or a 1, and a decision with consequences for that person.
+
+> **A fair test comes before a clever model.**
+
+---
+
+## 3. Geographic Cross-Validation
+
+### Which kind of fold?
+
+Two ways to split the data:
+
+- **Random folds:** each cell is assigned to a fold at random.
+- **District folds:** each fold is a whole police district, and the model is tested on a district it never saw.
+
+### Why random folds flatter a spatial model
+
+Every random test cell is surrounded by training cells. Neighbouring cells have nearly the same features and nearly the same outcome, so the model has effectively seen the answer next door. This is **proximity leakage**.
+
+Distance-to-hotspot makes it worse: neighbouring cells share almost the same distance, so the model can recover the answer from a feature it was given honestly.
+
+> **Geographic CV is the fix for proximity leakage.** Hold out whole places, not random cells.
+
+### Step 1: give every cell a police district
+
+Use the centroid, so a cell on a boundary is assigned to exactly one district.
+
+```{r}
+#| eval: false
+cell_district <- st_centroid(fishnet) %>%
+  st_join(police_districts %>% select(district = dist_num)) %>%
+  st_drop_geometry() %>%
+  select(cell_id, district)
+
+fishnet <- fishnet %>%
+  left_join(cell_district, by = "cell_id") %>%
+  filter(!is.na(district))
+```
+
+### Step 2: hide one district at a time
+
+For each district: hide it, fit on the rest, predict it, score it.
+
+```{r}
+#| eval: false
+districts <- unique(fishnet$district)
+
+cv_results <- map_dfr(districts, function(d) {
+  train <- fishnet %>% filter(district != d) %>% st_drop_geometry()
+  test  <- fishnet %>% filter(district == d) %>% st_drop_geometry()
+
+  fit <- glm(burglaries ~ cars_cnt + log_light_nn1 + log_graffiti_nn3 +
+               loop_mi + dist_hotspot,
+             family = poisson, data = train)
+
+  test %>%
+    mutate(pred = predict(fit, newdata = test, type = "response")) %>%
+    summarize(district = d, n_cells = n(),
+              mae = mean(abs(burglaries - pred)))
+})
+```
+
+### Step 3: map where the model fails
+
+```{r}
+#| eval: false
+police_districts %>%
+  left_join(cv_results, by = c("dist_num" = "district")) %>%
+  ggplot() +
+  geom_sf(aes(fill = mae), color = "white") +
+  scale_fill_viridis_c(name = "MAE") +
+  theme_void()
+```
+
+> **The error is not the same everywhere.** A single average hides the districts where the model does badly.
+
+**Watch the fold sizes.** Check `n_cells`. A tiny district gives a noisy error, and one unusual district can dominate the picture.
+
+---
+
+## 4. A Decision About a Person
+
+A corrections department wants to predict whether a person released from jail will be rearrested within two years. The lecture opened with a video to motivate the example (the link is not in the slides).
+
+The data are ProPublica's Broward County, Florida file: everyone screened with the COMPAS risk tool in 2013–14, followed for two years. ProPublica's analysis of this file is the basis for their 2016 reporting on the tool, "Machine Bias."
+
+```{r}
+#| eval: false
+compas <- read_csv("https://raw.githubusercontent.com/propublica/compas-analysis/master/compas-scores-two-years.csv") %>%
+  filter(days_b_screening_arrest >= -30,
+         days_b_screening_arrest <=  30,
+         is_recid != -1,
+         c_charge_degree != "O",
+         score_text != "N/A") %>%
+  mutate(male      = as.integer(sex == "Male"),
+         felony    = as.integer(c_charge_degree == "F"),
+         juv_total = juv_fel_count + juv_misd_count + juv_other_count)
+```
+
+After filtering, the lecture's sample has **6,172 people**, of whom **45.5%** were rearrested within two years.
+
+### The outcome is a record
+
+Before any maths, look at what the outcome is:
+
+- `two_year_recid` records a **new arrest**, not a new crime. An arrest is a record created by a process, and last week's dirty-data discussion applies here too.
+- `priors_count` is past arrests and convictions. It is also a record.
+
+> **Every variable in this model is a record of an earlier decision.**
+
+---
+
+## 5. Why Not OLS on a 0/1 Outcome?
+
+OLS on a 0/1 outcome has the same problem we met last week. It predicts values above 1 at high prior counts, which are impossible probabilities.
+
+| Last week (counts) | This week (probabilities) |
+|---|---|
+| OLS predicted negative burglaries | OLS predicts probabilities outside 0–1 |
+| Fix: model log(expected count) | Fix: model a transformed probability |
+
+We need a transformation that maps the probability scale onto a scale where a straight line can go anywhere. We build it in two steps.
+
+---
+
+## 6. From Probability to Odds to Log-Odds
+
+### Step 1: odds
+
+$$\text{odds} = \frac{p}{1 - p}$$
+
+Odds say how many times more likely an event is to happen than not.
+
+- $p = 0.8$ gives $0.8 / 0.2 = 4$, which reads "4 to 1"
+- $p = 0.5$ gives $0.5 / 0.5 = 1$, which reads "even odds"
+- Broward: $p = 0.455$ gives odds of $0.835$. For every 100 people not rearrested, about 84 were.
+
+### Step 2: log-odds
+
+$$\text{log-odds} = \log\left(\frac{p}{1 - p}\right)$$
+
+This is the natural log.
+
+### The ladder
+
+| Probability | Odds | Log-odds |
+|---|---|---|
+| 0.01 | 0.01 | −4.6 |
+| 0.10 | 0.11 | −2.2 |
+| 0.50 | 1 | 0 |
+| 0.80 | 4 | 1.4 |
+| 0.90 | 9 | 2.2 |
+| 0.99 | 99 | 4.6 |
+
+Each step stretches the scale:
+
+| Scale | Range |
+|---|---|
+| Probability | 0 to 1 |
+| Odds | 0 to ∞ |
+| Log-odds | −∞ to +∞ |
+
+A straight line can produce any number, so we fit the straight line on the log-odds scale.
+
+### Notice the symmetry
+
+- $p = 0.5$ gives log-odds of 0.
+- $p = 0.1$ and $p = 0.9$ give −2.2 and +2.2.
+
+Positive log-odds mean more likely than not. Negative log-odds mean less likely than not.
+
+---
+
+## 7. The Link Function
+
+The link function is the transformation that lets a straight line make predictions with limits. Each GLM has a random component (how the outcome scatters), a link (how the mean is transformed), and an inverse link (how we map back to real predictions).
+
+| Model | Random component | Bounded expected values | Link function | Inverse link |
+|---|---|---|---|---|
+| **Logistic** | Binomial (0, 1) | Probability p ∈ (0, 1) | Logit: log(p / (1 − p)) | Inverse logit, the S-curve |
+| **Poisson** | Poisson | Counts (0, ∞) | Log: log(λ) | exp() |
+
+| | Poisson (last week) | Logistic (today) |
+|---|---|---|
+| What we model | log(expected count) | log(odds) |
+| Link | log | logit |
+| R | `family = poisson` | `family = binomial` |
+
+> **Transform so a line can't produce nonsense. Fit the line on that scale. Transform back.**
+
+---
+
+## 8. The Logistic Model and the S-Curve
+
+The model on the log-odds scale is a straight line:
+
+$$\log\left(\frac{p}{1 - p}\right) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots$$
+
+Solved for $p$:
+
+$$p = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_1 + \dots)}}$$
+
+Do not memorise the formula. Know what it does: any number goes in, and a number between 0 and 1 comes out.
+
+The curve is steepest in the middle and flat at the edges. This matters when we read coefficients: the same change in a predictor moves the probability more near the middle than near the ends.
+
+### Fit a line, read a curve
+
+- Inside the model, it is always a straight line, the same as OLS.
+- The link translates the line into probability units.
+- The S-curve is the line, seen in probability units.
+- The binomial distribution describes the noise. At 11 priors, 78% of people like this are rearrested and 22% are not. Each person is still a 0 or a 1.
+
+### Three layers
+
+| | The line lives in | After translating | Real outcomes scatter by |
+|---|---|---|---|
+| **OLS** | price | still a line | normal |
+| **Poisson** | log(expected count) | exponential curve | Poisson |
+| **Logistic** | log-odds | S-curve | binomial |
+
+> **The link lets a straight line predict something that has limits.**
+
+---
+
+## 9. Fitting the Model in R
+
+```{r}
+#| eval: false
+recid_fit <- glm(two_year_recid ~ age + priors_count + male + felony + juv_total,
+                 family = binomial,
+                 data = compas)
+
+summary(recid_fit)
+```
+
+Only `family` changed from the Poisson code.
+
+There is no R² and no RMSE for this model. It is fitted by **maximum likelihood**: the β's that make the observed 0s and 1s most likely.
+
+The lecture left race out of the model. Whether the model is race-blind is a question for next week.
+
+### Remember `type = "response"`
+
+```{r}
+#| eval: false
+predict(recid_fit, type = "link")      # log-odds   <- the DEFAULT
+predict(recid_fit, type = "response")  # probability
+```
+
+If predictions come out negative, you forgot `type = "response"`, and you are looking at log-odds.
+
+---
+
+## 10. Reading the Coefficients: Three Readings
+
+The output for this model:
+
+| Term | Log-odds coefficient | Odds ratio |
+|---|---|---|
+| age (per year) | −0.044 | 0.96 |
+| priors_count (per prior) | 0.160 | 1.17 |
+| male | 0.328 | 1.39 |
+| felony charge | 0.229 | 1.26 |
+| juv_total (per juvenile record) | 0.135 | 1.14 |
+
+Take one row, `priors_count`, and read it three ways.
+
+### Reading 1: log-odds
+
+Each additional prior raises the log-odds of rearrest by 0.16.
+
+This is true, but nobody thinks in log-odds.
+
+### Reading 2: the odds ratio
+
+```{r}
+#| eval: false
+exp(coef(recid_fit))
+```
+
+$e^{0.16} = 1.17$. Each additional prior **multiplies the odds** of rearrest by 1.17, which is about 17% higher odds.
+
+### Reading odds ratios
+
+| Odds ratio | Meaning |
+|---|---|
+| = 1 | no association |
+| > 1 | higher odds |
+| < 1 | lower odds |
+
+$(\text{OR} - 1) \times 100$ gives the percent change in the odds.
+
+Last week, `exp(coef())` on a Poisson model gave a rate ratio. It is the same move on a different scale.
+
+### Reading 3: probability
+
+Two people from the model, both male, with a felony charge and no juvenile record. We add one prior to each.
+
+| Person | Priors | Predicted p | + 1 prior | Change |
+|---|---|---|---|---|
+| Age 22 | 0 | 0.488 | 0.528 | +4.0 points |
+| Age 50 | 0 | 0.218 | 0.246 | +2.8 points |
+
+Both people's **odds** went up by 17%, yet their probabilities did not move by the same amount. The 22-year-old sits near the steep middle of the S-curve, so the same change in odds moves the probability more.
+
+> **Odds ratios explain the model. Probabilities make the decision.**
+
+---
+
+## 11. From Probability to Decision
+
+The model gives a probability. A parole board decides yes or no. To turn one into the other, we pick a cutoff:
+
+$$\text{label "high risk" if } p \geq \text{threshold}$$
+
+### What threshold?
+
+Here the base rate is 45.5%, so 0.5 is not unreasonable. Last week, on the fishnet, almost no cell would have crossed 0.5.
+
+> **0.5 is a default, not a rule.** Our job is to determine what works best for the specific case, and that depends on what each kind of error costs.
+
+---
+
+## 12. The Confusion Matrix
+
+|  | Rearrested | Not rearrested |
+|---|---|---|
+| **Labelled high risk** | true positive (TP) | false positive (FP) |
+| **Labelled low risk** | false negative (FN) | true negative (TN) |
+
+| Measure | Formula | Question it answers |
+|---|---|---|
+| **Sensitivity** | TP / (TP + FN) | Of the people rearrested, how many did we flag? |
+| **Specificity** | TN / (TN + FP) | Of the people not rearrested, how many did we leave alone? |
+| **Precision** | TP / (TP + FP) | Of the people we flagged, how many were rearrested? |
+| **Accuracy** | (TP + TN) / total | Of everyone, how many did we label correctly? |
+
+A **false positive** here is a person labelled high risk who was not rearrested.
+
+---
+
+## 13. The Quarantine Exercise
+
+In class, every student was a patient. Each card showed:
+
+- **Probability:** the model's prediction that the patient has the disease
+- **Red dot:** the patient actually has it
+- **Star:** the patient has the deadly variant
+
+The rule was simple: anyone at or above the threshold goes to the quarantine table.
+
+| Round | Threshold | Rule |
+|---|---|---|
+| 1 | 0.50 | probability ≥ 0.50 goes to quarantine |
+| 2 | 0.30 | everyone between 0.30 and 0.49 walks to quarantine |
+| 3 | 0.70 | everyone below 0.70 walks back |
+
+### What happened
+
+| Threshold | TP | FP | FN | TN | Sensitivity | Specificity | Precision | Accuracy | Stars caught |
+|---|---|---|---|---|---|---|---|---|---|
+| 0.30 | 14 | 13 | 2 | 11 | 0.88 | 0.46 | 0.52 | 0.63 | 3 of 4 |
+| 0.50 | 10 | 6 | 6 | 18 | 0.63 | 0.75 | 0.63 | 0.70 | 2 of 4 |
+| 0.70 | 7 | 2 | 9 | 22 | 0.44 | 0.92 | 0.78 | 0.73 | 1 of 4 |
+
+Three things to take from the table:
+
+- **Sensitivity and specificity move in opposite directions.** Lowering the threshold catches more sick people and quarantines more healthy ones.
+- **Accuracy is highest at 0.70, and that threshold misses the most sick people.** A single number can point you to the wrong threshold.
+- **One star is missed at every threshold.** No threshold fixes a bad prediction.
+
+Students were also asked whether anything about them changed when they moved. The question is the same one a model faces: did the label change, and did the person?
+
+---
+
+## 14. Back to People
+
+In the recidivism model, a false positive is not a quarantine. It is a person labelled high risk who was not rearrested, and that label has consequences.
+
+Here is the same trade-off on the full 6,172 people:
+
+| Threshold | Flagged | TP | FP | FN | TN | Sensitivity | Specificity |
+|---|---|---|---|---|---|---|---|
+| 0.3 | 4,843 | 2,527 | 2,316 | 282 | 1,047 | 0.90 | 0.31 |
+| 0.5 | 2,264 | 1,551 | 713 | 1,258 | 2,650 | 0.55 | 0.79 |
+| 0.7 | 710 | 563 | 147 | 2,246 | 3,216 | 0.20 | 0.96 |
+
+At 0.3, 2,316 people who were not rearrested are labelled high risk. At 0.7, 2,246 people who were rearrested are labelled low risk.
+
+> **Somebody has to choose which number to live with.**
+
+---
+
+## 15. Attach a Decision to the Model
+
+Same model, same probabilities, two programmes:
+
+| | Program A | Program B |
+|---|---|---|
+| **"High risk" means** | parole denied or detention before trial | offered reentry services: housing help, a job programme, a case worker |
+| **A false positive is** | a person held who would not have been rearrested | a person offered help they did not strictly need |
+| **Cost of a false positive** | high | low |
+| **Sensible threshold** | higher, or question the programme | lower |
+
+Which threshold for each programme, and why? The answer depends on what the label does to the person, not on the statistics.
+
+This morning's example, patrol versus greening, has the same structure. Where a false positive costs a person their liberty, the threshold should be high. Where it costs a person a free service, the threshold can be low.
+
+> **The threshold is a policy choice. That decision belongs to people, not to the `glm`.**
+
+---
+
+## 16. In R
+
+```{r}
+#| eval: false
+compas <- compas %>%
+  mutate(p_hat   = predict(recid_fit, type = "response"),
+         pred_50 = as.integer(p_hat >= 0.5),
+         pred_30 = as.integer(p_hat >= 0.3))
+
+table(predicted = compas$pred_30, actual = compas$two_year_recid)
+```
+
+Every threshold at once is the **ROC curve**, which the lecture left for next week.
+
+---
+
+## 17. Wrap-Up
+
+### Next week
+
+- Race-blindness: is the model fair if race is left out, given that other features may carry it?
+- The ROC curve: evaluating every threshold at once.
+
+### Discussion question
+
+For each programme, which threshold would you choose, and who should be consulted before that choice is made?
+
+---
+
+## 18. Week 10 Quick Reference
+
+| Concept / Question | Tool / Answer |
+|---|---|
+| Random folds vs. district folds | Random folds leak neighbours; district folds hold out places |
+| Assign each cell a district | `st_centroid(fishnet) %>% st_join(...)` |
+| Hold out one district | `filter(district != d)` for training, `filter(district == d)` for testing |
+| Logistic regression | `glm(y ~ x, family = binomial)` |
+| Poisson link | log(λ) |
+| Logistic link | logit: log(p / (1 − p)) |
+| Odds | p / (1 − p) |
+| Log-odds of 0.5 | 0 |
+| Read a logistic coefficient | exp(β) = multiplicative change in the odds |
+| Odds ratio = 1 | no association |
+| Predicted probability | `predict(model, type = "response")` |
+| Default prediction | log-odds, unless `type = "response"` |
+| Threshold | Predict high risk if p ≥ threshold |
+| Default threshold | 0.5, but a choice, not a rule |
+| Sensitivity | TP / (TP + FN) |
+| Specificity | TN / (TN + FP) |
+| Precision | TP / (TP + FP) |
+| Who sets the threshold? | People, against the cost of each error |
+
+---
+
+## 19. Key Concepts to Remember
+
+- **Test the model fairly before you improve it.** Random folds flatter a spatial model through proximity leakage. Hold out whole districts.
+- **Check the fold sizes.** A small district gives a noisy error.
+- **Predict a 0/1 outcome with a link function.** OLS predicts impossible probabilities.
+- **Odds** are p / (1 − p). **Log-odds** are log(odds), and they run from −∞ to +∞.
+- **The link function** lets a straight line produce bounded predictions. Fit on the link scale, then transform back.
+- **The S-curve** is the straight line seen in probability units. It is steepest in the middle.
+- **Use `type = "response"`** to get probabilities. The default gives log-odds.
+- **exp(β) is an odds ratio.** A 1.17 odds ratio is about 17% higher odds, not 17% higher probability.
+- **The same odds change moves probabilities by different amounts** depending on where you are on the S-curve.
+- **0.5 is a default.** The threshold depends on the cost of each kind of error.
+- **Sensitivity and specificity trade off.** Accuracy can point you to the threshold that misses the most people who need help.
+- **The threshold is a policy choice.** It belongs to the people who live with its consequences.
+- **The outcome is a record.** A new arrest is not a new crime, and last week's dirty-data questions apply to it.
